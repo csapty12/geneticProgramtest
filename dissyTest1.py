@@ -152,7 +152,7 @@ class GeneticProgram:
         sub = []
         split_list = [re.findall('\w+|\W', s) for s in parents]
         for i in split_list:
-            print(i)
+            # print(i)
             while '(' and ')' in i:
                 x = GeneticProgram.get_random_substring(self,i)
                 y=collections.Counter(x)
@@ -162,18 +162,18 @@ class GeneticProgram:
             else:
                 x = GeneticProgram.get_random_substring(self,i)
                 sub.append(x)
-        print(sub)
+        # print(sub)
         string_split = []
         for i in sub:
             str1 = ''.join(i)
             string_split.append(str1)
-        print(string_split)
+        return string_split
 
 
     def get_random_substring(self,expression):
-        rndLeft = randint(0,len(expression)-1)
+        rndLeft = randint(0,len(expression)-2)
 
-        rndRight = randint(rndLeft+1, len(expression))
+        rndRight = randint(rndLeft+2, len(expression))
         rnd= randint(0,1)
         if rnd ==0:
             exp = expression[rndLeft:]
@@ -181,10 +181,32 @@ class GeneticProgram:
             exp = expression[:rndRight]
         return exp
 
-    def crossover(self, parents):
+    def crossover(self, parents, sub_string):
+
         """
         crossover fo parents occrs here
         """
+        parent1 = parents[0]
+        print("parent1: ",parent1)
+        parent2 = parents[1]
+        print("parent2: ",parent2)
+        sub1 = sub_string[0]
+        print("sub1: ",sub1)
+        sub2 = sub_string[1]
+        print("sub2: ",sub2)
+
+        if sub1 in parent1:
+            new_parent1 = parent1.replace(sub1,'')
+        print("new parent1: ",new_parent1)
+
+        if sub2 in parent2:
+            new_parent2 = parent2.replace(sub2,'')
+        print("new parent2: ",new_parent2)
+
+        # for i in parents:
+        #     print("parents: ", i)
+        # for i in sub_string:
+        #     print("substring: ",i)
         pass
     def mutation(self, population):
         """
@@ -216,6 +238,8 @@ def main():
     print("parents")
     select_parents = test.select_parents(generate_expressions, get_mean_sq_fitness, 2)
     get_valid_substring = test.get_valid_substring(select_parents)
+
+    crossover = test.crossover(select_parents,get_valid_substring)
 
 
 if __name__ == '__main__':
