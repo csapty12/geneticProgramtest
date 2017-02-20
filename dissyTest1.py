@@ -181,6 +181,11 @@ class GeneticProgram:
             exp = expression[:rndRight]
         return exp
 
+    def crossover(self, parents):
+        """
+        crossover fo parents occrs here
+        """
+        pass
     def mutation(self, population):
         """
         function to mutate part of the string
