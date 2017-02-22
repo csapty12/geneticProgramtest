@@ -151,30 +151,46 @@ class GeneticProgram:
         """
         sub = []
         split_list = [re.findall('\w+|\W', s) for s in parents]
-        for i in split_list:
-            # print(i)
-            while '(' and ')' in i:
-                x = GeneticProgram.get_random_substring(self,i)
-                y=collections.Counter(x)
-                if y['(']== y[')']:
-                    sub.append(x)
-                    break
-            else:
-                x = GeneticProgram.get_random_substring(self,i)
-                sub.append(x)
+        print(split_list)
+        for i in range(len(split_list)):
+            if split_list[i][0]=='(':
+                if split_list[i][-1]== ')':
+                    print("hooorary!")
+
+        #         split_list[i].remove(split_list[i][0])
+        #         split_list[i].remove(split_list[i][-1])
+        # new_split_list = split_list
+        # print("new split list: ", new_split_list)
+
+        # for i in new_split_list:
+        #     # print(i)
+        #     while '(' and ')' in i:
+        #         x = GeneticProgram.get_random_substring(self,i)
+        #         y=collections.Counter(x)
+        #         if y['(']== y[')']:
+        #             sub.append(x)
+        #             break
+        #     else:
+        #         x = GeneticProgram.get_random_substring(self,i)
+        #         sub.append(x)
+                
+
+
         # print(sub)
         string_split = []
         for i in sub:
             str1 = ''.join(i)
             string_split.append(str1)
+        print(string_split)
+
         return string_split
 
 
     def get_random_substring(self,expression):
         rndLeft = randint(0,len(expression)-2)
-
         rndRight = randint(rndLeft+2, len(expression))
         rnd= randint(0,1)
+
         if rnd ==0:
             exp = expression[rndLeft:]
         elif rnd ==1:
@@ -194,14 +210,6 @@ class GeneticProgram:
         print("sub1: ",sub1)
         sub2 = sub_string[1]
         print("sub2: ",sub2)
-
-        if sub1 in parent1:
-            new_parent1 = parent1.replace(sub1,'')
-        print("new parent1: ",new_parent1)
-
-        if sub2 in parent2:
-            new_parent2 = parent2.replace(sub2,'')
-        print("new parent2: ",new_parent2)
 
         # for i in parents:
         #     print("parents: ", i)
@@ -238,8 +246,8 @@ def main():
     print("parents")
     select_parents = test.select_parents(generate_expressions, get_mean_sq_fitness, 2)
     get_valid_substring = test.get_valid_substring(select_parents)
-
-    crossover = test.crossover(select_parents,get_valid_substring)
+    print(get_valid_substring)
+    # crossover = test.crossover(select_parents,get_valid_substring)
 
 
 if __name__ == '__main__':
