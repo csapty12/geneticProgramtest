@@ -145,45 +145,62 @@ class GeneticProgram:
 
         return parents
 
-    def get_valid_substring(self,parents):
+    def get_valid_substring(self,parents,eval,):
         """
         function to cross over the parents.
         """
-        sub = []
-        split_list = [re.findall('\w+|\W', s) for s in parents]
+        p = ['(X1*16)+(X1-7)', '(X1-6)+(13+3)', 'X1+12', '13+10+X1+17']
+        eval_parents = self.eval_expressions(p)
+        get_parent_values = self.get_values(eval_parents)
+
+        for i in p:
+        	print("parents:", i)
+        split_list = self.strip_list(p)
         print(split_list)
         for i in range(len(split_list)):
             if split_list[i][0]=='(':
                 if split_list[i][-1]== ')':
-                    print("hooorary!")
+                    split_list[i].pop(0)
+                    split_list[i].pop(-1)
+                    #evaluate the expression. if the expression remains the same, keep it, otherwise keep the old bracketing 
 
-        #         split_list[i].remove(split_list[i][0])
-        #         split_list[i].remove(split_list[i][-1])
-        # new_split_list = split_list
-        # print("new split list: ", new_split_list)
+        new_list = split_list
 
-        # for i in new_split_list:
-        #     # print(i)
-        #     while '(' and ')' in i:
-        #         x = GeneticProgram.get_random_substring(self,i)
-        #         y=collections.Counter(x)
-        #         if y['(']== y[')']:
-        #             sub.append(x)
-        #             break
-        #     else:
-        #         x = GeneticProgram.get_random_substring(self,i)
-        #         sub.append(x)
-                
-
-
-        # print(sub)
-        string_split = []
-        for i in sub:
+        string_split =[]
+        for i in new_list:
             str1 = ''.join(i)
             string_split.append(str1)
         print(string_split)
 
-        return string_split
+        
+        # for i in range(len(string_split)):
+        	
+        # 	eval_expressions = self.eval_expressions(string_split)
+
+        # 	try:
+        # 	 	get_values = GeneticProgram.get_values(self,eval_expressions)
+
+        # 	except:
+        # 		print("here")
+        # 		string_split.insert(0,'(')
+        # 		string_split.append(')')
+        # print(string_split)
+
+
+
+        
+
+
+
+
+        
+        	
+
+
+    def strip_list(self,parents):
+    	split_list = [re.findall('\w+|\W', s) for s in parents]
+    	return split_list   
+
 
 
     def get_random_substring(self,expression):
@@ -245,7 +262,7 @@ def main():
     print("=======================================================")
     print("parents")
     select_parents = test.select_parents(generate_expressions, get_mean_sq_fitness, 2)
-    get_valid_substring = test.get_valid_substring(select_parents)
+    get_valid_substring = test.get_valid_substring(select_parents,2)
     print(get_valid_substring)
     # crossover = test.crossover(select_parents,get_valid_substring)
 
