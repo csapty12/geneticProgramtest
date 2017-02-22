@@ -10,20 +10,7 @@ class Tree(object):
 	def __str__(self):
 
 		return str(self.val) #print out value of node 
-left = Tree(2)
-right = Tree(3)
 
-tree = Tree(1,left,right)
-
-def total(tree):
-	if tree == None: 
-		return 0
-	else:
-		return total(tree.left) +total(tree.right) + tree.val
-
-
-#build expression tree
-exp_tree = Tree("+",Tree(1), Tree("*", Tree(2), Tree(3)))
 
 #print out the expression in prefix notation -> express 1+2*3
 def print_tree_prefix(tree):
@@ -58,7 +45,6 @@ def show_tree(tree, level = 0):
 		print('  '*level + str(tree.val))
 		show_tree(tree.left,level+1)
 
-		
 print("prefix notation")
 print_tree_prefix(exp_tree)
 print()
@@ -86,9 +72,10 @@ for i in my_list:
 
 
 new_list.append('end')
-# print(new_list)
+print(new_list)
 
-def get_token(token_list,expected):
+
+def get_operation(token_list,expected):
 	"""
 	compares the expected token to the first token on the list. if they match, remove it, return True
 	this is to get the operator
@@ -99,88 +86,41 @@ def get_token(token_list,expected):
 	else:
 		return False
 
-
 def get_number(token_list):
-    if get_token(token_list, '('):
-        x = get_sum(token_list)         # get the subexpression
-        get_token(token_list, ')')      # remove the closing parenthesis
-        return x
+    x = token_list[0]
+    if type(x) != type("o"):
+    	return None
     else:
-        x = token_list[0]
-        if type(x) != type(0): return None
-        token_list[0:1] = []
-        return Tree (x, None, None)
+	    del token_list[0]
+	    return Tree (x, None, None)
+
+# def get_string(token_list):
+
 
 def get_product(token_list):
     a = get_number(token_list)
-    if get_token(token_list, '*'):
-        b = get_product(token_list)       # this line changed
+    if get_operation(token_list, '*'):
+        b = get_product(token_list)
         return Tree ('*', a, b)
     else:
         return a
 
-def get_sum(token_list):
-    a = get_product(token_list)
-    if get_token(token_list, '+'):
-        b = get_sum(token_list)
-        return Tree ('+', a, b)
-    else:
-        return a
 
-def get_take(token_list):
+def get_expression(token_list):
     a = get_product(token_list)
-    if get_token(token_list, '-'):
-        b = get_take(token_list)
+    if get_operation(token_list, '-'):
+        b = get_expression(token_list)
         return Tree ('-', a, b)
+    elif get_operation(token_list, '+'):
+    	b = get_expression(token_list)
+    	return Tree ('+', a, b)
+
     else:
         return a
 
-token_list = [9, '-', 11, '+', 5, '*', 7, 'end']
-tree = get_sum(token_list)
-print_tree_postfix(tree)
 
-print()
-# print()
-# token_list = [9, '*', 11, '+', 5, '*', 7, 'end']
-# tree = get_sum(token_list)
-# print_tree_postfix(tree)
-
-
+token_list = ['X1', '*', '11', '-', '5', '+', '7', 'end']
+tree = get_expression(token_list)
+print_tree_prefix(tree)
 print()
 print()
-
-
-
-
-# token_list = [9, '-', '(', 11, '+', 5, ')', '*', 8,'-',13, 'end']
-# tree = get_sum(token_list)
-# print_tree_postfix(tree)
-# print()
-# print()
-# show_tree(tree)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
