@@ -145,28 +145,37 @@ class GenExp:
 
 #print out the expression in prefix notation -> express 1+2*3
 def print_tree_prefix(tree):
-	if tree ==None:
-		return
+	if tree.left ==None:
+		sys.stdout.write("%s " %(tree.val))
+		return tree.val
 	else:
 		sys.stdout.write("%s " %(tree.val))
-		print_tree_prefix(tree.left)
-		print_tree_prefix(tree.right)
+		left = print_tree_prefix(tree.left)
+		right = print_tree_prefix(tree.right)
+		return tree.val +" "+ left+" " + right + " "
 
 def print_tree_postfix(tree):
-	if tree ==None:
-		return
+	if tree.left ==None:
+		return tree.val
 	else:
 		print_tree_postfix(tree.left)
 		print_tree_postfix(tree.right)
 		sys.stdout.write("%s " %(tree.val))
 
 def print_tree_inorder(tree):
-	if tree ==None:
-		return
+	if tree.left == None:
+		return tree.val
 	else:
-		print_tree_inorder(tree.left)
-		sys.stdout.write("%s " %(tree.val))
-		print_tree_inorder(tree.right)
+
+		left = print_tree_inorder(tree.left)
+
+		# sys.stdout.write("%s " %(tree.val))
+
+		right = print_tree_inorder(tree.right)
+
+		return left + tree.val + right
+
+
 
 def show_tree(tree, level = 0):
 
@@ -180,7 +189,8 @@ def show_tree(tree, level = 0):
 		print('  '*level + str(tree.val))
 		show_tree(tree.left,level+1)
 
-
+def get_tree(tree):
+	return show_tree(tree)
 
 def get_operation(token_list,expected):
 	"""
@@ -230,19 +240,14 @@ def get_expression(token_list):
 def get_new_expressions(token_list):
 	for i in token_list:
 		tree = get_expression(i)
-		print_tree_postfix(tree)
 		print()
-		print_tree_prefix(tree)
+		print()
+		y = print_tree_prefix(tree)
+		print('\n')
+	return y
 
-		print()
-		print()
-		print()
-		show_tree(tree)
-
-		print()
-		print()
-		print()
-
+def print_tree(tree):
+		return get_tree(tree)
 
 def main2():
 	print("======================================================")
@@ -266,8 +271,8 @@ def main2():
 	print("parents selected: ",select_parents)
 	split_parents = test.split_parents(select_parents)
 	# print("split parents: ", split_parents)
-	get_new_expressions(split_parents)
-
+	x = get_new_expressions(split_parents)
+	
 
 
 if __name__=="__main__":
