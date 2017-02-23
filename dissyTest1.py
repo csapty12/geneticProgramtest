@@ -9,8 +9,7 @@ OPS = ['+', '-', '*']
 GROUP_PROB = 0.3
 MIN_NUM, MAX_NUM = 0, 20
 
-X2 = 5
-X3 = 8
+
 inputs = [4, 8, 12, 13]
 output = [60, 64, 68, 69]
 ideal_solution = "x1+8*(4+3)"
@@ -171,30 +170,6 @@ class GeneticProgram:
             str1 = ''.join(i)
             string_split.append(str1)
         print(string_split)
-
-        
-        # for i in range(len(string_split)):
-        	
-        # 	eval_expressions = self.eval_expressions(string_split)
-
-        # 	try:
-        # 	 	get_values = GeneticProgram.get_values(self,eval_expressions)
-
-        # 	except:
-        # 		print("here")
-        # 		string_split.insert(0,'(')
-        # 		string_split.append(')')
-        # print(string_split)
-
-
-
-        
-
-
-
-
-        
-        	
 
 
     def strip_list(self,parents):
