@@ -18,10 +18,11 @@ randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 class Tree(object):
 
 	#every instance of a tree is a node.  
-	def __init__(self,val, left = None, right = None):
-		self.val = val
-		self.left= left
-		self.right = right
+	def __init__(self,val, left = None, right = None, node_val =None ):
+		self.val = val # holds the value
+		self.left= left # holds the left child value
+		self.right = right # holds the right child value
+		self.node_val = node_val
 
 	def __str__(self):
 
@@ -37,7 +38,7 @@ class GenExp:
     """
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
-        self.left = None  # create the left and right nodes.
+        self.left = None  # create the left and right nodes for an expression.
         self.right = None
 
         if maxdepth is None:
@@ -71,7 +72,7 @@ class GenExp:
             exps = GenExp(maxNumbers)
             str_exps = str(exps)
             expression_list.append(str_exps)
-            expression_list = [i for i in expression_list if 'X1' in i]
+            expression_list = [i for i in expression_list if 'X1' in i]  # print out valid expressions with varibales
         return expression_list
 
     def eval_expressions(self, expression):
@@ -269,16 +270,3 @@ def main2():
 
 if __name__=="__main__":
 	main2()
-
-
-
-
-def main():
-	token_list = ['X1', '*', '11', '-', '5', '+', '7', 'end']
-	tree = get_expression(token_list)
-	print_tree_postfix(tree)
-	print()
-	print()
-
-	print()
-	show_tree(tree)
