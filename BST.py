@@ -18,11 +18,11 @@ randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 class Tree(object):
 
 	#every instance of a tree is a node.  
-	def __init__(self,val, left = None, right = None, node_val =None ):
+	def __init__(self,val, left = None, right = None ):
 		self.val = val # holds the value
 		self.left= left # holds the left child value
 		self.right = right # holds the right child value
-		self.node_val = node_val
+		
 
 	def __str__(self):
 
@@ -236,10 +236,12 @@ def get_new_expressions(token_list):
 
 		print()
 		print()
-
 		print()
 		show_tree(tree)
 
+		print()
+		print()
+		print()
 
 
 def main2():
