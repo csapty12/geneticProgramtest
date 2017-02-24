@@ -122,10 +122,6 @@ class GenExp:
 
 
     def select_parents(self, population, fitness, num_parents):
-        """
-        input: population, solution fitness
-        output: two randomly selected parents
-        """
         print("population: ", population)
         parents = sample(population, num_parents)
 
@@ -136,12 +132,38 @@ class GenExp:
     	split_list = [re.findall('\w+|\W', s) for s in parents]
     	for i in split_list:
     		i.append("end")
-
-    	# print(split_list)
     	return split_list
 
+    def track_nodes(self,parents):
+    	newl = []
+    	for i in parents:
+    		x = i.split()
+    		newl.append(x)
+    	# print(newl)
 
+    	new2 = []
+    	for i in range(len(newl)):
+    		tmp = []
+    		[tmp.append(newl[i][j]) for j in range(len(newl[i]))]
+    		new2.append(tmp)
+    	
 
+    	[new2[i].remove(new2[i][j]) for i in range(len(new2)) for j in range(len(new2[i])) if ' ' in new2[i][j]]
+
+    	vals = []
+    	for i in range(len(new2)):
+    		tmp =[]
+    		[tmp.append(j+1) for j in range(len(new2[i]))]
+    		vals.append(tmp)
+
+    	tups = []
+    	for i in range(len(new2)):
+    		tmp = []
+    		[tmp.append(j)for j in zip(new2[i],vals[i])]
+    		tups.append(tmp)
+    	print(tups)
+
+    	
 
 #print out the expression in prefix notation -> express 1+2*3
 def print_tree_prefix(tree):
@@ -152,7 +174,7 @@ def print_tree_prefix(tree):
 		sys.stdout.write("%s " %(tree.val))
 		left = print_tree_prefix(tree.left)
 		right = print_tree_prefix(tree.right)
-		return tree.val +" "+ left+" " + right + " "
+		return tree.val + " "+ left+' '+ right + ''
 
 def print_tree_postfix(tree):
 	if tree.left ==None:
@@ -181,16 +203,10 @@ def show_tree(tree, level = 0):
 
 	if tree == None: 
 		return 
-	# if level ==8:
-	# 	return
-
 	else:
 		show_tree(tree.right,level+1)
 		print('  '*level + str(tree.val))
 		show_tree(tree.left,level+1)
-
-def get_tree(tree):
-	return show_tree(tree)
 
 def get_operation(token_list,expected):
 	"""
@@ -237,17 +253,22 @@ def get_expression(token_list):
 	else:
 		return a
 
-def get_new_expressions(token_list):
+def get_prefix_expressions(token_list):
+	my_list = []
 	for i in token_list:
 		tree = get_expression(i)
-		print()
-		print()
 		y = print_tree_prefix(tree)
 		print('\n')
-	return y
+		my_list.append(y)
 
-def print_tree(tree):
-		return get_tree(tree)
+		print()
+		print()
+		show_tree(tree)
+		print()
+		print()
+	return my_list
+
+
 
 def main2():
 	print("======================================================")
@@ -259,7 +280,6 @@ def main2():
 	generate_expressions = test.get_valid_expressions(4, 4)  # (maxNumber,Population size)
 	print("Population: ", generate_expressions)
 	eval_exp = test.eval_expressions(generate_expressions)
-	# print("evaluations: ",eval_exp)
 	get_totals = test.get_totals(eval_exp)
 	print("totals: ", get_totals)
 	get_fitness = test.get_mean_squared_fitness(get_totals)
@@ -271,7 +291,12 @@ def main2():
 	print("parents selected: ",select_parents)
 	split_parents = test.split_parents(select_parents)
 	# print("split parents: ", split_parents)
-	x = get_new_expressions(split_parents)
+	prefix_exp = get_prefix_expressions(split_parents)
+	print(prefix_exp)
+	
+	track_nodes = test.track_nodes(prefix_exp)
+	
+
 	
 
 
