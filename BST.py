@@ -18,10 +18,11 @@ randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 class Tree(object):
 
 	#every instance of a tree is a node.  
-	def __init__(self,val, left = None, right = None ):
+	def __init__(self,val, left = None, right = None, track_val = None ):
 		self.val = val # holds the value
 		self.left= left # holds the left child value
 		self.right = right # holds the right child value
+		self.track_val = track_val
 		
 
 	def __str__(self):
@@ -130,6 +131,7 @@ class GenExp:
 
     def split_parents(self,parents):
     	split_list = [re.findall('\w+|\W', s) for s in parents]
+
     	for i in split_list:
     		i.append("end")
     	return split_list
@@ -219,7 +221,7 @@ def get_operation(token_list,expected):
 	else:
 		return False
 
-def get_number(token_list):
+def get_number(token_list, t_val):
     if get_operation(token_list, '('):
         x = get_expression(token_list)         # get the subexpression
         get_operation(token_list, ')')      # remove the closing parenthesis
@@ -228,37 +230,46 @@ def get_number(token_list):
         x = token_list[0]
         if type(x) != type("o"): return None
         token_list[0:1] = []
-        return Tree (x, None, None)
+        print(Tree (x, None, None, track_val = t_val+1))
+        return Tree (x, None, None, track_val = t_val+1)
 
 
 
-def get_product(token_list):
-    a = get_number(token_list)
+def get_product(token_list, t_val):
+    a = get_number(token_list, t_val)
     if get_operation(token_list, '*'):
-        b = get_product(token_list)
-        return Tree ('*', a, b)
+        b = get_product(token_list, t_val+1)
+        print(Tree ('*', a, b, track_val = t_val+1))
+        return Tree ('*', a, b, track_val = t_val+1)
     else:
         return a
 
 
-def get_expression(token_list):
-
-	a = get_product(token_list)
+def get_expression(token_list, t_val=0):
+	val =0
+	a = get_product(token_list, t_val+1)
 	if get_operation(token_list, '-'):
 		b = get_expression(token_list)
-		return Tree ('-', a, b)
+		print(Tree ('-', a, b, track_val = t_val+1))
+		return Tree ('-', a, b, track_val = t_val+1)
 	elif get_operation(token_list, '+'):
 		b = get_expression(token_list)
-		return Tree ('+', a, b)
+		print(Tree ('+', a, b, track_val = t_val+1))
+		return Tree ('+', a, b, track_val = t_val+1)
 	else:
 		return a
 
 def get_prefix_expressions(token_list):
 	my_list = []
+	tree_obj = []
+	
 	for i in token_list:
+
 		tree = get_expression(i)
+
 		y = print_tree_prefix(tree)
 		print('\n')
+		tree_obj.append(tree)
 		my_list.append(y)
 
 		print()
@@ -266,8 +277,19 @@ def get_prefix_expressions(token_list):
 		show_tree(tree)
 		print()
 		print()
+
+
+			
+	
 	return my_list
 
+def get_nodes(token_list):
+	print("token list: ", token_list)
+	for i in token_list:
+		
+		tree = get_expression(i)
+
+		
 
 
 def main2():
@@ -279,6 +301,7 @@ def main2():
 	test = GenExp(4)
 	generate_expressions = test.get_valid_expressions(4, 4)  # (maxNumber,Population size)
 	print("Population: ", generate_expressions)
+
 	eval_exp = test.eval_expressions(generate_expressions)
 	get_totals = test.get_totals(eval_exp)
 	print("totals: ", get_totals)
@@ -291,10 +314,11 @@ def main2():
 	print("parents selected: ",select_parents)
 	split_parents = test.split_parents(select_parents)
 	# print("split parents: ", split_parents)
-	prefix_exp = get_prefix_expressions(split_parents)
-	print(prefix_exp)
-	
-	track_nodes = test.track_nodes(prefix_exp)
+	# prefix_exp = get_prefix_expressions(split_parents)
+	# print(prefix_exp)
+	print('\n \n \n \n \n ')
+	nodes = get_nodes(split_parents)
+	# track_nodes = test.track_nodes(prefix_exp)
 	
 
 	
