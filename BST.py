@@ -31,9 +31,8 @@ class Tree(object):
             self.left = left  # holds the left child value
             self.right = right  # holds the right child value
 
-
-def __str__(self):
-    return str(self.val)  # print out value of node
+    def __str__(self):
+	    return str(self.val)  # print out value of node
 
 
 #########################################################################################
@@ -247,15 +246,17 @@ def get_expression(token_list):
 def return_all_nodes(token_list):
     my_list = []
     tree_objs = []
+    prefix = []
 
     for i in token_list:
         tree = get_expression(i)
         
-        # y = print_tree_prefix(tree)
-        # print('\n')
-        # my_list.append(y)
-        # show_tree(tree)
-
+        y = print_tree_prefix(tree)
+        print('\n')
+        prefix.append(y)
+        print('\n\n')
+        show_tree(tree)
+        print('\n\n')
         x = get_nodes(tree)
         tmp = []
         tmp2  = []
@@ -264,7 +265,8 @@ def return_all_nodes(token_list):
         	tmp2.append((j.val,j.nodeID))
         tree_objs.append(tmp)
         my_list.append(tmp2)
-    print(my_list)   
+    print("nodes: ", my_list)
+    print("prefix notation: ",prefix)
     return tree_objs
 
 def main2():
@@ -288,9 +290,9 @@ def main2():
     select_parents = test.select_parents(generate_expressions, get_fitness, 2)
     print("parents selected: ", select_parents)
     split_parents = test.split_parents(select_parents)
-    # print("split parents: ", split_parents)
+    print("split parents: ", split_parents)
     return_nodes = return_all_nodes(split_parents)
-    print(return_nodes)
+    
     print('\n \n \n \n \n ')
         
 if __name__ == "__main__":
