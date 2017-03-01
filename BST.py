@@ -137,37 +137,6 @@ class GenExp:
             i.append("end")
         return split_list
 
-        # def track_nodes(self,parents):
-        #   newl = []
-        #   for i in parents:
-        #       x = i.split()
-        #       newl.append(x)
-        #   # print(newl)
-
-        #   new2 = []
-        #   for i in range(len(newl)):
-        #       tmp = []
-        #       [tmp.append(newl[i][j]) for j in range(len(newl[i]))]
-        #       new2.append(tmp)
-
-
-        #   [new2[i].remove(new2[i][j]) for i in range(len(new2)) for j in range(len(new2[i])) if ' ' in new2[i][j]]
-
-        #   vals = []
-        #   for i in range(len(new2)):
-        #       tmp =[]
-        #       [tmp.append(j+1) for j in range(len(new2[i]))]
-        #       vals.append(tmp)
-
-        #   tups = []
-        #   for i in range(len(new2)):
-        #       tmp = []
-        #       [tmp.append(j)for j in zip(new2[i],vals[i])]
-        #       tups.append(tmp)
-        #   print(tups)
-
-
-
 
 # print out the expression in prefix notation -> express 1+2*3
 def print_tree_prefix(tree):
