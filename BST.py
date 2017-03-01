@@ -150,7 +150,6 @@ def print_tree_prefix(tree):
         return tree.val + " " + left + ' ' + right + ''
 
 
-
 def print_tree_postfix(tree):
     if tree.left == None:
         return tree.val
@@ -178,10 +177,8 @@ def show_tree(tree, level=0):
         return
     else:
         show_tree(tree.right, level + 1)
-        print('  ' * level + str(tree.val) + "   "+ str(tree.nodeID))
+        print('  ' * level + str(tree.val))
         show_tree(tree.left, level + 1)
-
-
 
 
 def get_nodes(tree, level = 0):
@@ -200,11 +197,6 @@ def get_nodes(tree, level = 0):
         l1 += right + left 
         l1.append((Tree(tree.val,None, None,tree.nodeID, False)))
         return l1
-
-        
-
-
-
 
 
 def get_operation(token_list, expected):
@@ -252,31 +244,28 @@ def get_expression(token_list):
         return a
 
 
-def get_prefix_expressions(token_list):
+def return_all_nodes(token_list):
     my_list = []
-    tree_obj = []
+    tree_objs = []
 
     for i in token_list:
         tree = get_expression(i)
         
-        y = print_tree_prefix(tree)
-        print('\n')
-        my_list.append(y)
+        # y = print_tree_prefix(tree)
+        # print('\n')
+        # my_list.append(y)
+        # show_tree(tree)
 
-        print()
-        print()
-        show_tree(tree)
-        print()
-        print()
         x = get_nodes(tree)
-        for i in x:
-            print(i.val,i.nodeID)
-        print()
-        print()
-
-    return my_list
-
-
+        tmp = []
+        tmp2  = []
+        for j in x:
+        	tmp.append(j)
+        	tmp2.append((j.val,j.nodeID))
+        tree_objs.append(tmp)
+        my_list.append(tmp2)
+    print(my_list)   
+    return tree_objs
 
 def main2():
     print("======================================================")
@@ -300,8 +289,8 @@ def main2():
     print("parents selected: ", select_parents)
     split_parents = test.split_parents(select_parents)
     # print("split parents: ", split_parents)
-    prefix_exp = get_prefix_expressions(split_parents)
-    print(prefix_exp)
+    return_nodes = return_all_nodes(split_parents)
+    print(return_nodes)
     print('\n \n \n \n \n ')
         
 if __name__ == "__main__":
