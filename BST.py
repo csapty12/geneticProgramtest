@@ -266,8 +266,28 @@ def return_all_nodes(token_list):
         tree_objs.append(tmp)
         my_list.append(tmp2)
     print("nodes: ", my_list)
-    print("prefix notation: ",prefix)
+    # print("prefix notation: ",prefix)
     return tree_objs
+
+def get_random_node(tree):
+    vals = []
+    for i in tree:
+        x= choice(i)
+        vals.append(x)
+
+    nodes  = []
+    for i in vals:
+        print(i.val,i.nodeID)
+        nodes.append((i.val,i.nodeID))
+    print(type(nodes[0]))
+
+
+
+
+
+   
+
+
 
 def main2():
     print("======================================================")
@@ -292,6 +312,8 @@ def main2():
     split_parents = test.split_parents(select_parents)
     print("split parents: ", split_parents)
     return_nodes = return_all_nodes(split_parents)
+    # rand_values = rand_value(return_nodes)
+    random_nodes = get_random_node(return_nodes)
     
     print('\n \n \n \n \n ')
         
