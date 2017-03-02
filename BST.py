@@ -176,26 +176,8 @@ def show_tree(tree, level=0):
         return
     else:
         show_tree(tree.right, level + 1)
-        print('  ' * level + str(tree.val))
+        print('  ' * level + str(tree.val) )#+ " "+str(tree.nodeID))
         show_tree(tree.left, level + 1)
-
-
-def get_nodes(tree, level = 0):
-    l1 = []
-    if type(tree) == type(None):
-        return []
-    else:
-        right = get_nodes(tree.right, level + 1)
-        
-        if right == None:
-            right = []
-        # print("xx:  ",str(tree.val) + " " +str(tree.nodeID))
-        left = get_nodes(tree.left, level + 1)
-        if left == None:
-            left = []
-        l1 += right + left 
-        l1.append((Tree(tree.val,None, None,tree.nodeID, False)))
-        return l1
 
 
 def get_operation(token_list, expected):
@@ -243,43 +225,62 @@ def get_expression(token_list):
         return a
 
 
+def get_nodes(tree, level = 0):
+    l1 = []
+    if type(tree) == type(None):
+        return []
+    else:
+        right = get_nodes(tree.right, level + 1)
+        
+        if right == None:
+            right = []
+        # print("xx:  ",str(tree.val) + " " +str(tree.nodeID))
+        left = get_nodes(tree.left, level + 1)
+        if left == None:
+            left = []
+        l1 += right + left 
+        l1.append((Tree(tree.val,tree.left, tree.right,tree.nodeID, False)))
+        return l1
+
 def return_all_nodes(token_list):
     my_list = []
-    tree_objs = []
     prefix = []
+    l1 = []
 
     for i in token_list:
-        tree = get_expression(i)
-        
+        tree = get_expression(i) 
         y = print_tree_prefix(tree)
         print('\n')
         prefix.append(y)
         print('\n\n')
-        show_tree(tree)
+        show_tree(tree)  # print the expression in prefix form 
         print('\n\n')
-        x = get_nodes(tree)
+        x = get_nodes(tree) # get the full tree as tree objects. 
+        print("xxx", x)
+        choicex = choice(x) #select a random node in the tree
+        print("index of parent : ",x.index(choicex)) #get index of parents
+        print()
+       
+        
+        l1.append(choicex)
+        # x.pop(x.index(choicex))
         tmp = []
         tmp2  = []
         for j in x:
         	tmp.append(j)
         	tmp2.append((j.val,j.nodeID))
-        tree_objs.append(tmp)
         my_list.append(tmp2)
+    # print(l1)
+    for i in l1:
+    	print("parent: ",i.val, i.nodeID)
+    	print("child: ",i.left,i.right)
+    	# print("child:", i.left,i.right)
     print("nodes: ", my_list)
-    # print("prefix notation: ",prefix)
-    return tree_objs
+    
 
-def get_random_node(tree):
-    vals = []
-    for i in tree:
-        x= choice(i)
-        vals.append(x)
 
-    nodes  = []
-    for i in vals:
-        print(i.val,i.nodeID)
-        nodes.append((i.val,i.nodeID))
-    print(type(nodes[0]))
+    
+    return l1
 
 
 
@@ -312,9 +313,7 @@ def main2():
     split_parents = test.split_parents(select_parents)
     print("split parents: ", split_parents)
     return_nodes = return_all_nodes(split_parents)
-    # rand_values = rand_value(return_nodes)
-    random_nodes = get_random_node(return_nodes)
-    
+    print(return_nodes)
     print('\n \n \n \n \n ')
         
 if __name__ == "__main__":
