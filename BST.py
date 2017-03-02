@@ -25,6 +25,7 @@ class Tree(object):
             self.val = val  # holds the value
             self.left = left  # holds the left child value
             self.right = right  # holds the right child value
+
         else:
             self.nodeID = nodesNumber
             self.val = val  # holds the value
@@ -246,6 +247,7 @@ def return_all_nodes(token_list):
     my_list = []
     prefix = []
     l1 = []
+    ind =[]
 
     for i in token_list:
         tree = get_expression(i) 
@@ -256,39 +258,54 @@ def return_all_nodes(token_list):
         show_tree(tree)  # print the expression in prefix form 
         print('\n\n')
         x = get_nodes(tree) # get the full tree as tree objects. 
-        print("xxx", x)
+        # print("xxx", x)
         choicex = choice(x) #select a random node in the tree
+        print("nodes: ",x)
         print("index of parent : ",x.index(choicex)) #get index of parents
+        ind.append(x.index(choicex))
         print()
+        print()
+        print()
+
+
        
         
         l1.append(choicex)
-        # x.pop(x.index(choicex))
         tmp = []
         tmp2  = []
         for j in x:
         	tmp.append(j)
         	tmp2.append((j.val,j.nodeID))
         my_list.append(tmp2)
-    # print(l1)
+
     for i in l1:
-    	print("parent: ",i.val, i.nodeID)
-    	print("child: ",i.left,i.right)
-    	# print("child:", i.left,i.right)
-    print("nodes: ", my_list)
+    	print("parent: ",i.val)
+
+
+
+
+    	
     
-
-
+    
     
     return l1
 
 
 
+def get_subtree(sub_tree):
 
+	for i in sub_tree:
+		show_tree(i)
 
-   
+def crossover(subtree):
+	tmp = subtree[0]
+	subtree[0] = subtree[1]
+	subtree[1] = tmp
 
-
+	print("subtree1: ",subtree[0])
+	print("subtree2: ",subtree[1])
+	print(subtree)
+	return subtree
 
 def main2():
     print("======================================================")
@@ -312,9 +329,12 @@ def main2():
     print("parents selected: ", select_parents)
     split_parents = test.split_parents(select_parents)
     print("split parents: ", split_parents)
-    return_nodes = return_all_nodes(split_parents)
-    print(return_nodes)
+    return_subtree = return_all_nodes(split_parents)
+    # print(return_subtree)
+    # subtree = get_subtree(return_subtree)
+    cross = crossover(return_subtree)
     print('\n \n \n \n \n ')
         
 if __name__ == "__main__":
     main2()
+
