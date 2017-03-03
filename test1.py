@@ -15,29 +15,6 @@ randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 num_nodes = 0
 
 
-class Tree(object):
-    # every instance of a tree is a node.
-    def __init__(self, val, left=None, right=None, nodesNumber =0, glob=True):
-        if glob ==True:
-            global num_nodes
-            num_nodes+=1
-            self.nodeID = num_nodes
-            self.val = val  # holds the value
-            self.left = left  # holds the left child value
-            self.right = right  # holds the right child value
-
-        else:
-            self.nodeID = nodesNumber
-            self.val = val  # holds the value
-            self.left = left  # holds the left child value
-            self.right = right  # holds the right child value
-
-    def __str__(self):
-	    return str(self.val)  # print out value of node
-
-
-#########################################################################################
-
 class GenExp:
     """
     Class to generate a population, evaluate it, find the fitness function
@@ -137,48 +114,86 @@ class GenExp:
             i.append("end")
         return split_list
 
+#building up the tree
+class Node(object):
+ 
+    def __repr__(self):
+        if self.parent != None:
+            return "Node (" + str(self.value) + ") parent val:" + str(self.parent.value)
+        else:
+            return "Node (" + str(self.value) + ")"
+    def __str__(self, level=0):
+        ret = "\t"*level+self.__repr__()+"\n"
+        if self.left_child is not None:
+            ret += (self.left_child).__str__(level+1)
+        if self.right_child is not None:
+            ret += (self.right_child).__str__(level+1)
+        return ret
+ 
+ 
+    def __init__(self, value):
+        self.value = value
+ 
+        self.left_child = None
+        self.right_child = None
+        self.parent = None
+ 
+    def add_child(self, value, left=True):
+        if left == True:
+            new_node = Node(value)
+            self.left_child = new_node
+            new_node.parent = self
+ 
+        else:
+            new_node = Node(value)
+            self.right_child = new_node
+            new_node.parent = self
 
-# print out the expression in prefix notation -> express 1+2*3
-def print_tree_prefix(tree):
-    if tree.left == None:
-        sys.stdout.write("%s " % (tree.val))
-        return tree.val
-    else:
-        sys.stdout.write("%s " % (tree.val))
-        left = print_tree_prefix(tree.left)
-        right = print_tree_prefix(tree.right)
-        return tree.val + " " + left + ' ' + right + ''
 
-
-def print_tree_postfix(tree):
-    if tree.left == None:
-        return tree.val
-    else:
-        print_tree_postfix(tree.left)
-        print_tree_postfix(tree.right)
-        sys.stdout.write("%s " % (tree.val))
-
-
-def print_tree_inorder(tree):
-    if tree.left == None:
-        return tree.val
-    else:
-
-        left = print_tree_inorder(tree.left)
-
-        right = print_tree_inorder(tree.right)
-
-        return left + tree.val + right
-
-
-def show_tree(tree, level=0):
-
-    if tree == None:
+#manipulating the tree
+class FullTree(object):
+    def __init__(self, root_node):
+        self.root = root_node
+ 
+    @classmethod
+    def swap_nodes(cls, node_one, node_two):
+        node_one_parent = node_one.parent
+        node_two_parent = node_two.parent
+ 
+        #figure out if node is left or right child
+        if node_one_parent.left_child.value == node_one.value:
+            node_one_parent.left_child = node_two
+        else:
+            #it is right child
+            node_one_parent.right_child = node_two
+ 
+        if node_two_parent.left_child.value == node_two.value:
+            node_two_parent.left_child = node_one
+        else:
+            node_two_parent.right_child = node_one
+ 
         return
-    else:
-        show_tree(tree.right, level + 1)
-        print('  ' * level + str(tree.val) )#+ " "+str(tree.nodeID))
-        show_tree(tree.left, level + 1)
+
+#bullshit class that needs to get sorted......
+class Tree(object):
+    # every instance of a tree is a node.
+    def __init__(self, val, left=None, right=None, nodesNumber =0, glob=True):
+        if glob ==True:
+            global num_nodes
+            num_nodes+=1
+            self.nodeID = num_nodes
+            self.val = val  # holds the value
+            self.left = left  # holds the left child value
+            self.right = right  # holds the right child value
+
+        else:
+            self.nodeID = nodesNumber
+            self.val = val  # holds the value
+            self.left = left  # holds the left child value
+            self.right = right  # holds the right child value
+
+    def __str__(self):
+	    return str(self.val)  # print out value of node
 
 
 def get_operation(token_list, expected):
@@ -224,103 +239,61 @@ def get_expression(token_list):
     else:
         return a
 
-def get_nodes(tree, level = 0):
-    l1 = []
-    if type(tree) == type(None):
-        return []
+def print_tree_prefix(tree):
+    if tree.left == None:
+        # sys.stdout.write("%s " % (tree.val))
+        return tree.val
     else:
-        right = get_nodes(tree.right, level + 1)
-        
-        if right == None:
-            right = []
-        # print("xx:  ",str(tree.val) + " " +str(tree.nodeID))
-        left = get_nodes(tree.left, level + 1)
-        if left == None:
-            left = []
-        l1 += right + left 
-        l1.append((Tree(tree.val,tree.left, tree.right,tree.nodeID, False)))
-        return l1
+        # sys.stdout.write("%s " % (tree.val))
+        left = print_tree_prefix(tree.left)
+        right = print_tree_prefix(tree.right)
+        return tree.val + " " + left + ' ' + right + ''
 
-def return_all_nodes(token_list):
-    my_list = []
-    prefix = []
-    l1 = []
-    ind =[]
+def get_prefix_notation(token_list):
+	prefix = []
+	prefix_list = []
+	for i in token_list:
+		tree  = get_expression(i)
+		y = print_tree_prefix(tree)
+		prefix.append(y)
+	for i in prefix:
+		prefix_list.append(i.split())
+	return prefix_list
 
-    for i in token_list:
-        tree = get_expression(i) 
-        print("TREE: ",tree)
-        y = print_tree_prefix(tree)
-        print('\n')
-        prefix.append(y)
-        print('\n\n')
-        show_tree(tree)  # print the expression in prefix form 
-        print('\n\n')
-        x = get_nodes(tree) # get the full tree as tree objects. 
-        # print("xxx", x)
-        choicex = choice(x) #select a random node in the tree
-        print("nodes: ",x)
-        print("index of parent : ",x.index(choicex)) #get index of parents
-        ind.append(x.index(choicex))
-        print()
-        print()
-        print()     
-        l1.append(choicex)
-        tmp = []
-        tmp2  = []
-        for j in x:
-        	tmp.append(j)
-        	tmp2.append((j.val,j.nodeID))
-        my_list.append(tmp2)
 
-    for i in l1:
-    	print("parent: ",i.val)
-    
-    return l1
+def make_tree(pref_list):
 
-def get_subtree(sub_tree):
+	root_node = Node(pref_list[0])
+	pref_list.pop(0)
+	current_node = root_node
+	while pref_list != []:
+		if current_node.value in ['-','+','*']:
+			current_node.add_child(pref_list[0],True) # add child to the left 
+			pref_list.pop(0)
+			current_node = current_node.left_child
+		
+	
+	return root_node
 
-	for i in sub_tree:
-		show_tree(i)
 
-def crossover(subtree):
-	tmp = subtree[0]
-	subtree[0] = subtree[1]
-	subtree[1] = tmp
 
-	print("subtree1: ",subtree[0])
-	print("subtree2: ",subtree[1])
-	print(subtree)
-	return subtree
 
-def main2():
-    print("======================================================")
-    print("Aim to find a function to map my inputs to my outputs.")
-    print("inputs: ", inputs)
-    print("outputs: ", output)
-    print("======================================================")
-    test = GenExp(4)
-    generate_expressions = test.get_valid_expressions(4, 4)  # (maxNumber,Population size)
-    print("Population: ", generate_expressions)
 
-    eval_exp = test.eval_expressions(generate_expressions)
-    get_totals = test.get_totals(eval_exp)
-    print("totals: ", get_totals)
-    get_fitness = test.get_mean_squared_fitness(get_totals)
-    print("fitness error: ", get_fitness)
-    print()
-    print("=======================================================")
-    print("parents")
-    select_parents = test.select_parents(generate_expressions, get_fitness, 2)
-    print("parents selected: ", select_parents)
-    split_parents = test.split_parents(select_parents)
-    print("split parents: ", split_parents)
-    return_subtree = return_all_nodes(split_parents)
-    # # print(return_subtree)
-    # # subtree = get_subtree(return_subtree)
-    # cross = crossover(return_subtree)
-    # print('\n \n \n \n \n ')
-        
-if __name__ == "__main__":
-    main2()
 
+
+
+
+
+def main():
+	token_list = [['X1', '-', '14', 'end'], ['(', 'X1', '+', '15', ')', '+', '13', 'end']]
+	get_prefix = get_prefix_notation(token_list)
+	print(get_prefix)
+	tree1 = get_prefix[0]
+	tree2 = get_prefix[1]
+	make_tree_one = make_tree(tree1)
+	
+
+	pass
+
+if __name__ =="__main__":
+	main()
