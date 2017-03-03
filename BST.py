@@ -206,7 +206,7 @@ def get_number(token_list):
 
 
 def get_product(token_list):
-    a = get_number(token_list, )
+    a = get_number(token_list)
     if get_operation(token_list, '*'):
         b = get_product(token_list)
         return Tree('*', a, b)
@@ -251,6 +251,7 @@ def return_all_nodes(token_list):
 
     for i in token_list:
         tree = get_expression(i) 
+        print("TREE: ",tree)
         y = print_tree_prefix(tree)
         print('\n')
         prefix.append(y)
