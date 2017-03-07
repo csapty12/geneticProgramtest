@@ -133,7 +133,6 @@ class Node(object):
  
     def __init__(self, value):
         self.value = value
- 
         self.left_child = None
         self.right_child = None
         self.parent = None
@@ -144,7 +143,7 @@ class Node(object):
             self.left_child = new_node
             new_node.parent = self
  
-        else:
+        elif left == False:
             new_node = Node(value)
             self.right_child = new_node
             new_node.parent = self
@@ -240,7 +239,7 @@ def get_expression(token_list):
         return a
 
 def print_tree_prefix(tree):
-    if tree.left == None:
+    if tree.left == None and tree.right == None:
         # sys.stdout.write("%s " % (tree.val))
         return tree.val
     else:
@@ -262,37 +261,99 @@ def get_prefix_notation(token_list):
 
 
 def make_tree(pref_list):
-
+	print('\n\n')
+	print("pref list: ",pref_list)
 	root_node = Node(pref_list[0])
+	print(root_node)
 	pref_list.pop(0)
 	current_node = root_node
+	# print("current ndoe: ",current_node)
 	while pref_list != []:
 		if current_node.value in ['-','+','*']:
-			current_node.add_child(pref_list[0],True) # add child to the left 
-			pref_list.pop(0)
-			current_node = current_node.left_child
-		
-	
+			if current_node.left_child == None:
+				current_node.add_child(pref_list[0])
+				pref_list.pop(0)
+				current_node = current_node.left_child
+				print("left node val",current_node.value)
+			else:
+				current_node.add_child(pref_list[0], left = False)
+				pref_list.pop(0)
+				current_node = current_node.right_child
+				print("right node val",current_node.value)
+			
+		elif current_node.value not in ['-','+','*']:
+			current_node =current_node.parent
+
+
+	print('\n\n')		
+	return root_node
+
+def make_tree1(pref_list):
+	print('\n\n')
+	print("pref list: ",pref_list)
+	root_node = Node(pref_list[0])
+	print(root_node)
+	pref_list.pop(0)
+	current_node = root_node
+	# print("current ndoe: ",current_node)
+	while pref_list != []:
+		if current_node.value in ['-','+','*']:
+			if current_node.left_child == None:
+				current_node.add_child(pref_list[0])
+				pref_list.pop(0)
+				print("new list: ",pref_list)
+				current_node = current_node.left_child
+				print("left node val",current_node.value)
+			else:
+				print("child ot be added",pref_list[0])
+				current_node.add_child(pref_list[0], left = False)
+				pref_list.pop(0)
+				print("pref list: ",pref_list)
+				current_node = current_node.right_child
+				print("right node val",current_node.value)
+				prefix_list = []
+			
+		elif current_node.value not in ['-','+','*']:
+			print("current node value: ",current_node.value)
+			current_node =current_node.parent
+			print("current node parent = ",current_node)
+
+
+	print('\n\n')		
 	return root_node
 
 
 
 
-
-
-
-
-
-
 def main():
-	token_list = [['X1', '-', '14', 'end'], ['(', 'X1', '+', '15', ')', '+', '13', 'end']]
-	get_prefix = get_prefix_notation(token_list)
+	# test = GenExp(32)
+	# generate_expressions = test.get_valid_expressions(32, 4)  # (maxNumber,Population size)
+	# print("Population: ", generate_expressions)
+	# eval_exp = test.eval_expressions(generate_expressions)
+	# get_totals = test.get_totals(eval_exp)
+	# print("totals: ", get_totals)
+	# get_fitness = test.get_mean_squared_fitness(get_totals)
+	# print("fitness error: ", get_fitness)
+	# print()
+	# print("=======================================================")
+	# print("parents")
+	# select_parents = test.select_parents(generate_expressions, get_fitness, 2)
+	# print("parents selected: ", select_parents)
+	# split_parents = test.split_parents(select_parents)
+	# print("split parents: ", split_parents)
+	# split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '+', '15', ')', '+', '13', 'end']]
+	split_parents = [['(', 'X1', '*', '9', '+', '20', ')', 'end'], ['(', '12', '-', '18', ')', '+', '(', 'X1', '+', '6', ')', 'end']]
+	get_prefix = get_prefix_notation(split_parents)
 	print(get_prefix)
 	tree1 = get_prefix[0]
 	tree2 = get_prefix[1]
-	make_tree_one = make_tree(tree1)
-	
-
+	make_tree_one = make_tree1(tree1)
+	print(make_tree_one)
+	print()
+	make_tree_two = make_tree1(tree2)
+	print(make_tree_two)
+	print()
+	print("ss",make_tree_two.right_child)
 	pass
 
 if __name__ =="__main__":
