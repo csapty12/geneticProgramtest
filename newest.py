@@ -13,6 +13,7 @@ output = [60, 64, 68, 69]
 ideal_solution = "x1+8*(4+3)"
 randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 num_nodes = 0
+nodeid = 0
 
 
 class GenExp:
@@ -131,11 +132,14 @@ class Node(object):
         return ret
  
  
-    def __init__(self, value):
-        self.value = value
-        self.left_child = None
-        self.right_child = None
-        self.parent = None
+    def __init__(self, value ):
+    	global nodeid
+    	nodeid+=1
+    	self.nodenum = nodeid
+    	self.value = value
+    	self.left_child = None
+    	self.right_child = None
+    	self.parent = None
  
     def add_child(self, value, left=True):
         if left == True:
@@ -147,6 +151,8 @@ class Node(object):
             new_node = Node(value)
             self.right_child = new_node
             new_node.parent = self
+
+
 
 
 #manipulating the tree
@@ -193,7 +199,6 @@ class Tree(object):
 
     def __str__(self):
 	    return str(self.val)  # print out value of node
-
 
 def get_operation(token_list, expected):
     """
@@ -261,100 +266,83 @@ def get_prefix_notation(token_list):
 
 
 def make_tree(pref_list):
-	print('\n\n')
+	l1 = []
+    # print('\n\n')
 	print("pref list: ",pref_list)
 	root_node = Node(pref_list[0])
-	print(root_node)
+	print("root node: ", root_node)
 	pref_list.pop(0)
 	current_node = root_node
-	# print("current ndoe: ",current_node)
 	while pref_list != []:
-		if current_node.value in ['-','+','*']:
-			if current_node.left_child == None:
-				current_node.add_child(pref_list[0])
-				pref_list.pop(0)
-				current_node = current_node.left_child
-				print("left node val",current_node.value)
-			else:
-				current_node.add_child(pref_list[0], left = False)
-				pref_list.pop(0)
-				current_node = current_node.right_child
-				print("right node val",current_node.value)
-			
-		elif current_node.value not in ['-','+','*']:
-			current_node =current_node.parent
+	    if current_node.value in ['-','+','*']:
 
+	        if current_node.left_child == None:
+	            current_node.add_child(pref_list[0], left =True) #add a left child with its value
+	            pref_list.pop(0)
+	            current_node = current_node.left_child
+	            l1.append(current_node)
 
-	print('\n\n')		
-	return root_node
+	        elif current_node.left_child != None:
+	            current_node.add_child(pref_list[0], left = False)
+	            pref_list.pop(0)
+	            current_node = current_node.right_child
+	            l1.append(current_node)
 
-def make_tree1(pref_list):
-	print('\n\n')
-	print("pref list: ",pref_list)
-	root_node = Node(pref_list[0])
+	    elif current_node.value not in ['-','+','*']:
+	        current_node =current_node.parent
+	        if current_node.left_child !=None and current_node.right_child !=None:
+	            current_node =current_node.parent
+	            l1.append(current_node)
 	print(root_node)
-	pref_list.pop(0)
-	current_node = root_node
-	# print("current ndoe: ",current_node)
-	while pref_list != []:
-		if current_node.value in ['-','+','*']:
-			if current_node.left_child == None:
-				current_node.add_child(pref_list[0])
-				pref_list.pop(0)
-				print("new list: ",pref_list)
-				current_node = current_node.left_child
-				print("left node val",current_node.value)
-			else:
-				print("child ot be added",pref_list[0])
-				current_node.add_child(pref_list[0], left = False)
-				pref_list.pop(0)
-				print("pref list: ",pref_list)
-				current_node = current_node.right_child
-				print("right node val",current_node.value)
-				prefix_list = []
-			
-		elif current_node.value not in ['-','+','*']:
-			print("current node value: ",current_node.value)
-			current_node =current_node.parent
-			print("current node parent = ",current_node)
+	return l1
 
 
-	print('\n\n')		
-	return root_node
+def select_random_val(tree):
+    return choice(tree)
 
-
-
-
+    
+    
 def main():
-	# test = GenExp(32)
-	# generate_expressions = test.get_valid_expressions(32, 4)  # (maxNumber,Population size)
-	# print("Population: ", generate_expressions)
-	# eval_exp = test.eval_expressions(generate_expressions)
-	# get_totals = test.get_totals(eval_exp)
-	# print("totals: ", get_totals)
-	# get_fitness = test.get_mean_squared_fitness(get_totals)
-	# print("fitness error: ", get_fitness)
-	# print()
-	# print("=======================================================")
-	# print("parents")
-	# select_parents = test.select_parents(generate_expressions, get_fitness, 2)
-	# print("parents selected: ", select_parents)
-	# split_parents = test.split_parents(select_parents)
-	# print("split parents: ", split_parents)
-	# split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '+', '15', ')', '+', '13', 'end']]
-	split_parents = [['(', 'X1', '*', '9', '+', '20', ')', 'end'], ['(', '12', '-', '18', ')', '+', '(', 'X1', '+', '6', ')', 'end']]
+	test = GenExp(256)
+	generate_expressions = test.get_valid_expressions(256, 500)  # (maxNumber,Population size)
+	print("Population: ", generate_expressions)
+	eval_exp = test.eval_expressions(generate_expressions)
+	get_totals = test.get_totals(eval_exp)
+	print("totals: ", get_totals)
+	get_fitness = test.get_mean_squared_fitness(get_totals)
+	print("fitness error: ", get_fitness)
+	print()
+	print("=======================================================")
+	print("parents")
+	select_parents = test.select_parents(generate_expressions, get_fitness, 2)
+	print("parents selected: ", select_parents)
+	split_parents = test.split_parents(select_parents)
+	print("split parents: ", split_parents)
 	get_prefix = get_prefix_notation(split_parents)
+    
 	print(get_prefix)
 	tree1 = get_prefix[0]
 	tree2 = get_prefix[1]
-	make_tree_one = make_tree1(tree1)
+	# select_random_value = select_random_val(tree2)
+
+	# print("randomly selected value: ", select_random_value)
+	make_tree_one = make_tree(tree1)
 	print(make_tree_one)
 	print()
-	make_tree_two = make_tree1(tree2)
-	print(make_tree_two)
-	print()
-	print("ss",make_tree_two.right_child)
-	pass
+	make_tree_two = make_tree(tree2)
+	select_random1 = select_random_val(make_tree_one)
+	select_random2 = select_random_val(make_tree_two)
+	print('\n')
+	print('random node seclted1: ')
+	print(select_random1)
+	print('\n')
+	print('random node seclted2: ')
+	print(select_random2)
+
+    
+    # check= find_node('18',make_tree_two)
+    # print(check)
+
 
 if __name__ =="__main__":
 	main()
