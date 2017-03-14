@@ -70,7 +70,7 @@ if __name__ == '__main__':
     root_node_one.right_child.left_child.add_child(8)
     root_node_one.right_child.left_child.add_child(9, True)
  
-    print(root_node_one)
+    print(type(root_node_one))
  
  
     root_node_two = Node('a')
@@ -91,6 +91,8 @@ if __name__ == '__main__':
  
     print("Swapping:", root_node_one.right_child.left_child.value, "and", root_node_two.left_child.right_child.value)
     Tree.swap_nodes(root_node_one.right_child.left_child, root_node_two.left_child.right_child)
+
+
  
     print(root_node_one)
     print(root_node_two)
