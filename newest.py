@@ -314,72 +314,67 @@ def print_full_tree(tree):
 
 def find_subtree(tree,list_nodes):
 	print("list nodes: ", list_nodes)
-	x = select_random_val(list_nodes)
-	print(x)
+	rnd_val = select_random_val(list_nodes)
+
+	print(rnd_val)
 	current_node = tree
-	if current_node.value == x:
+	print("current node value : ", current_node.value)
+	if current_node.value == rnd_val[0] and current_node.nodenum == rnd_val[1]:
 		print("found")
 		current_node.checked = True
 		return current_node
-
-
-
-			
-
-
 	else:
-		if current_node.value != x and current_node.checked == False:
+		# if the current node left child exists:
+		if current_node.left_child != None and current_node.left_child.checked==False:
+			# mark the current node as checked
 			current_node.checked = True
-			print("current node: ", current_node.value, " checked: ", current_node.checked)
-			if current_node.left_child != None and current_node.left_child.checked == False:
-				current_node = current_node.left_child
-				print("next node to check ", current_node.value,  " checked: ", current_node.checked)
-				return find_subtree(current_node, list_nodes)
+			# move into the left child node. 
+			current_node = current_node.left_child
+			return find_subtree(current_node, list_nodes)
+		else:
+			# if the curent node left child doesnt exist i.e is a leaf node
+			current_node.checked = True
+			# move to the parent 
+			if current_node.right_child !=None and current_node.right_child.checked== False:
+				current_node.checked = True
+				current_node = current_node.right_child
+				return find_subtree(current_node,list_nodes)
+
+
 			else:
 				current_node = current_node.parent
-				find_subtree(current_node, list_nodes)
-		elif current_node.value != x and current_node.checked == True and current_node.left_child.checked == True and current_node.right_child.checked==False:
-			print("current node: ", current_node.value, " checked: ", current_node.checked)
-			if current_node.right_child!=None:
-				current_node = current_node.right_child
-				print("next node to check ", current_node.value,  " checked: ", current_node.checked)
-				return find_subtree(current_node, list_nodes)
-
-
-		# elif current_node.value != x and current_node.checked == True and current_node.left_child.checked == True and current_node.right_child.checked == True:
-		# 	current_node = current_node.parent
-
-
-		
-
-
-		# if current_node.checked == True and current_node.right_child.checked == True and current_node.left_child.checked == True:
-		# 	current_node = current_node.parent
+				print("current node is now: ", current_node)
+				# if the current node left and right child both have been cheked, move to the curren node parent
+				if current_node.left_child.checked==True and current_node.right_child.checked==True:
+					current_node = current_node.parent
+					return find_subtree(current_node,list_nodes)
+				else:
+					# move pointer to the right child 
+					current_node = current_node.right_child
+					return find_subtree(current_node, list_nodes)
 
 
 
-		# if current_node.checked == True and current_node.parent.left_child.checked == True and current_node.parent.checked == True:
-		# 	current_node = current_node.parent
 
 
-			
-			# if current_node.right_child != None:
-			# 	current_node = current_node.right_child
-			# 	current_node.checked = True
-			# 	print("current node now here: ", current_node)
-			# 	return find_subtree(current_node, list_nodes)
+
+
+
+
+
 
 
 
 		
 
 def select_random_val(tree):
-    return '*'
+	x = choice(tree)
+	return (x.value, x.nodenum)
 
 
 def main():
-    # test = GenExp(256)
-    # generate_expressions = test.get_valid_expressions(256, 500)  # (maxNumber,Population size)
+    # test = GenExp(4)
+    # generate_expressions = test.get_valid_expressions(4, 4)  # (maxNumber,Population size)
     # print("Population: ", generate_expressions)
     # eval_exp = test.eval_expressions(generate_expressions)
     # get_totals = test.get_totals(eval_exp)
@@ -393,7 +388,8 @@ def main():
     # print("parents selected: ", select_parents)
     # split_parents = test.split_parents(select_parents)
     # print("split parents: ", split_parents)
-    split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '*', '13','7', 'end']]
+    # # split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
+    split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
     get_prefix = get_prefix_notation(split_parents)
 
     # print(get_prefix)
@@ -417,10 +413,8 @@ def main():
 
     t1 = print_full_tree(make_tree_one[0])
     t2 = print_full_tree(make_tree_two[0])
-
-    # select_random1 = select_random_val(x)
-    # select_random2 = select_random_val(make_tree_two)
-    x = find_subtree(make_tree_two[0],make_tree_two[1])
+    print(t2)
+    x = find_subtree(make_tree_one[0],make_tree_one[1])
     print(x)
 
 
