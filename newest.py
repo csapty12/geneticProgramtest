@@ -3,6 +3,7 @@ from random import randint, choice, random, sample
 from math import log
 import numpy as np
 import re
+import copy
 
 OPS = ['+', '-', '*']
 GROUP_PROB = 0.3
@@ -12,7 +13,7 @@ inputs = [4, 8, 12, 13]
 output = [60, 64, 68, 69]
 ideal_solution = "x1+8*(4+3)"
 randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
-num_nodes = 0
+
 nodeid = 0
 
 
@@ -161,16 +162,13 @@ class FullTree(object):
 
     @classmethod
     def swap_nodes(cls, node_one, node_two):
-        # need to account for the root node. maybe a try catch...
-        try:
-            node_one_parent = node_one.parent
-
-        except:
-            node_one_parent = node_one
-        try:
-            node_two_parent = node_two.parent
-        except:
-            node_two_parent = node_two
+        # need to account for the root nodes. 
+       
+     
+        node_one_parent = node_one.parent
+        
+        node_two_parent = node_two.parent
+        
 
         # figure out if node is left or right child
         if node_one_parent.left_child.value == node_one.value:
@@ -185,22 +183,17 @@ class FullTree(object):
             node_two_parent.right_child = node_one
 
         return
-
-
+      
 # bullshit class that needs to get sorted......
 class Tree(object):
     # every instance of a tree is a node.
-    def __init__(self, val, left=None, right=None, nodesNumber=0, glob=True):
+    def __init__(self, val, left=None, right=None, glob=True):
         if glob == True:
-            global num_nodes
-            num_nodes += 1
-            self.nodeID = num_nodes
             self.val = val  # holds the value
             self.left = left  # holds the left child value
             self.right = right  # holds the right child value
 
         else:
-            self.nodeID = nodesNumber
             self.val = val  # holds the value
             self.left = left  # holds the left child value
             self.right = right  # holds the right child value
@@ -279,158 +272,172 @@ def get_prefix_notation(token_list):
 
 def make_tree(pref_list):
     l1 = []
-    # print('\n\n')
-    print("pref list: ", pref_list)
+    # # print('\n\n')
+    # print("pref list: ", pref_list)
+    # pref_list = ['+', '14', '+', '*', '12', '*', '-', '14', '3', 'X1', '-', '8', '*', '14', '5']
+    # pref_list= ['+', '14', '+', '*', '12', '*', '-', '14', '3', 'X1','-','8', '*', '14', '5']
     root_node = Node(pref_list[0])
     l1.append(root_node)
-    pref_list.pop(0)
     current_node = root_node
-    while pref_list != []:
-        if current_node.value in ['-', '+', '*']:
+    pref_list.pop(0)
 
+
+    # print("pref list now: ",pref_list)
+    while pref_list != []:
+        # print("value of current node1: ",current_node)
+        # print("pref list now2: ",pref_list)
+        if current_node.value in ['-', '+', '*']:
+            # print("current node has value 3: ", current_node.value, "in param")
             if current_node.left_child == None:
                 current_node.add_child(pref_list[0], left=True)  # add a left child with its value
                 pref_list.pop(0)
                 current_node = current_node.left_child
+                # print("current node is now lc 4: ",current_node.value)
+                l1.append(current_node)
+            elif current_node.left_child != None and current_node.right_child != None:
+                current_node = current_node.parent
                 l1.append(current_node)
 
-            elif current_node.left_child != None:
+            else:
+
                 current_node.add_child(pref_list[0], left=False)
                 pref_list.pop(0)
                 current_node = current_node.right_child
+                # print("current node now in right 5: ",current_node.value)
                 l1.append(current_node)
+                # print(current_node.value, " appended to l1")
+
 
         elif current_node.value not in ['-', '+', '*']:
+            # print("current node value 6: ", current_node.value, " not in param")
             current_node = current_node.parent
+            # print("back at parent 7: ", current_node.value)
             if current_node.left_child != None and current_node.right_child != None:
                 current_node = current_node.parent
                 l1.append(current_node)
 
+
     return root_node, l1
 
+
+
+
 def print_full_tree(tree):
-	return tree
+    return tree
 
 
-def find_subtree(tree,list_nodes):
-	print("list nodes: ", list_nodes)
-	rnd_val = select_random_val(list_nodes)
+def find_subtree(tree, list_nodes,rnd_val):
+    # print("list nodes: ", list_nodes)
 
-	print(rnd_val)
-	current_node = tree
-	print("current node value : ", current_node.value)
-	if current_node.value == rnd_val[0] and current_node.nodenum == rnd_val[1]:
-		print("found")
-		current_node.checked = True
-		return current_node
-	else:
-		# if the current node left child exists:
-		if current_node.left_child != None and current_node.left_child.checked==False:
-			# mark the current node as checked
-			current_node.checked = True
-			# move into the left child node. 
-			current_node = current_node.left_child
-			return find_subtree(current_node, list_nodes)
-		else:
-			# if the curent node left child doesnt exist i.e is a leaf node
-			current_node.checked = True
-			# move to the parent 
-			if current_node.right_child !=None and current_node.right_child.checked== False:
-				current_node.checked = True
-				current_node = current_node.right_child
-				return find_subtree(current_node,list_nodes)
+    # print("value to be found: ",rnd_val)
+    current_node = tree
+    # print("current node value : ", current_node.value)
+    if current_node.value == rnd_val[0] and current_node.nodenum == rnd_val[1]:
+        # print("found")
+        current_node.checked = True
+        return current_node
+    else:
+        # if the current node left child exists:
+        if current_node.left_child != None and current_node.left_child.checked == False:
+            # mark the current node as checked
+            current_node.checked = True
+            # move into the left child node.
+            current_node = current_node.left_child
+            return find_subtree(current_node, list_nodes, rnd_val)
+        else:
+            # if the curent node left child doesnt exist i.e is a leaf node
+            current_node.checked = True
+            # move to the parent
+            if current_node.right_child != None and current_node.right_child.checked == False:
+                current_node.checked = True
+                current_node = current_node.right_child
+                return find_subtree(current_node, list_nodes,rnd_val)
+    
+    
+            else:
+                current_node = current_node.parent
+                # print("current node is now: ", current_node)
+                # if the current node left and right child both have been cheked, move to the curren node parent
+                if current_node.left_child.checked == True and current_node.right_child.checked == True:
+                    current_node = current_node.parent
+                    return find_subtree(current_node, list_nodes,rnd_val)
+                else:
+                    # move pointer to the right child
+                    current_node = current_node.right_child
+                    return find_subtree(current_node, list_nodes,rnd_val)
 
-
-			else:
-				current_node = current_node.parent
-				print("current node is now: ", current_node)
-				# if the current node left and right child both have been cheked, move to the curren node parent
-				if current_node.left_child.checked==True and current_node.right_child.checked==True:
-					current_node = current_node.parent
-					return find_subtree(current_node,list_nodes)
-				else:
-					# move pointer to the right child 
-					current_node = current_node.right_child
-					return find_subtree(current_node, list_nodes)
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
 
 def select_random_val(tree):
-	x = choice(tree)
-	return (x.value, x.nodenum)
+    # print("tttrreeeeeeeeeeeee: ", tree)
+    #problem lays here, make sure the the root node is never selectee. 
+    root = tree[0].nodenum
+
+    x = tree.pop(0)
+    
+    while True:
+        x = choice(tree)
+        if x.nodenum != root:
+            break
+    # print("blaah: ",x.value, x.nodenum)
+    return x.value,x.nodenum
 
 
 def main():
-    # test = GenExp(4)
-    # generate_expressions = test.get_valid_expressions(4, 4)  # (maxNumber,Population size)
+    test = GenExp(8)
+    generate_expressions = test.get_valid_expressions(8, 4)  # (maxNumber,Population size)
     # print("Population: ", generate_expressions)
-    # eval_exp = test.eval_expressions(generate_expressions)
-    # get_totals = test.get_totals(eval_exp)
+    eval_exp = test.eval_expressions(generate_expressions)
+    get_totals = test.get_totals(eval_exp)
     # print("totals: ", get_totals)
-    # get_fitness = test.get_mean_squared_fitness(get_totals)
+    get_fitness = test.get_mean_squared_fitness(get_totals)
     # print("fitness error: ", get_fitness)
     # print()
     # print("=======================================================")
     # print("parents")
-    # select_parents = test.select_parents(generate_expressions, get_fitness, 2)
+    select_parents = test.select_parents(generate_expressions, get_fitness, 2)
     # print("parents selected: ", select_parents)
-    # split_parents = test.split_parents(select_parents)
-    # print("split parents: ", split_parents)
-    # # split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
-    split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
+    split_parents = test.split_parents(select_parents)
+    print("split parents: ", split_parents)
+    # split_parents = [['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'], ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
+
+    # split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
+    # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
+    # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
     get_prefix = get_prefix_notation(split_parents)
 
-    # print(get_prefix)
+    print(get_prefix)
     tree1 = get_prefix[0]
     tree2 = get_prefix[1]
-    # select_random_value = select_random_val(tree2)
 
-    # print("randomly selected value: ", select_random_value)
     make_tree_one = make_tree(tree1)
 
-
-    
     make_tree_two = make_tree(tree2)
 
-
-    # prints out the tree as a list 
-    print(make_tree_one[1])
-    # prints out the tree as a list 
-    print(make_tree_two[1])
-
-
     t1 = print_full_tree(make_tree_one[0])
+
     t2 = print_full_tree(make_tree_two[0])
+
+    print(t1)
     print(t2)
-    x = find_subtree(make_tree_one[0],make_tree_one[1])
-    print(x)
-
-
-    # print('swapping: ', t1.left_child.value, ' and ', t2.left_child.value)
-    # FullTree.swap_nodes(t1.left_child, t2.left_child)
-    # print('make tree 1: ')
-    # print(t1)
-    # print('make tree 2: ')
-    # print(t2)
-
-
-
-
-
 
     
+    select_node1 = select_random_val(make_tree_one[1])
+    select_node2 = select_random_val(make_tree_two[1])
+    print("selected node 1: ", select_node1)
+    print("selected node 2: ", select_node2)
+    
+    t1_node = find_subtree(make_tree_one[0],make_tree_one[1],select_node1)
+    t2_node = find_subtree(make_tree_two[0],make_tree_two[1],select_node2)
+
+
+
+    print('swapping: ', t1_node.value, t1_node.nodenum , " with ",t2_node.value, t2_node.nodenum)
+    # print( 'swapping: ', t2_node.value, t2_node.nodenum)
+    FullTree.swap_nodes(t1_node, t2_node)
+    print('makeing new tree 1: ')
+    print(t1)
+    print('make new tree 2: ')
+    print(t2)
 
 
 if __name__ == "__main__":
