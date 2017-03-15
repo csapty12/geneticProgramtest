@@ -23,11 +23,13 @@ class GenExp:
     select parents for genetic operations and put children back into population
 
     """
+    
+
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
         self.left = None  # create the left and right nodes for an expression.
         self.right = None
-
+   
         if maxdepth is None:
             maxdepth = log(maxNumbers, 2) - 1
 
@@ -37,8 +39,7 @@ class GenExp:
             self.left = choice(randomVariable1)
 
         if depth < maxdepth and randint(0, maxdepth) > depth:
-            self.right = GenExp(maxNumbers, maxdepth,
-                                depth + 1)  # generate part of the expression (on the right)
+            self.right = GenExp(maxNumbers, maxdepth, depth + 1)  # generate part of the expression (on the right)
         else:
             self.right = randint(MIN_NUM, MAX_NUM)
 
@@ -53,7 +54,7 @@ class GenExp:
             return s
 
     def get_valid_expressions(self, maxNumbers, populationSize):
-        expression_list = []
+        expression_list = list()
         while len(expression_list) < populationSize:
             exps = GenExp(maxNumbers)
             str_exps = str(exps)
@@ -403,42 +404,60 @@ def main():
     # split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
     # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
     # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
-    get_prefix = get_prefix_notation(split_parents)
+    get_prefix_parents = get_prefix_notation(split_parents)
 
-    print(get_prefix)
-    tree1 = get_prefix[0]
-    tree2 = get_prefix[1]
+    print(get_prefix_parents)
+    parent_tree1 = get_prefix_parents[0]
+    parent_tree2 = get_prefix_parents[1]
 
-    make_tree_one = make_tree(tree1)
+    # make the parent trees 
+    make_parent_tree_one = make_tree(parent_tree1)
+    make_parent_tree_two = make_tree(parent_tree2)
 
-    make_tree_two = make_tree(tree2)
+ 
 
-    t1 = print_full_tree(make_tree_one[0])
 
-    t2 = print_full_tree(make_tree_two[0])
+    show_parent_tree_one = print_full_tree(make_parent_tree_one[0])
+    show_parent_tree_two = print_full_tree(make_parent_tree_two[0])
 
-    print(t1)
-    print(t2)
+    # print(show_parent_tree1)
+    # print(show_parent_tree2)
 
+    make_child_tree_one = copy.deepcopy(make_parent_tree_one)
+    show_child_tree_one = print_full_tree(make_child_tree_one[0])
     
-    select_node1 = select_random_val(make_tree_one[1])
-    select_node2 = select_random_val(make_tree_two[1])
-    print("selected node 1: ", select_node1)
-    print("selected node 2: ", select_node2)
+
+    make_child_tree_two = copy.deepcopy(make_parent_tree_two)
+    show_child_tree_two = print_full_tree(make_child_tree_two[0])
     
-    t1_node = find_subtree(make_tree_one[0],make_tree_one[1],select_node1)
-    t2_node = find_subtree(make_tree_two[0],make_tree_two[1],select_node2)
+
+    select_child_node_one = select_random_val(make_child_tree_one[1])
+    select_child_node_two = select_random_val(make_child_tree_two[1])
+    print("selected node 1: ", select_child_node_one)
+    print("selected node 2: ", select_child_node_two)
+    
+    random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
+    random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
 
 
 
-    print('swapping: ', t1_node.value, t1_node.nodenum , " with ",t2_node.value, t2_node.nodenum)
-    # print( 'swapping: ', t2_node.value, t2_node.nodenum)
-    FullTree.swap_nodes(t1_node, t2_node)
+    print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
+    FullTree.swap_nodes(random_node_one, random_node_two)
+
+
+    print("parent 1: ")
+    print(show_parent_tree_one)
+    print('\n')
+    print("parent 2: ")
+    print(show_parent_tree_two)
+    print('\n')
     print('makeing new tree 1: ')
-    print(t1)
+    print(show_child_tree_one)
+    print('\n')
     print('make new tree 2: ')
-    print(t2)
-
+    print(show_child_tree_two)
+    print('\n')
+    
 
 if __name__ == "__main__":
     main()
