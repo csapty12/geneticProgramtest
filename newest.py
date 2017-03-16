@@ -280,7 +280,9 @@ def make_tree(pref_list):
     root_node = Node(pref_list[0])
     l1.append(root_node)
     current_node = root_node
+
     pref_list.pop(0)
+
 
 
     # print("pref list now: ",pref_list)
@@ -317,7 +319,7 @@ def make_tree(pref_list):
                 current_node = current_node.parent
                 l1.append(current_node)
 
-
+    print("l1 is!!!!!: ", l1)
     return root_node, l1
 
 
@@ -371,41 +373,55 @@ def select_random_val(tree):
     # print("tttrreeeeeeeeeeeee: ", tree)
     #problem lays here, make sure the the root node is never selectee. 
     root = tree[0].nodenum
-
+    
     x = tree.pop(0)
     
     while True:
-        x = choice(tree)
-        if x.nodenum != root:
+        y = choice(tree)
+        if y.nodenum != root:
             break
+    tree.insert(0,x)
     # print("blaah: ",x.value, x.nodenum)
-    return x.value,x.nodenum
+    return y.value,y.nodenum
+
+def mutate_node(node):
+	print(node.value, node.nodenum)
+	if random() < 0.05:
+		# perform mutation
+		if node.value in ['+','-','*']:
+			node.value = choice(['+','-','*'])
+			print(node.value, node.nodenum)
+
+		pass
+	else:
+		return 
 
 
+# def testVals():
+# 	test = GenExp(8)
+#     generate_expressions = test.get_valid_expressions(8, 4)  # (maxNumber,Population size)
+#     # print("Population: ", generate_expressions)
+#     eval_exp = test.eval_expressions(generate_expressions)
+#     get_totals = test.get_totals(eval_exp)
+#     # print("totals: ", get_totals)
+#     get_fitness = test.get_mean_squared_fitness(get_totals)
+#     # print("fitness error: ", get_fitness)
+#     # print()
+#     # print("=======================================================")
+#     # print("parents")
+#     select_parents = test.select_parents(generate_expressions, get_fitness, 2)
+#     # print("parents selected: ", select_parents)
+#     split_parents = test.split_parents(select_parents)
+#     print("split parents: ", split_parents)
+#     split_parents = [['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'], ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
 
+#     split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
+#     split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
 
 
 def main():
-    test = GenExp(8)
-    generate_expressions = test.get_valid_expressions(8, 4)  # (maxNumber,Population size)
-    # print("Population: ", generate_expressions)
-    eval_exp = test.eval_expressions(generate_expressions)
-    get_totals = test.get_totals(eval_exp)
-    # print("totals: ", get_totals)
-    get_fitness = test.get_mean_squared_fitness(get_totals)
-    # print("fitness error: ", get_fitness)
-    # print()
-    # print("=======================================================")
-    # print("parents")
-    select_parents = test.select_parents(generate_expressions, get_fitness, 2)
-    # print("parents selected: ", select_parents)
-    split_parents = test.split_parents(select_parents)
-    print("split parents: ", split_parents)
-    # split_parents = [['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'], ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
 
-    # split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
-    # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
-    # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
+    split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
     get_prefix_parents = get_prefix_notation(split_parents)
 
     print(get_prefix_parents)
@@ -416,37 +432,37 @@ def main():
     make_parent_tree_one = make_tree(parent_tree1)
     make_parent_tree_two = make_tree(parent_tree2)
 
- 
-
-
+    #print the parent trees
     show_parent_tree_one = print_full_tree(make_parent_tree_one[0])
     show_parent_tree_two = print_full_tree(make_parent_tree_two[0])
 
-    # print(show_parent_tree1)
-    # print(show_parent_tree2)
-
+    # create deep clones of the parents as the parents will be remained unchanged
     make_child_tree_one = copy.deepcopy(make_parent_tree_one)
     show_child_tree_one = print_full_tree(make_child_tree_one[0])
     
 
     make_child_tree_two = copy.deepcopy(make_parent_tree_two)
     show_child_tree_two = print_full_tree(make_child_tree_two[0])
-    
 
+
+    # select two random subtrees to be crossedover with each other. 
     select_child_node_one = select_random_val(make_child_tree_one[1])
     select_child_node_two = select_random_val(make_child_tree_two[1])
 
     print("selected node 1: ", select_child_node_one)
     print("selected node 2: ", select_child_node_two)
-    print("node one to be mutated: ", mutate_node_one)
-    print("node two to be mutated: ", mutate_node_two)
+
     
+    # find the subtree in the tree and select the subtree to be crossed over. 
     random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
     random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
 
+     # swap the two subtrees with each other 
     print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
-    FullTree.swap_nodes(random_node_one, random_node_two)
 
+    # print('swapping: ', make_parent_tree_one[0].left_child.left_child.value ,make_parent_tree_one[0].left_child.left_child.nodenum ," with ",make_parent_tree_two[0].right_child.value,make_parent_tree_two[0].right_child.nodenum)
+    FullTree.swap_nodes(random_node_one, random_node_two)
+    # FullTree.swap_nodes(make_parent_tree_one[0].left_child.left_child, make_parent_tree_two[0].right_child)
 
     print("parent 1: ")
     print(show_parent_tree_one)
@@ -460,6 +476,14 @@ def main():
     print('make new tree 2: ')
     print(show_child_tree_two)
     print('\n')
+    print(make_child_tree_one[0])
+    print(make_child_tree_two[0])
+
+
+
+
+
+
 
 
     
