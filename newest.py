@@ -367,7 +367,6 @@ def find_subtree(tree, list_nodes,rnd_val):
                     current_node = current_node.right_child
                     return find_subtree(current_node, list_nodes,rnd_val)
 
-
 def select_random_val(tree):
     # print("tttrreeeeeeeeeeeee: ", tree)
     #problem lays here, make sure the the root node is never selectee. 
@@ -381,6 +380,9 @@ def select_random_val(tree):
             break
     # print("blaah: ",x.value, x.nodenum)
     return x.value,x.nodenum
+
+
+
 
 
 def main():
@@ -433,13 +435,14 @@ def main():
 
     select_child_node_one = select_random_val(make_child_tree_one[1])
     select_child_node_two = select_random_val(make_child_tree_two[1])
+
     print("selected node 1: ", select_child_node_one)
     print("selected node 2: ", select_child_node_two)
+    print("node one to be mutated: ", mutate_node_one)
+    print("node two to be mutated: ", mutate_node_two)
     
     random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
     random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
-
-
 
     print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
     FullTree.swap_nodes(random_node_one, random_node_two)
@@ -457,6 +460,8 @@ def main():
     print('make new tree 2: ')
     print(show_child_tree_two)
     print('\n')
+
+
     
 
 if __name__ == "__main__":
