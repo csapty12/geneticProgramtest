@@ -155,7 +155,6 @@ class Node(object):
             self.right_child = new_node
             new_node.parent = self
 
-
 # manipulating the tree
 class FullTree(object):
     def __init__(self, root_node):
@@ -319,14 +318,11 @@ def make_tree(pref_list):
                 current_node = current_node.parent
                 l1.append(current_node)
 
-    print("l1 is!!!!!: ", l1)
+
     return root_node, l1
 
-
-
-
 def print_full_tree(tree):
-    return tree
+	return tree
 
 
 def find_subtree(tree, list_nodes,rnd_val):
@@ -384,17 +380,31 @@ def select_random_val(tree):
     # print("blaah: ",x.value, x.nodenum)
     return y.value,y.nodenum
 
-def mutate_node(node):
-	print(node.value, node.nodenum)
-	if random() < 0.05:
+def mutate_node(tree,list_nodes,node):
+	print("tree: \n")
+	print(tree)
+	print()
+	print("list nodes: ",list_nodes)
+	print()
+	print("selected node: ",node.value, node.nodenum)
+	print("selected node subtree: ")
+	print(node)
 		# perform mutation
-		if node.value in ['+','-','*']:
-			node.value = choice(['+','-','*'])
-			print(node.value, node.nodenum)
-
-		pass
+	if node.value in ['+','-','*']:
+		node.value = choice(['+','-','*'])
+		print("new mutated node: ",node.value, node.nodenum)
+		print(node)
+		print("new list of nodes: ",list_nodes)
+		print("new tree")
+		print(tree)
+		return tree,list_nodes,node  #return the new tree, new list_nodes, new mutated node.
 	else:
-		return 
+		node.value =  choice(randomVariable1)
+		print("new mutated node: ",node.value, node.nodenum)
+		print(node)
+		print("new list of nodes: ",list_nodes)
+		print(tree)
+		return tree,list_nodes,node
 
 
 # def testVals():
@@ -422,62 +432,108 @@ def mutate_node(node):
 def main():
 
     split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
-    get_prefix_parents = get_prefix_notation(split_parents)
+    split_parents_clone = copy.deepcopy(split_parents)
 
-    print(get_prefix_parents)
+    get_prefix_parents = get_prefix_notation(split_parents)
+    get_prefix_parent_clone = get_prefix_notation(split_parents_clone)
+    
+    
+    # print(get_prefix_parents)
+    # print(get_prefix_parent_clone)  # [[1,2,3],[4,5,6]] -> 2d array
+
+    # print(get_prefix_parents)
     parent_tree1 = get_prefix_parents[0]
     parent_tree2 = get_prefix_parents[1]
 
+    parent_tree_clone1 = get_prefix_parent_clone[0]
+    parent_tree_clone2 = get_prefix_parent_clone[1]
+
+    
     # make the parent trees 
     make_parent_tree_one = make_tree(parent_tree1)
     make_parent_tree_two = make_tree(parent_tree2)
+
+    # print(make_parent_tree_one[0]) # returns the root node and all their children
+    # print(make_parent_tree_one[1])	# return a list containing all the nodes
+
+    # make the clones of the parent trees.  
+    make_parent_clone_tree_one = make_tree(parent_tree_clone1) 
+    make_parent_clone_tree_two = make_tree(parent_tree_clone2) 
+
+    print(make_parent_clone_tree_one[0]) # returns the root node and all their children
+    print(make_parent_clone_tree_one[1]) # return a list containing all the nodes -> this will be edited for the mutation
 
     #print the parent trees
     show_parent_tree_one = print_full_tree(make_parent_tree_one[0])
     show_parent_tree_two = print_full_tree(make_parent_tree_two[0])
 
-    # create deep clones of the parents as the parents will be remained unchanged
-    make_child_tree_one = copy.deepcopy(make_parent_tree_one)
-    show_child_tree_one = print_full_tree(make_child_tree_one[0])
+    show_parent_clone_tree_one = print_full_tree(make_parent_clone_tree_one[0])
+    show_parent_clone_tree_two = print_full_tree(make_parent_clone_tree_two[0])
+    show_parent_clone_tree_one_nodes = print_full_tree(make_parent_clone_tree_one[1])
+    show_parent_clone_tree_two_nodes = print_full_tree(make_parent_clone_tree_two[1])
+
+    if random() > 0.05:
+
+	    node_one_mutate = select_random_val(make_parent_clone_tree_one[1])
+	    node_two_mutate = select_random_val(make_parent_clone_tree_two[1])
+	    print("node one selected for mutation: ",node_one_mutate)
+	    print("node two selected for mutation: ",node_two_mutate)
+	    find_node_one = find_subtree(make_parent_clone_tree_one[0], make_parent_clone_tree_one[1],node_one_mutate)
+	    find_node_two = find_subtree(make_parent_clone_tree_two[0], make_parent_clone_tree_two[1],node_two_mutate)
+	    print("found node one: ")
+	    print(find_node_one.value, find_node_one.nodenum)
+	    print("mutating node one!")
+	    mutate_node_one = mutate_node(make_parent_clone_tree_one[0],make_parent_clone_tree_one[1],find_node_one)
+
+    # # create deep clones of the parents as the parents will be remained unchanged
+    # make_child_tree_one = copy.deepcopy(make_parent_tree_one)
+    # show_child_tree_one = print_full_tree(make_child_tree_one[0])
     
 
-    make_child_tree_two = copy.deepcopy(make_parent_tree_two)
-    show_child_tree_two = print_full_tree(make_child_tree_two[0])
+    # make_child_tree_two = copy.deepcopy(make_parent_tree_two)
+    # show_child_tree_two = print_full_tree(make_child_tree_two[0])
 
+    # node_one_mutate = select_random_val(make_child_tree_one[1])
+    # node_two_mutate = select_random_val(make_child_tree_two[1])
 
-    # select two random subtrees to be crossedover with each other. 
-    select_child_node_one = select_random_val(make_child_tree_one[1])
-    select_child_node_two = select_random_val(make_child_tree_two[1])
+    # print("node one to be mutated: ",node_one_mutate)
+    # print("node two to be mutated: ",node_two_mutate)
+    
+    # find_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],node_one_mutate)
+    # find_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],node_two_mutate)
 
-    print("selected node 1: ", select_child_node_one)
-    print("selected node 2: ", select_child_node_two)
+    # print("find node one: ",find_node_one.value, find_node_one.nodenum)
+    # print("find node two: ", find_node_two)
+
+    # # select two random subtrees to be crossedover with each other. 
+    # select_child_node_one = select_random_val(make_child_tree_one[1])
+    # select_child_node_two = select_random_val(make_child_tree_two[1])
+
+    # print("selected node 1: ", select_child_node_one)
+    # print("selected node 2: ", select_child_node_two)
 
     
-    # find the subtree in the tree and select the subtree to be crossed over. 
-    random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
-    random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
+    # # find the subtree in the tree and select the subtree to be crossed over. 
+    # random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
+    # random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
 
-     # swap the two subtrees with each other 
-    print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
+    #  # swap the two subtrees with each other 
+    # print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
+    # FullTree.swap_nodes(random_node_one, random_node_two)
 
-    # print('swapping: ', make_parent_tree_one[0].left_child.left_child.value ,make_parent_tree_one[0].left_child.left_child.nodenum ," with ",make_parent_tree_two[0].right_child.value,make_parent_tree_two[0].right_child.nodenum)
-    FullTree.swap_nodes(random_node_one, random_node_two)
-    # FullTree.swap_nodes(make_parent_tree_one[0].left_child.left_child, make_parent_tree_two[0].right_child)
+    # print("parent 1: ")
+    # print(show_parent_tree_one)
+    # print('\n')
+    # print("parent 2: ")
+    # print(show_parent_tree_two)
+    # print('\n')
+    # print('makeing new tree 1: ')
+    # print(show_child_tree_one)
+    # print('\n')
+    # print('make new tree 2: ')
+    # print(show_child_tree_two)
+    # print('\n')
 
-    print("parent 1: ")
-    print(show_parent_tree_one)
-    print('\n')
-    print("parent 2: ")
-    print(show_parent_tree_two)
-    print('\n')
-    print('makeing new tree 1: ')
-    print(show_child_tree_one)
-    print('\n')
-    print('make new tree 2: ')
-    print(show_child_tree_two)
-    print('\n')
-    print(make_child_tree_one[0])
-    print(make_child_tree_two[0])
 
 
 
