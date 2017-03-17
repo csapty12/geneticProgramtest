@@ -23,13 +23,11 @@ class GenExp:
     select parents for genetic operations and put children back into population
 
     """
-    
-
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
         self.left = None  # create the left and right nodes for an expression.
         self.right = None
-   
+
         if maxdepth is None:
             maxdepth = log(maxNumbers, 2) - 1
 
@@ -155,6 +153,7 @@ class Node(object):
             self.right_child = new_node
             new_node.parent = self
 
+
 # manipulating the tree
 class FullTree(object):
     def __init__(self, root_node):
@@ -162,13 +161,12 @@ class FullTree(object):
 
     @classmethod
     def swap_nodes(cls, node_one, node_two):
-        # need to account for the root nodes. 
-       
-     
+        # need to account for the root nodes.
+
+
         node_one_parent = node_one.parent
-        
+
         node_two_parent = node_two.parent
-        
 
         # figure out if node is left or right child
         if node_one_parent.left_child.value == node_one.value:
@@ -183,7 +181,8 @@ class FullTree(object):
             node_two_parent.right_child = node_one
 
         return
-      
+
+
 # bullshit class that needs to get sorted......
 class Tree(object):
     # every instance of a tree is a node.
@@ -282,8 +281,6 @@ def make_tree(pref_list):
 
     pref_list.pop(0)
 
-
-
     # print("pref list now: ",pref_list)
     while pref_list != []:
         # print("value of current node1: ",current_node)
@@ -318,14 +315,14 @@ def make_tree(pref_list):
                 current_node = current_node.parent
                 l1.append(current_node)
 
-
     return root_node, l1
 
+
 def print_full_tree(tree):
-	return tree
+    return tree
 
 
-def find_subtree(tree, list_nodes,rnd_val):
+def find_subtree(tree, list_nodes, rnd_val):
     # print("list nodes: ", list_nodes)
 
     # print("value to be found: ",rnd_val)
@@ -350,79 +347,66 @@ def find_subtree(tree, list_nodes,rnd_val):
             if current_node.right_child != None and current_node.right_child.checked == False:
                 current_node.checked = True
                 current_node = current_node.right_child
-                return find_subtree(current_node, list_nodes,rnd_val)
-    
-    
+                return find_subtree(current_node, list_nodes, rnd_val)
+
+
             else:
                 current_node = current_node.parent
                 # print("current node is now: ", current_node)
                 # if the current node left and right child both have been cheked, move to the curren node parent
                 if current_node.left_child.checked == True and current_node.right_child.checked == True:
                     current_node = current_node.parent
-                    return find_subtree(current_node, list_nodes,rnd_val)
+                    return find_subtree(current_node, list_nodes, rnd_val)
                 else:
                     # move pointer to the right child
                     current_node = current_node.right_child
-                    return find_subtree(current_node, list_nodes,rnd_val)
+                    return find_subtree(current_node, list_nodes, rnd_val)
+
 
 def select_random_val(tree):
     # print("tttrreeeeeeeeeeeee: ", tree)
-    #problem lays here, make sure the the root node is never selectee. 
+    # problem lays here, make sure the the root node is never selectee.
     root = tree[0].nodenum
-    
+
     x = tree.pop(0)
-    
+
     while True:
         y = choice(tree)
         if y.nodenum != root:
             break
-    tree.insert(0,x)
+    tree.insert(0, x)
     # print("blaah: ",x.value, x.nodenum)
-    return y.value,y.nodenum
-
-def mutate_node(tree,list_nodes,node):
-	print("tree: \n")
-	print(tree)
-	print()
-	print("list nodes: ",list_nodes)
-	print()
-	print("selected node: ",node.value, node.nodenum)
-	print("selected node subtree: ")
-	print(node)
-		# perform mutation
-	if node.value in ['+','-','*']:
-		node.value = choice(['+','-','*'])
-		print("new mutated node: ",node.value, node.nodenum)
-		print(node)
-		print("new list of nodes: ",list_nodes)
-		print("new tree")
-		print(tree)
-		return tree,list_nodes,node  #return the new tree, new list_nodes, new mutated node.
-	else:
-		node.value =  choice(randomVariable1)
-		print("new mutated node: ",node.value, node.nodenum)
-		print(node)
-		print("new list of nodes: ",list_nodes)
-		print(tree)
-		return tree,list_nodes,node
+    return y.value, y.nodenum
 
 
-# def testVals():
-# 	test = GenExp(8)
-#     generate_expressions = test.get_valid_expressions(8, 4)  # (maxNumber,Population size)
-#     # print("Population: ", generate_expressions)
-#     eval_exp = test.eval_expressions(generate_expressions)
-#     get_totals = test.get_totals(eval_exp)
-#     # print("totals: ", get_totals)
-#     get_fitness = test.get_mean_squared_fitness(get_totals)
-#     # print("fitness error: ", get_fitness)
-#     # print()
-#     # print("=======================================================")
-#     # print("parents")
-#     select_parents = test.select_parents(generate_expressions, get_fitness, 2)
-#     # print("parents selected: ", select_parents)
-#     split_parents = test.split_parents(select_parents)
-#     print("split parents: ", split_parents)
+def mutate_node(tree, list_nodes, node):
+    # print("tree: \n")
+    # print(tree)
+    # print()
+    # print("list nodes: ",list_nodes)
+    # print()
+    # print("selected node: ",node.value, node.nodenum)
+    # print("selected node subtree: ")
+    # print(node)
+    # perform mutation
+    if node.value in ['+', '-', '*']:
+        node.value = choice(['+', '-', '*'])
+        # print("new mutated node: ",node.value, node.nodenum)
+        # print(node)
+        # print("new list of nodes: ",list_nodes)
+        # print("new tree")
+        # print(tree)
+        return tree, list_nodes, node  # return the new tree, new list_nodes, new mutated node.
+    else:
+        node.value = choice(randomVariable1)
+        # print("new mutated node: ",node.value, node.nodenum)
+        # print(node)
+        # print("new list of nodes: ",list_nodes)
+        # print(tree)
+        return tree, list_nodes, node
+
+
+
 #     split_parents = [['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'], ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
 
 #     split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
@@ -430,14 +414,26 @@ def mutate_node(tree,list_nodes,node):
 
 
 def main():
-
-    split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
+    test = GenExp(8)
+    generate_expressions = test.get_valid_expressions(8, 4)  # (maxNumber,Population size)
+    # print("Population: ", generate_expressions)
+    eval_exp = test.eval_expressions(generate_expressions)
+    get_totals = test.get_totals(eval_exp)
+    # print("totals: ", get_totals)
+    get_fitness = test.get_mean_squared_fitness(get_totals)
+    # print("fitness error: ", get_fitness)
+    # print()
+    # print("=======================================================")
+    # print("parents")
+    select_parents = test.select_parents(generate_expressions, get_fitness, 2)
+    # print("parents selected: ", select_parents)
+    split_parents = test.split_parents(select_parents)
+    # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
     split_parents_clone = copy.deepcopy(split_parents)
 
     get_prefix_parents = get_prefix_notation(split_parents)
     get_prefix_parent_clone = get_prefix_notation(split_parents_clone)
-    
-    
+
     # print(get_prefix_parents)
     # print(get_prefix_parent_clone)  # [[1,2,3],[4,5,6]] -> 2d array
 
@@ -448,22 +444,21 @@ def main():
     parent_tree_clone1 = get_prefix_parent_clone[0]
     parent_tree_clone2 = get_prefix_parent_clone[1]
 
-    
-    # make the parent trees 
+    # make the parent trees
     make_parent_tree_one = make_tree(parent_tree1)
     make_parent_tree_two = make_tree(parent_tree2)
 
     # print(make_parent_tree_one[0]) # returns the root node and all their children
     # print(make_parent_tree_one[1])	# return a list containing all the nodes
 
-    # make the clones of the parent trees.  
-    make_parent_clone_tree_one = make_tree(parent_tree_clone1) 
-    make_parent_clone_tree_two = make_tree(parent_tree_clone2) 
+    # make the clones of the parent trees.
+    make_parent_clone_tree_one = make_tree(parent_tree_clone1)
+    make_parent_clone_tree_two = make_tree(parent_tree_clone2)
 
-    print(make_parent_clone_tree_one[0]) # returns the root node and all their children
-    print(make_parent_clone_tree_one[1]) # return a list containing all the nodes -> this will be edited for the mutation
+    # print(make_parent_clone_tree_one[0])  # returns the root node and all their children
+    # print(make_parent_clone_tree_one[1])  # return a list containing all the nodes -> this will be edited for the mutation
 
-    #print the parent trees
+    # print the parent trees
     show_parent_tree_one = print_full_tree(make_parent_tree_one[0])
     show_parent_tree_two = print_full_tree(make_parent_tree_two[0])
 
@@ -472,23 +467,28 @@ def main():
     show_parent_clone_tree_one_nodes = print_full_tree(make_parent_clone_tree_one[1])
     show_parent_clone_tree_two_nodes = print_full_tree(make_parent_clone_tree_two[1])
 
-    if random() > 0.05:
+    if random() <0.95:
+    	print("mutation activated")
+    	node_one_mutate = select_random_val(make_parent_clone_tree_one[1])
+    	node_two_mutate = select_random_val(make_parent_clone_tree_two[1])
+    	find_node_one = find_subtree(make_parent_clone_tree_one[0], make_parent_clone_tree_one[1], node_one_mutate)
+    	find_node_two = find_subtree(make_parent_clone_tree_two[0], make_parent_clone_tree_two[1], node_two_mutate)
+    	mutate_node_one = mutate_node(make_parent_clone_tree_one[0], make_parent_clone_tree_one[1], find_node_one)
+    	mutate_node_two = mutate_node(make_parent_clone_tree_two[0], make_parent_clone_tree_two[1], find_node_two)
+    	make_parent_clone_tree_one = mutate_node_one
+    	make_parent_clone_tree_two = mutate_node_two
 
-	    node_one_mutate = select_random_val(make_parent_clone_tree_one[1])
-	    node_two_mutate = select_random_val(make_parent_clone_tree_two[1])
-	    print("node one selected for mutation: ",node_one_mutate)
-	    print("node two selected for mutation: ",node_two_mutate)
-	    find_node_one = find_subtree(make_parent_clone_tree_one[0], make_parent_clone_tree_one[1],node_one_mutate)
-	    find_node_two = find_subtree(make_parent_clone_tree_two[0], make_parent_clone_tree_two[1],node_two_mutate)
-	    print("found node one: ")
-	    print(find_node_one.value, find_node_one.nodenum)
-	    print("mutating node one!")
-	    mutate_node_one = mutate_node(make_parent_clone_tree_one[0],make_parent_clone_tree_one[1],find_node_one)
+    # print("make parent clone tree one: ")
+    # print(make_parent_clone_tree_one[0])
+
+    # print("make parent clone tree two: ")
+    # print(make_parent_clone_tree_two[0])
+
 
     # # create deep clones of the parents as the parents will be remained unchanged
     # make_child_tree_one = copy.deepcopy(make_parent_tree_one)
     # show_child_tree_one = print_full_tree(make_child_tree_one[0])
-    
+
 
     # make_child_tree_two = copy.deepcopy(make_parent_tree_two)
     # show_child_tree_two = print_full_tree(make_child_tree_two[0])
@@ -498,26 +498,26 @@ def main():
 
     # print("node one to be mutated: ",node_one_mutate)
     # print("node two to be mutated: ",node_two_mutate)
-    
+
     # find_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],node_one_mutate)
     # find_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],node_two_mutate)
 
     # print("find node one: ",find_node_one.value, find_node_one.nodenum)
     # print("find node two: ", find_node_two)
 
-    # # select two random subtrees to be crossedover with each other. 
+    # # select two random subtrees to be crossedover with each other.
     # select_child_node_one = select_random_val(make_child_tree_one[1])
     # select_child_node_two = select_random_val(make_child_tree_two[1])
 
     # print("selected node 1: ", select_child_node_one)
     # print("selected node 2: ", select_child_node_two)
 
-    
-    # # find the subtree in the tree and select the subtree to be crossed over. 
+
+    # # find the subtree in the tree and select the subtree to be crossed over.
     # random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
     # random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
 
-    #  # swap the two subtrees with each other 
+    #  # swap the two subtrees with each other
     # print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
     # FullTree.swap_nodes(random_node_one, random_node_two)
 
@@ -533,16 +533,5 @@ def main():
     # print('make new tree 2: ')
     # print(show_child_tree_two)
     # print('\n')
-
-
-
-
-
-
-
-
-
-    
-
 if __name__ == "__main__":
     main()
