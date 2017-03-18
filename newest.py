@@ -438,17 +438,7 @@ def swap_nodes(tree_one, tree_two,list_nodes_one,list_nodes_two,node_one, node_t
 	print("list nodes 2: ")
 	print(list_nodes_two)
 
-	# print("old tree one")
-	# print(old_tree_one)
-	# print()
-	# print("old tree two")
-	# print(old_tree_two)
-	# print()
-	# print("new tree one")
-	# print(tree_one)
-	# print('\n')
-	# print("new tree 2")
-	# print(tree_two)
+	
 	return tree_one,tree_two
 
 
