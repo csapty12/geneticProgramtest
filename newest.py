@@ -140,6 +140,7 @@ class Node(object):
         self.right_child = None
         self.parent = None
         self.checked = False
+        self.checkedAgain = False
 
     def add_child(self, value, left=True):
         if left == True:
@@ -404,7 +405,56 @@ def mutate_node(tree, list_nodes, node):
         # print(tree)
         return tree, list_nodes
 
+def swap_nodes(tree_one, tree_two,list_nodes_one,list_nodes_two,node_one, node_two):
+	old_tree_one = copy.deepcopy(tree_one)
+	old_tree_two = copy.deepcopy(tree_two)
 
+	# print("\n")
+	print("list nodes 1: ")
+	print(list_nodes_one)
+
+	print("list nodes 2: ")
+	print(list_nodes_two)
+	node_one_parent = node_one.parent 
+	node_two_parent = node_two.parent
+	if node_one_parent.left_child.value == node_one.value:
+		node_one_parent.left_child = node_two
+		node_one_parent.left_child.parent = node_one_parent
+
+	else:
+		node_one_parent.right_child = node_two
+		node_one_parent.right_child.parent = node_one_parent
+
+	if node_two_parent.left_child.value == node_two.value:
+		node_two_parent.left_child = node_one
+		node_two_parent.left_child.parent = node_two_parent
+
+	else:
+		node_two_parent.right_child = node_one
+		node_two_parent.right_child.parent = node_two_parent
+	print("list nodes 1: ")
+	print(list_nodes_one)
+
+	print("list nodes 2: ")
+	print(list_nodes_two)
+
+	# print("old tree one")
+	# print(old_tree_one)
+	# print()
+	# print("old tree two")
+	# print(old_tree_two)
+	# print()
+	# print("new tree one")
+	# print(tree_one)
+	# print('\n')
+	# print("new tree 2")
+	# print(tree_two)
+	return tree_one,tree_two
+
+
+
+
+    # return
 
 #     split_parents = [['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'], ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
 
@@ -440,38 +490,56 @@ def main2():
 	# these are currently identicle to the parents
 	show_child_tree_one_nodes = print_full_tree(make_child_tree_one[1])
 	show_child_tree_two_nodes = print_full_tree(make_child_tree_two[1])
-
-	select_child_node_one = select_random_val(make_child_tree_one[1])
-	select_child_node_two = select_random_val(make_child_tree_two[1])
-
+	print(show_child_tree_one)
+	print(show_child_tree_two)
+	select_child_node_one = (make_child_tree_one[0].right_child.value,make_child_tree_one[0].right_child.nodenum)
+	select_child_node_two = (make_child_tree_two[0].right_child.value,make_child_tree_two[0].right_child.nodenum)
 	print("selected node 1: ", select_child_node_one)
 	print("selected node 2: ", select_child_node_two)
-
+	
 	random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
 	random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
 	print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
-	FullTree.swap_nodes(random_node_one, random_node_two)
+	new_trees = swap_nodes(make_child_tree_one[0],make_child_tree_two[0],make_child_tree_one[1],make_child_tree_two[1], random_node_one,random_node_two)
+	print(new_trees[0])
+	print()
+	print(new_trees[1])
+	print()
 
 
 
-	print("parent 1: ")
-	print(show_parent_tree_one)
-	print(show_parent_tree_one_nodes)
-	print('\n')
-	print("parent 2: ")
-	print(show_parent_tree_two)
-	print(show_parent_tree_two_nodes)
-	print('\n')
-	print('makeing new tree 1: ')
-	print(show_child_tree_one)
-	print(show_child_tree_one_nodes)
-	print('\n')
-	print('make new tree 2: ')
-	print(show_child_tree_two)
-	print("\n")
-	print(show_child_tree_two.right_child.value)
-	print(show_child_tree_two_nodes)
-	print('\n')
+	# print(select_child_node_one)
+	# select_child_node_one = select_random_val(make_child_tree_one[1])
+	# select_child_node_two = select_random_val(make_child_tree_two[1])
+
+	# print("selected node 1: ", select_child_node_one)
+	# print("selected node 2: ", select_child_node_two)
+
+	# random_node_one = find_subtree(make_child_tree_one[0],make_child_tree_one[1],select_child_node_one)
+	# random_node_two = find_subtree(make_child_tree_two[0],make_child_tree_two[1],select_child_node_two)
+	# print('swapping: ', random_node_one.value, random_node_one.nodenum , " with ",random_node_two.value, random_node_two.nodenum)
+	# FullTree.swap_nodes(random_node_one, random_node_two)
+
+
+
+	# print("parent 1: ")
+	# print(show_parent_tree_one)
+	# print(show_parent_tree_one_nodes)
+	# print('\n')
+	# print("parent 2: ")
+	# print(show_parent_tree_two)
+	# print(show_parent_tree_two_nodes)
+	# print('\n')
+	# print('makeing new tree 1: ')
+	# print(show_child_tree_one)
+	# print(show_child_tree_one_nodes)
+	# print('\n')
+	# print('make new tree 2: ')
+	# print(show_child_tree_two)
+	# print("\n")
+	# print('\n')
+
+
 
 if __name__ == "__main__":
     main2()
