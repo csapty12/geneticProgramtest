@@ -420,15 +420,40 @@ def mutate_node(tree, list_nodes, node):
 
 
 def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
+    # print("ln1: ", list_nodes_one)
+    # print("ln2: ", list_nodes_two)
+    # print("node one: ", node_one.value, node_one.nodenum)
+    # print("node two: ", node_two.value, node_two.nodenum)
+    # # tmp = [1,2,5,3,2,4,2,4,2,2]
+    # # new = [6,7,8,6,7,9,7,6,6,6]
+    # # print("old list1: ",tmp)
+    # # print("old list2: ", new)
+    # # indices_one = [i for i, x in enumerate(tmp) if x == 2]
+    # # indices_two = [i for i, x in enumerate(new) if x == 6]
+    # # print("indicies one: ", indices_one)
+    # # print("indicies two: ", indices_two)
+    # indices_one = [i for i, x in enumerate(list_nodes_one) if x == node_one.nodenum]
+    # # print("indiciesssss: ", indices_one)
+    # indices_two = [i for i, x in enumerate(list_nodes_two) if x == node_two.nodenum]
+    # # print("indicies 2: ", indices_two)
+    #
+    # for i in indices_one:
+    #     x = list_nodes_one[i]
+    #     for j in indices_two:
+    #         list_nodes_one[i],list_nodes_two[j] = list_nodes_two[j],list_nodes_one[i]
+    # print("new n1l: ", list_nodes_one)
+    # print("new nl2: ", list_nodes_two)
 
     node_one_parent = node_one.parent
     node_two_parent = node_two.parent
     if node_one_parent.left_child.value == node_one.value and node_one_parent.left_child.nodenum == node_one.nodenum:
         node_one_parent.left_child = node_two
+
         node_one_parent.left_child.parent = node_one_parent
 
     else:
         node_one_parent.right_child = node_two
+
         node_one_parent.right_child.parent = node_one_parent
 
     if node_two_parent.left_child.value == node_two.value and node_two_parent.left_child.nodenum == node_two.nodenum:
@@ -439,13 +464,19 @@ def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, nod
         node_two_parent.right_child = node_one
         node_two_parent.right_child.parent = node_two_parent
 
-    return tree_one, tree_two
+    return tree_one, tree_two, list_nodes_one, list_nodes_two
     # split_parents = [['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'], ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
 
 #     split_parents = [['X1', '-', '14', 'end'], ['(', 'X1', '-', '15', ')', '+', '13', 'end']]
 #     split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
 # 	  split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
 
+def tree_to_pref(tree):
+    print(tree)
+    nodes = []
+    print(tree.value, tree.nodenum, tree.checkedAgain)
+
+    pass
 
 def main2():
     # test = GenExp(8)
@@ -464,9 +495,11 @@ def main2():
     # split_parents = test.split_parents(select_parents)
     # print("split parents: ", split_parents)
     # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
-    split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],
-                     ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
-
+    # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],
+    #                  ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
+    split_parents = [
+        ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
+        ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
     get_prefix_parents = get_prefix_notation(split_parents)
     print(get_prefix_parents)
     parent_tree1 = get_prefix_parents[0]
@@ -485,9 +518,9 @@ def main2():
     show_parent_tree_two_nodes = print_full_tree(make_parent_tree_two[1])
 
     nodes_parent_tree_one = print_full_tree(make_parent_tree_one[2])
-    print("parent one nodes: ", nodes_parent_tree_one)
+    # print("parent one nodes: ", nodes_parent_tree_one)
     nodes_parent_tree_two = print_full_tree(make_parent_tree_two[2])
-    print("parent two nodes: ", nodes_parent_tree_two)
+    # print("parent two nodes: ", nodes_parent_tree_two)
 
     # make a copy of the parents
     make_child_tree_one = copy.deepcopy(make_parent_tree_one)
@@ -503,8 +536,11 @@ def main2():
     print(show_child_tree_one)
     print("parent 2")
     print(show_child_tree_two)
-    select_child_node_one = (make_child_tree_one[0].right_child.value, make_child_tree_one[0].right_child.nodenum)
-    select_child_node_two = (make_child_tree_two[0].right_child.value, make_child_tree_two[0].right_child.nodenum)
+    # select_child_node_one = (make_child_tree_one[0].right_child.value, make_child_tree_one[0].right_child.nodenum)
+    # select_child_node_two = (make_child_tree_two[0].right_child.value, make_child_tree_two[0].right_child.nodenum)
+    select_child_node_one = select_random_val(make_child_tree_one[1])
+    select_child_node_two = select_random_val(make_child_tree_two[1])
+
     print("selected node 1: ", select_child_node_one)
     print("selected node 2: ", select_child_node_two)
 
@@ -519,8 +555,8 @@ def main2():
     print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,
           random_node_two.nodenum)
 
-    new_trees = swap_nodes(make_child_tree_one[0], make_child_tree_two[0], make_child_tree_one[1],
-                           make_child_tree_two[1], random_node_one, random_node_two)
+    new_trees = swap_nodes(make_child_tree_one[0], make_child_tree_two[0],
+                           nodes_parent_tree_one, nodes_parent_tree_two, random_node_one, random_node_two)
     child_one = new_trees[0]
     child_two = new_trees[1]
     print("child one")
@@ -533,8 +569,15 @@ def main2():
     print("mutating nodes")
 
     """
-    to get the node value to mutate, pick two random  node nums values and change their values. 
+    to get the node value to mutate, pick two random  node nums values and change their values.
     """
+    # baby1 = new_trees[2]
+    # baby2 = new_trees[3]
+    # print("new nodes one: ", baby1)
+    # print("new nodes two: ", baby2)
+    tree_to_pref_child = tree_to_pref(child_one)
+
+
 
 
 
