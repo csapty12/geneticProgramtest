@@ -384,14 +384,14 @@ def select_random_val(list_nodes):
         if y.nodenum != root:
             break
     list_nodes.insert(0,x)
-    return y.value, y.nodenum
+    return y.value, y.nodenum, y
 
 def mutate_node(tree, list_nodes, node):
     # print("tree: \n")
     # print(tree)
     # print()
     print("list nodes: ", list_nodes)
-    # print()
+    print()
     # print("selected node: ",node.value, node.nodenum)
     # print("selected node subtree: ")
     # print(node)
@@ -401,6 +401,7 @@ def mutate_node(tree, list_nodes, node):
         # print("new mutated node: ",node.value, node.nodenum)
         # print(node)
         print("new list of nodes: ", list_nodes)
+        print()
         # print("new tree")
         # print(tree)
         return tree, list_nodes  # return the new tree, new list_nodes, new mutated node.
@@ -409,6 +410,7 @@ def mutate_node(tree, list_nodes, node):
         # print("new mutated node: ",node.value, node.nodenum)
         # print(node)
         print("new list of nodes: ", list_nodes)
+        print()
         # print(tree)
         return tree, list_nodes
 
@@ -457,12 +459,6 @@ def get_child_two(child_one,child_two):
     return child_two[len(child_one):]
 
 
-# def get_child_two(child_one, child_two):
-#     for i in range(0, len(child_two), len(child_one)):
-#         if child_two[i:len(child_one)] == child_one:
-#             del child_two[i:len(child_one)]
-#             break
-#     return child_two
 
 def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
     # print("ln1: ", list_nodes_one)
@@ -621,6 +617,18 @@ def main2():
     # print()
     node_to_mutate_two = select_random_val(child_two_list_node)
     print("node to mutate two: ",node_to_mutate_two)
+    print()
+
+    new_child_one = mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
+    print(new_child_one[0])
+
+    new_child_two = mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
+    print(new_child_two[0])
+
+    """
+    next break back down into prefix, evaluate and get mean squared error fitness
+    then put back into the population. 
+    """
    
 
 if __name__ == "__main__":
