@@ -16,7 +16,6 @@ randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 
 nodeid = 0
 
-
 class GenExp:
     """
 	Class to generate a population, evaluate it, find the fitness function
@@ -115,7 +114,6 @@ class GenExp:
             i.append("end")
         return split_list
 
-
 # building up the tree
 class Node(object):
     def __repr__(self):
@@ -153,7 +151,6 @@ class Node(object):
             new_node = Node(value)
             self.right_child = new_node
             new_node.parent = self
-
 
 # manipulating the tree
 class FullTree(object):
@@ -325,10 +322,8 @@ def make_tree(pref_list):
 def print_full_tree(tree):
     return tree
 
-
 def get_child_one(child_one):
     return child_one
-
 
 def find_subtree(tree, list_nodes, rnd_val):
     # print("list nodes: ", list_nodes)
@@ -369,7 +364,6 @@ def find_subtree(tree, list_nodes, rnd_val):
                     # move pointer to the right child
                     current_node = current_node.right_child
                     return find_subtree(current_node, list_nodes, rnd_val)
-
 
 def select_random_val(list_nodes):
     ln = []
@@ -414,19 +408,20 @@ def mutate_node(tree, list_nodes, node):
         # print(tree)
         return tree, list_nodes
 
+
 def make_list_nodes(tree, l1 = []):
     root_node = tree
     current_node = root_node
     # print(current_node)
-    l1.append(current_node)
+    
     if current_node.checkedAgain==True and current_node.parent == None and current_node.left_child.checkedAgain == True and current_node.right_child.checkedAgain==True:
-        del l1[-1]
+        
         return l1
     else:
         # print("in here fam")
         if current_node.left_child != None and current_node.left_child.checkedAgain == False:
             current_node.checkedAgain = True
-            # l1.append(current_node)
+            l1.append(current_node)
             current_node = current_node.left_child
             # print("current node 1: ", current_node.value)
             return make_list_nodes(current_node)
@@ -442,6 +437,9 @@ def make_list_nodes(tree, l1 = []):
                 return make_list_nodes(current_node)
             else:
                 # print("shit gone down")
+                if current_node not in l1:
+                    l1.append(current_node)
+
                 current_node = current_node.parent
                 # print("current node : ", current_node.value)
                 if current_node.left_child.checkedAgain== True and current_node.right_child.checkedAgain == True and current_node.parent !=None:
@@ -453,12 +451,9 @@ def make_list_nodes(tree, l1 = []):
                     current_node = current_node.right_child
                     return make_list_nodes(current_node)
 
-
 def get_child_two(child_one,child_two):
    
     return child_two[len(child_one):]
-
-
 
 def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
     # print("ln1: ", list_nodes_one)
@@ -513,13 +508,18 @@ def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, nod
 # 	  split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
 
 
-
+def deconstruct_tree(list_nodes):
+    # print(list_nodes)
+    pref = list()
+    for i in list_nodes:
+        pref.append(str(i.value))
+    return pref
 
 def main2():
     # test = GenExp(256)
-    # generate_expressions = test.get_valid_expressions(256,500)  # (maxNumber,Population size)
-    #    # print("Population: ", generate_expressions)
-    # eval_exp = test.eval_expressions(generate_expressions)
+    # population = test.get_valid_expressions(256,500)  # (maxNumber,Population size)
+    #    # print("Population: ", population)
+    # eval_exp = test.eval_expressions(population)
     # get_totals = test.get_totals(eval_exp)
     #    # print("totals: ", get_totals)
     # get_fitness = test.get_mean_squared_fitness(get_totals)
@@ -527,7 +527,7 @@ def main2():
     #    # print()
     #    # print("=======================================================")
     #    # print("parents")
-    # select_parents = test.select_parents(generate_expressions, get_fitness, 2)
+    # select_parents = test.select_parents(population, get_fitness, 2)
     #    # print("parents selected: ", select_parents)
     # split_parents = test.split_parents(select_parents)
     # print("split parents: ", split_parents)
@@ -614,7 +614,7 @@ def main2():
     print("mutating nodes: ")
     node_to_mutate_one = select_random_val(child_one_list_node)
     print("node to mutate one: ",node_to_mutate_one)
-    # print()
+    print()
     node_to_mutate_two = select_random_val(child_two_list_node)
     print("node to mutate two: ",node_to_mutate_two)
     print()
@@ -624,6 +624,15 @@ def main2():
 
     new_child_two = mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
     print(new_child_two[0])
+    print()
+    print()
+    print("deconstructing tree")
+    deconstruct_child_one = deconstruct_tree(new_child_one[1])
+    print(deconstruct_child_one)
+
+
+
+
 
     """
     next break back down into prefix, evaluate and get mean squared error fitness
