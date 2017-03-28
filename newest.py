@@ -11,7 +11,7 @@ MIN_NUM, MAX_NUM = 0, 20
 
 inputs = [4, 8, 12, 13]
 output = [60, 64, 68, 69]
-ideal_solution = "x1+8*(4+3)"
+ideal_solution = "X1+8*(4+3)"
 randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 
 nodeid = 0
@@ -384,8 +384,8 @@ def mutate_node(tree, list_nodes, node):
     # print("tree: \n")
     # print(tree)
     # print()
-    print("list nodes: ", list_nodes)
-    print()
+    # print("list nodes: ", list_nodes)
+    # print()
     # print("selected node: ",node.value, node.nodenum)
     # print("selected node subtree: ")
     # print(node)
@@ -394,8 +394,8 @@ def mutate_node(tree, list_nodes, node):
         node.value = choice(['+', '-', '*'])
         # print("new mutated node: ",node.value, node.nodenum)
         # print(node)
-        print("new list of nodes: ", list_nodes)
-        print()
+        # print("new list of nodes: ", list_nodes)
+        # print()
         # print("new tree")
         # print(tree)
         return tree, list_nodes  # return the new tree, new list_nodes, new mutated node.
@@ -403,8 +403,8 @@ def mutate_node(tree, list_nodes, node):
         node.value = choice(randomVariable1)
         # print("new mutated node: ",node.value, node.nodenum)
         # print(node)
-        print("new list of nodes: ", list_nodes)
-        print()
+        # print("new list of nodes: ", list_nodes)
+        # print()
         # print(tree)
         return tree, list_nodes
 
@@ -515,28 +515,51 @@ def deconstruct_tree(list_nodes):
         pref.append(str(i.value))
     return pref
 
+class Parser:
+    def __init__ (self):
+        self.stack = []
+
+    def add_to_stack (self, p):
+        if p in ['+', '-', '*']:
+            op1 = self.stack.pop ()
+            op2 = self.stack.pop ()
+            self.stack.append ('({} {} {})' .format (op1, p, op2) )
+        else:
+            self.stack.append (p)
+
+    def convert_to_infix (self, l):
+        l.reverse ()
+        for e in l:
+            self.add_to_stack (e)
+        return self.stack.pop ()
+
+
 def main2():
-    # test = GenExp(256)
-    # population = test.get_valid_expressions(256,500)  # (maxNumber,Population size)
-    #    # print("Population: ", population)
-    # eval_exp = test.eval_expressions(population)
-    # get_totals = test.get_totals(eval_exp)
-    #    # print("totals: ", get_totals)
-    # get_fitness = test.get_mean_squared_fitness(get_totals)
-    #    # print("fitness error: ", get_fitness)
-    #    # print()
-    #    # print("=======================================================")
-    #    # print("parents")
-    # select_parents = test.select_parents(population, get_fitness, 2)
-    #    # print("parents selected: ", select_parents)
-    # split_parents = test.split_parents(select_parents)
-    # print("split parents: ", split_parents)
+    test = GenExp(8)
+    population = test.get_valid_expressions(8,4)  # (maxNumber,Population size)
+    print("Population: ", population)
+    eval_exp = test.eval_expressions(population)
+    print("eval exp: ", eval_exp)
+    get_totals = test.get_totals(eval_exp)
+    print("totals: ", get_totals)
+    get_fitness = test.get_mean_squared_fitness(get_totals)
+    print("fitness error: ", get_fitness)
+    print()
+    print("=======================================================")
+    print("parents")
+    select_parents = test.select_parents(population, get_fitness, 2)
+       # print("parents selected: ", select_parents)
+    split_parents = test.split_parents(select_parents)
+    print("split parents: ", split_parents)
     # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
     # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],
     #                  ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
-    split_parents = [
-        ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
-        ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
+
+
+
+    # # split_parents = [
+    # #     ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
+    # #     ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
     get_prefix_parents = get_prefix_notation(split_parents)
     print(get_prefix_parents)
     parent_tree1 = get_prefix_parents[0]
@@ -626,12 +649,31 @@ def main2():
     print(new_child_two[0])
     print()
     print()
-    print("deconstructing tree")
-    deconstruct_child_one = deconstruct_tree(new_child_one[1])
+    print("deconstructing trees")
+
+    print("deconstructing child 1")
+    deconstruct_child_one= deconstruct_tree(new_child_one[1])
     print(deconstruct_child_one)
 
+    p = Parser()
+    c1 = p.convert_to_infix(deconstruct_child_one)
+    c1 = c1.replace(" ", "")
+    population.append(c1)
 
+    print("deconstructing child 2")
+    deconstruct_child_two= deconstruct_tree(new_child_two[1])
+    print(deconstruct_child_two)
 
+    p = Parser()
+    c2 = p.convert_to_infix(deconstruct_child_two)
+    c2 = c2.replace(" ", "")
+    population.append(c2)
+    print(population)
+    eval_exp = test.eval_expressions(population)
+    get_totals = test.get_totals(eval_exp)
+    get_fitness = test.get_mean_squared_fitness(get_totals)
+    print("getting fitness: ")
+    print(get_fitness)
 
 
     """
@@ -642,3 +684,4 @@ def main2():
 
 if __name__ == "__main__":
     main2()
+    
