@@ -330,14 +330,6 @@ def get_child_one(child_one):
     return child_one
 
 
-def get_child_two(child_one, child_two):
-    for i in range(0, len(child_two), len(child_one)):
-        if child_two[i:len(child_one)] == child_one:
-            del child_two[i:len(child_one)]
-            break
-    return child_two
-
-
 def find_subtree(tree, list_nodes, rnd_val):
     # print("list nodes: ", list_nodes)
 
@@ -379,18 +371,20 @@ def find_subtree(tree, list_nodes, rnd_val):
                     return find_subtree(current_node, list_nodes, rnd_val)
 
 
-def select_random_val(tree):
-    root = tree[0].nodenum
-
-    x = tree.pop(0)
-
+def select_random_val(list_nodes):
+    ln = []
+    for i in list_nodes:
+        ln.append((i.value, i.nodenum))
+    # print("ln: ",ln)
+    
+    root = list_nodes[0].nodenum
+    x = list_nodes.pop(0)
     while True:
-        y = choice(tree)
+        y = choice(list_nodes)
         if y.nodenum != root:
             break
-    tree.insert(0, x)
+    list_nodes.insert(0,x)
     return y.value, y.nodenum
-
 
 def mutate_node(tree, list_nodes, node):
     # print("tree: \n")
@@ -418,25 +412,76 @@ def mutate_node(tree, list_nodes, node):
         # print(tree)
         return tree, list_nodes
 
+def make_list_nodes(tree, l1 = []):
+    root_node = tree
+    current_node = root_node
+    # print(current_node)
+    l1.append(current_node)
+    if current_node.checkedAgain==True and current_node.parent == None and current_node.left_child.checkedAgain == True and current_node.right_child.checkedAgain==True:
+        del l1[-1]
+        return l1
+    else:
+        # print("in here fam")
+        if current_node.left_child != None and current_node.left_child.checkedAgain == False:
+            current_node.checkedAgain = True
+            # l1.append(current_node)
+            current_node = current_node.left_child
+            # print("current node 1: ", current_node.value)
+            return make_list_nodes(current_node)
+        else:
+            # print("now im here")
+            current_node.checkedAgain = True
+            if current_node.right_child != None and current_node.right_child.checkedAgain == False:
+                # print("moving into this bit")
+                # current_node.checkedAgain = True
+                current_node = current_node.right_child
+                # l1.append(current_node)
+                # print("current node : ", current_node.value)
+                return make_list_nodes(current_node)
+            else:
+                # print("shit gone down")
+                current_node = current_node.parent
+                # print("current node : ", current_node.value)
+                if current_node.left_child.checkedAgain== True and current_node.right_child.checkedAgain == True and current_node.parent !=None:
+                    current_node = current_node.parent
+                    return make_list_nodes(current_node)
+                elif current_node.left_child.checkedAgain== True and current_node.right_child.checkedAgain == True and current_node.parent ==None:
+                    return make_list_nodes(current_node)
+                else:
+                    current_node = current_node.right_child
+                    return make_list_nodes(current_node)
+
+
+def get_child_two(child_one,child_two):
+   
+    return child_two[len(child_one):]
+
+
+# def get_child_two(child_one, child_two):
+#     for i in range(0, len(child_two), len(child_one)):
+#         if child_two[i:len(child_one)] == child_one:
+#             del child_two[i:len(child_one)]
+#             break
+#     return child_two
 
 def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
     # print("ln1: ", list_nodes_one)
     # print("ln2: ", list_nodes_two)
-    # print("node one: ", node_one.value, node_one.nodenum)
-    # print("node two: ", node_two.value, node_two.nodenum)
+    # # print("node one: ", node_one.value, node_one.nodenum)
+    # # print("node two: ", node_two.value, node_two.nodenum)
     # # tmp = [1,2,5,3,2,4,2,4,2,2]
     # # new = [6,7,8,6,7,9,7,6,6,6]
-    # # print("old list1: ",tmp)
-    # # print("old list2: ", new)
-    # # indices_one = [i for i, x in enumerate(tmp) if x == 2]
-    # # indices_two = [i for i, x in enumerate(new) if x == 6]
-    # # print("indicies one: ", indices_one)
-    # # print("indicies two: ", indices_two)
+    # # # print("old list1: ",tmp)
+    # # # print("old list2: ", new)
+    # # # indices_one = [i for i, x in enumerate(tmp) if x == 2]
+    # # # indices_two = [i for i, x in enumerate(new) if x == 6]
+    # # # print("indicies one: ", indices_one)
+    # # # print("indicies two: ", indices_two)
     # indices_one = [i for i, x in enumerate(list_nodes_one) if x == node_one.nodenum]
-    # # print("indiciesssss: ", indices_one)
+    # # # print("indiciesssss: ", indices_one)
     # indices_two = [i for i, x in enumerate(list_nodes_two) if x == node_two.nodenum]
-    # # print("indicies 2: ", indices_two)
-    #
+    # # # print("indicies 2: ", indices_two)
+    
     # for i in indices_one:
     #     x = list_nodes_one[i]
     #     for j in indices_two:
@@ -471,16 +516,12 @@ def swap_nodes(tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, nod
 #     split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
 # 	  split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'], ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
 
-def tree_to_pref(tree):
-    print(tree)
-    nodes = []
-    print(tree.value, tree.nodenum, tree.checkedAgain)
 
-    pass
+
 
 def main2():
-    # test = GenExp(8)
-    # generate_expressions = test.get_valid_expressions(8,4)  # (maxNumber,Population size)
+    # test = GenExp(256)
+    # generate_expressions = test.get_valid_expressions(256,500)  # (maxNumber,Population size)
     #    # print("Population: ", generate_expressions)
     # eval_exp = test.eval_expressions(generate_expressions)
     # get_totals = test.get_totals(eval_exp)
@@ -544,10 +585,6 @@ def main2():
     print("selected node 1: ", select_child_node_one)
     print("selected node 2: ", select_child_node_two)
 
-    random_child_node_one = (make_child_tree_one[0].right_child.value, make_child_tree_one[0].right_child.nodenum)
-    random_child_node_two = (make_child_tree_two[0].right_child.value, make_child_tree_two[0].right_child.nodenum)
-    print("selected node 3: ", random_child_node_one)
-    print("selected node 4: ", random_child_node_two)
 
     random_node_one = find_subtree(make_child_tree_one[0], make_child_tree_one[1], select_child_node_one)
     random_node_two = find_subtree(make_child_tree_two[0], make_child_tree_two[1], select_child_node_two)
@@ -566,21 +603,25 @@ def main2():
     print(child_two)
     print("complete!")
     print()
-    print("mutating nodes")
+    
+    print()
+    print("making nodes:")
 
-    """
-    to get the node value to mutate, pick two random  node nums values and change their values.
-    """
-    # baby1 = new_trees[2]
-    # baby2 = new_trees[3]
-    # print("new nodes one: ", baby1)
-    # print("new nodes two: ", baby2)
-    tree_to_pref_child = tree_to_pref(child_one)
+    child_one_list_node = list(make_list_nodes(child_one))
+    child_two_list_node = list(make_list_nodes(child_two))
+    child_two_list_node = get_child_two(child_one_list_node, child_two_list_node)
 
+    print("child one nodes: ", child_one_list_node)
+    print()
+    print("child two nodes: ", child_two_list_node)
 
-
-
-
+    print("mutating nodes: ")
+    node_to_mutate_one = select_random_val(child_one_list_node)
+    print("node to mutate one: ",node_to_mutate_one)
+    # print()
+    node_to_mutate_two = select_random_val(child_two_list_node)
+    print("node to mutate two: ",node_to_mutate_two)
+   
 
 if __name__ == "__main__":
     main2()
