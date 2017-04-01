@@ -11,7 +11,9 @@ class GenExp:
 
     input1 = [4, 8, 12, 13]
     input2 = [1, 2, 3, 4]
-    output = [8, 33, 72, 122]
+    output = [38, 66, 94,101 ]
+    # 4 * 8 + (10 - 4)
+    # output = [8, 33, 72, 122]
     ideal_solution = "X1+X2*(7*X2)-3"
     randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
 
@@ -706,17 +708,17 @@ def main2():
         # print("fitness of update 2")
         print("updated population fitness: ", update_popn2[1])
 
-        if 0 in update_popn2[1] or 1 in update_popn2[1] or 2 in update_popn2[1]:
+        if min(update_popn2[1]) <= 5:
             print("it exists")
             break
         population = update_popn2[0]
-        print("current iteration: ", x-1)
+        print("current iteration: ", x)
         x += 1
 
     new_popn = update_popn2[1]
     min_val = min(new_popn)
     print("best fitness so far: ", min_val)
-    print("number of iterations: ", x)
+    print("number of iterations: ", x-1)
     for i in range(len(new_popn)):
         if new_popn[i] == min_val:
             print("index: ", i)
