@@ -12,7 +12,7 @@ class GenExp:
     input1 = [4, 8, 12, 13]
     input2 = [1, 2, 3, 4]
     output = [38, 66, 94,101 ]
-    # 4 * 8 + (10 - 4)
+    # X1 * 8 + (10 - X1)
     # output = [8, 33, 72, 122]
     ideal_solution = "X1+X2*(7*X2)-3"
     randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
@@ -38,9 +38,10 @@ class GenExp:
         self.operator = choice(GenExp.OPS)
 
     def __str__(self):
-        s = '{0!s}{1}{2!s}'.format(self.left, self.operator, self.right)
+        s = '{}{}{}'.format(self.left, self.operator, self.right)
+        s = str(s)
         if self.grouped:
-            return '({0})'.format(s)
+            return '({})'.format(s)
         else:
             return s
 
@@ -66,6 +67,7 @@ class GenExp:
     def get_totals(self, expression):
 
         totals = list()
+        print(expression)
         for i in expression:
             temp_totals = []
             for j in i:
@@ -91,7 +93,7 @@ class GenExp:
                 tmp.append(x)
             differences.append(tmp)
         # print("differences: ")
-        # print(differences)
+        # print(differences) ######################################################
         square = list()
         for i in range(len(differences)):
             tmp = list()
@@ -100,7 +102,7 @@ class GenExp:
                 tmp.append(x)
             square.append(tmp)
         # print("differences squared: ")
-        # print(square)
+        # print(square)#############################################################
         new_total = list()
         for i in range(len(square)):
             x = sum(square[i])
@@ -119,7 +121,42 @@ class GenExp:
 
     def select_parents(self, population, num_parents):
         # print("population: ", population)
-        parents = sample(population, num_parents)
+        parents = choice(population, num_parents)
+
+        return parents
+
+    def tournament_selection(self, population, fitness, selection_size):
+        # print("population")
+        # print(population)
+        # print("population fitnesses")
+        # print(fitness)
+        # print("selection size: ")
+        # print(selection_size)
+        zipped_population = list(zip(population, fitness))
+        # print("zipped list:")
+        # print(zipped_population)
+        candidates = sample(zipped_population, selection_size)
+        # print("selection")
+        # print(candidates)
+        parent_one = min(candidates, key=lambda t: t[1])
+
+        p1_index = candidates.index(parent_one)
+        # print(p1_index)
+        candidates.pop(p1_index)
+        # print("candidates:")
+        # print(candidates)
+        parent_two = min(candidates, key=lambda t: t[1])
+        p2_index = candidates.index(parent_two)
+        # print(p2_index)
+        candidates.pop(p2_index)
+        # print("candidates:")
+        # print(candidates)
+        parents = list()
+        # print(parent_one)
+        # print(parent_two)
+        parents.append(parent_one[0])
+        parents.append(parent_two[0])
+        print(parents)
 
         return parents
 
@@ -516,13 +553,6 @@ class Tree(object):
                         return self.make_list_nodes(current_node)
 
 
-# def deconstruct_tree(list_nodes):
-#     # print(list_nodes)
-#     pref = list()
-#     for i in list_nodes:
-#         pref.append(str(i.value))
-#     return pref
-
 
 class ToInfixParser:
     def __init__(self):
@@ -562,29 +592,39 @@ def main2():
     # print(eval_exp)
     x = 1
     while x <= 1000:
-        # print("Population: ", population)
+        print("Population: ", population)
 
         eval_exp = current_population.eval_expressions(population)
-        # print("eval exp: ", eval_exp) ##################################################################
+    # print("eval exp: ", eval_exp) ##################################################################
         get_totals = current_population.get_totals(eval_exp)
-        print("totals: ", get_totals)
+    # print("totals: ", get_totals)
         get_fitness = current_population.get_mean_squared_fitness(get_totals)
-        print("fitness error: ", get_fitness)
+        # print("fitness error: ", get_fitness)
+
+        if min(get_fitness) <= 3:
+            print("getting the fitnesssss: ", get_fitness)
+            print("the new min fitness is : ", min(get_fitness))
+            print("it exists")
+            break
 
         # print()
         # print("=======================================================")
         # print("parents")
-        select_parents = current_population.select_parents(population, 2)
-        #    # print("parents selected: ", select_parents)
+        # select_parents = current_population.select_parents(population, 2)
+        # print("parents selected: ", select_parents)
+
+        select_parents = current_population.tournament_selection(population, get_fitness, 4)
+        # print("selecting parents:")
+        # print(select_parents)
         split_parents = current_population.split_parents(select_parents)
         # print("split parents: ", split_parents)
-        # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
-        # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],
-        #                  ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
-
-        # # split_parents = [
-        # ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
-        # ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
+        # # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
+        # # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],
+        # #                  ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
+        #
+        # # # split_parents = [
+        # # ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
+        # # ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
         get_prefix_parents = to_pref.get_prefix_notation(split_parents)
         # print(get_prefix_parents)
         parent_tree1 = get_prefix_parents[0]
@@ -693,7 +733,7 @@ def main2():
         get_totals = current_population.get_totals(eval_exp)
         get_fitness = current_population.get_mean_squared_fitness(get_totals)
         # print("getting  new fitness: ")
-        print(get_fitness)
+        print("getting fitness: ",get_fitness)
         update_popn1 = current_population.update_population(population, get_fitness)
         # print("popn update one: ")
         # print(update_popn1[0])
@@ -703,26 +743,33 @@ def main2():
         print()
         print()
         update_popn2 = current_population.update_population(update_popn1[0], update_popn1[1])
+        # print("new population : ", update_popn2[0])
+        # print("new fitnesses: ", update_popn2[1])
+        population = update_popn2[0]
+
         # print("popn update two: ")
         # print(update_popn2[0])
         # print("fitness of update 2")
-        print("updated population fitness: ", update_popn2[1])
+        # print("updated population fitness: ", update_popn2[1])
 
-        if min(update_popn2[1]) <= 5:
-            print("it exists")
-            break
+        
         population = update_popn2[0]
+        # print("the newest population is ::::::: ", population)
+
         print("current iteration: ", x)
+        print("current best fitness: ",  min(update_popn2[1]))
         x += 1
 
-    new_popn = update_popn2[1]
+    new_popn = get_fitness
     min_val = min(new_popn)
     print("best fitness so far: ", min_val)
     print("number of iterations: ", x-1)
     for i in range(len(new_popn)):
         if new_popn[i] == min_val:
             print("index: ", i)
-            print("equation ", population[i])
+            best = population[i]
+            print("equation ", best)
+
 
 
 if __name__ == "__main__":
