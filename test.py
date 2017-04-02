@@ -11,10 +11,15 @@ class GenExp:
 
     input1 = [4, 8, 12, 13]
     input2 = [1, 2, 3, 4]
+    input3 = [5, 9, 2, 7]
+    input4 = [6, 4, 2, 1]
+    input5 = [7, 2, 6, 9]
     # output = [46, 66, 94,101 ]
     # X1 * 8 + (10 - X1)
     # (X1*10)-X2+(6+X2)
-    output = [8, 33, 72, 122]
+    # (X1+X3-6)+(X2+13)*18
+    # output = [8, 33, 72, 122]
+    output = [255, 400, 296, 320 ]
     ideal_solution = "X1+X2*(7*X2)-3"
     randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1", "X2", "X3"]
 
@@ -53,7 +58,7 @@ class GenExp:
             str_exps = str(exps)
             expression_list.append(str_exps)
 
-            expression_list = [i for i in expression_list if 'X1' in i if "X2" in i]  # print out valid expressions with varibales
+            expression_list = [i for i in expression_list if 'X1' in i if "X2" in i if "X3" in i]  # print out valid expressions with varibales
         return expression_list
 
     def eval_expressions(self, expression):
@@ -62,13 +67,20 @@ class GenExp:
 
         x1 = GenExp.input1
         x2 = GenExp.input2
+        x3 = GenExp.input3
+
         for i in expression:
-            new_exp = [i.replace("X1", str(j)) for j in x1]
+            first_eval = [i.replace("X1", str(j)) for j in x1]
             tmp = list()
-            for k in new_exp:
-                newer_exp = [k.replace("X2", str(l)) for l in x2]
-                tmp.append(newer_exp)
+            for k in first_eval:
+                snd_eval = [k.replace("X2", str(l)) for l in x2]
+                tmp2 = list()
+                for m in snd_eval:
+                    trd_eval = [m.replace("X3", str(n)) for n in x3]
+                    tmp2.append(trd_eval)
+                tmp.append(tmp2)
             eval_list.append(tmp)
+        # print("eval listttttt: ")
         # print(eval_list)
 
         
@@ -78,135 +90,125 @@ class GenExp:
     def get_totals(self, expression):
 
         totals = list()
-        # for i in expression:
-        #     temp_totals = []
-        #     for j in i:
-        #         x = eval(j)
-        #         temp_totals.append(x)
-        #     totals.append(temp_totals)
-        # return totals
-        # print("eeeeek")
+
         for i in expression:
             new_tmp = list()
             for j in i:
-                tmp_totals = list()
+                tmp1 = list()
                 for k in j:
-                    x = eval(k)
-                    tmp_totals.append(x)
-                new_tmp.append(tmp_totals)
+                    tmp2 = list()
+                    for l in k:
+                        x = eval(l)
+                        tmp2.append(x)
+                    tmp1.append(tmp2)
+                new_tmp.append(tmp1)
             totals.append(new_tmp)
-        # print("totals")
-        # print(totals)
         return totals
 
 
+    # def test_fit(self,totals):
+    #     import time
+    #     t0 = time.time()
+    #     differences = list()
+    #     for i in range(len(totals)):
+    #         tmp1 = list()
+    #         for j in range(len(totals[i])):
+    #             tmp2 = list()
+    #             for k in range(len(totals[i][j])):
+    #                 tmp3 = list()
+    #                 for l in range(len(totals[i][j][k])):
+    #                     x = totals[i][j][k][l] - GenExp.output[l]
+    #                     sq = x **2
+    #                     tmp3.append(sq)
+    #                 tmp2.append(tmp3)
+            
+    #                 for l in range(len(tmp2)):
+    #                     sum1 = sum(tmp2[l])
+                
+    #                 tmp1.append(sum1)
+    #         differences.append(tmp1)
+    #     print("differences:")
+    #     print(differences)
+    #     print()
+
+    #     mean = [sum(i)/len(i) for i in differences]
+    #     squareroot = [sqrt(i) for i in mean]
+    #     print(mean)
+
+
+    #     # squareroot = [sqrt(i) for i in mean]
+    #     # print("sqrt:")
+    #     # print(squareroot)
+
+    #     t1 = time.time()
+    #     total = t1-t0
+    #     print("time taken: ", total)
 
     def get_mean_squared_fitness(self, totals):
         """
         first find the difference between actual output and expected output for each X1 value
         square the differences, sum them all up and divide by number len(x1)
         """
-        # print("the outputs are::::: ")
-        # print(outputs)
-        # print("differences::::")
-        # print("current totals")
-        # print(totals)
-        # print()
+        import time
+        t0 = time.time()
         differences = list()
         for i in range(len(totals)):
             tmp1 = list()
             for j in range(len(totals[i])):
-                # print(totals[i][j])
                 tmp2 = list()
                 for k in range(len(totals[i][j])):
-                    x = totals[i][j][k] - GenExp.output[k]
-                    tmp2.append(x)
+                    tmp3 = list()
+                    for l in range(len(totals[i][j][k])):
+                        x = totals[i][j][k][l] - GenExp.output[l]
+                        sq = x **2
+                        tmp3.append(sq)
+                    tmp2.append(tmp3)
                 tmp1.append(tmp2)
             differences.append(tmp1)
-        # print()
-        # print("differences::")
+        # print("differeces")
         # print(differences)
 
-        square = list()
+        print()
+
+
+        print()
+        new_total = list()
         for i in range(len(differences)):
             tmp1 = list()
             for j in range(len(differences[i])):
                 tmp2 = list()
                 for k in range(len(differences[i][j])):
-                    x = differences[i][j][k] **2
+                    x = sum(differences[i][j][k])
                     tmp2.append(x)
                 tmp1.append(tmp2)
-            square.append(tmp1)
-        # print()
-        # print("squared vals:")
-        # print(square)
-
-        # print()
-        new_total = list()
-        for i in range(len(square)):
-            tmp1 = list()
-            for j in range(len(square[i])):
-                x = sum(square[i][j])
-                tmp1.append(x)
             new_total.append(tmp1)
-        # print("new totals:")
+        # print("old totals:")
         # print(new_total)
+
+
 
         root_mean_sq_err = list()
         for i in new_total:
             tmp= list()
             for j in i:
-                x = j/len(GenExp.input1)
-                err = sqrt(x)
-                tmp.append(err)
+                tmp2 = list()
+                for k in j:
+                    x = k/len(GenExp.input1)
+                    err = sqrt(x)
+                    tmp2.append(err)
+                tmp.append(tmp2)
             root_mean_sq_err.append(tmp)
-        # print()
-        # print("root mean sq err")
-        # print(root_mean_sq_err)
 
         average_err = list()
         for i in root_mean_sq_err:
-            x = sum(i)
-            y = x/len(i)
+            for j in i:
+                x = sum(j)
+                y = x/len(j)
             average_err.append(y)
-        # print("average error: ")
-        # print(average_err)
+
+
         return average_err
-        # differences = list()
-        # for i in range(len(totals)):
-        #     tmp = list()
-        #     for j in range(len(totals[i])):
-        #         x = totals[i][j] - GenExp.output[j]
-        #         tmp.append(x)
-        #     differences.append(tmp)
-        # print("differences: ")
-        # print(differences)
 
-        # square = list()
-        # for i in range(len(differences)):
-        #     tmp = list()
-        #     for j in range(len(differences[i])):
-        #         x = differences[i][j] ** 2
-        #         tmp.append(x)
-        #     square.append(tmp)
-        # print()
-        # print("differences squared: ")
-        # print(square)
-        # new_total = list()
-        # for i in range(len(square)):
-        #     x = sum(square[i])
-        #     new_total.append(x)
-        # print("new totals: ")
-        # print(new_total)
-
-        # root_mean_sq_err = list()
-        # for i in new_total:
-        #     x = i / len(GenExp.input1)
-        #     err = sqrt(x)
-        #     root_mean_sq_err.append(err)
-        # # print("root mean sq err")
-        # # print(root_mean_sq_err)
-        # return root_mean_sq_err
 
     def select_parents(self, population, num_parents):
         # print("population: ", population)
@@ -513,30 +515,6 @@ class Tree(object):
         return y.value, y.nodenum, y
 
     def swap_nodes(self, tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
-        # print("ln1: ", list_nodes_one)
-        # print("ln2: ", list_nodes_two)
-        # # print("node one: ", node_one.value, node_one.nodenum)
-        # # print("node two: ", node_two.value, node_two.nodenum)
-        # # tmp = [1,2,5,3,2,4,2,4,2,2]
-        # # new = [6,7,8,6,7,9,7,6,6,6]
-        # # # print("old list1: ",tmp)
-        # # # print("old list2: ", new)
-        # # # indices_one = [i for i, x in enumerate(tmp) if x == 2]
-        # # # indices_two = [i for i, x in enumerate(new) if x == 6]
-        # # # print("indicies one: ", indices_one)
-        # # # print("indicies two: ", indices_two)
-        # indices_one = [i for i, x in enumerate(list_nodes_one) if x == node_one.nodenum]
-        # # # print("indiciesssss: ", indices_one)
-        # indices_two = [i for i, x in enumerate(list_nodes_two) if x == node_two.nodenum]
-        # # # print("indicies 2: ", indices_two)
-
-        # for i in indices_one:
-        #     x = list_nodes_one[i]
-        #     for j in indices_two:
-        #         list_nodes_one[i],list_nodes_two[j] = list_nodes_two[j],list_nodes_one[i]
-        # print("new n1l: ", list_nodes_one)
-        # print("new nl2: ", list_nodes_two)
-
         node_one_parent = node_one.parent
         node_two_parent = node_two.parent
         if node_one_parent.left_child.value == node_one.value\
@@ -669,13 +647,13 @@ class ToInfixParser:
 
 
 def main2():
-    current_population = GenExp(256)
+    current_population = GenExp(8)
     to_pref = ToPrefixParser()
     tree = Tree()
 
-    population = current_population.get_valid_expressions(256, 500)  # (maxNumber,Population size)
+    population = current_population.get_valid_expressions(8, 50)  # (maxNumber,Population size)
     x = 1
-    while x <= 1:
+    while x <= 100:
         # print("Population: ", population)
 
         eval_exp = current_population.eval_expressions(population)
@@ -683,6 +661,8 @@ def main2():
         get_totals = current_population.get_totals(eval_exp)
         # print("totals: ", get_totals)
         get_fitness = current_population.get_mean_squared_fitness(get_totals)
+        # test_fitness = current_population.test_fit(get_totals)
+
         print("fitness error: ", get_fitness)
 
         if min(get_fitness) <= 3:
