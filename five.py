@@ -11,11 +11,17 @@ class GenExp:
 
     input1 = [4, 8, 12, 13]
     input2 = [1, 2, 3, 4]
-    output = [38, 66, 94,101 ]
+    input3 = [5, 9, 2, 7]
+    input4 = [6, 4, 2, 1]
+    input5 = [7, 2, 6, 9]
+    # output = [46, 66, 94,101 ]
     # X1 * 8 + (10 - X1)
+    # (X1*10)-X2+(6+X2)
+    # (X1+X3-6)+(X2+13)*18
     # output = [8, 33, 72, 122]
+    output = [255, 400, 296, 320 ]
     ideal_solution = "X1+X2*(7*X2)-3"
-    randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1"]
+    randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1", "X2", "X3"]
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
         self.left = None  # create the left and right nodes for an expression.
@@ -51,73 +57,158 @@ class GenExp:
             exps = GenExp(maxNumbers)
             str_exps = str(exps)
             expression_list.append(str_exps)
-            expression_list = [i for i in expression_list if 'X1' in i]  # print out valid expressions with varibales
+
+            expression_list = [i for i in expression_list if 'X1' in i if "X2" in i if "X3" in i]  # print out valid expressions with varibales
         return expression_list
 
     def eval_expressions(self, expression):
 
         eval_list = list()
+
         x1 = GenExp.input1
         x2 = GenExp.input2
+        x3 = GenExp.input3
+
         for i in expression:
-            new_exp = [i.replace("X1", str(j)) for j in x1]
-            eval_list.append(new_exp)
+            first_eval = [i.replace("X1", str(j)) for j in x1]
+            tmp = list()
+            for k in first_eval:
+                snd_eval = [k.replace("X2", str(l)) for l in x2]
+                tmp2 = list()
+                for m in snd_eval:
+                    trd_eval = [m.replace("X3", str(n)) for n in x3]
+                    tmp2.append(trd_eval)
+                tmp.append(tmp2)
+            eval_list.append(tmp)
+        # print("eval listttttt: ")
+        # print(eval_list)
+
+        
         return eval_list
+
 
     def get_totals(self, expression):
 
         totals = list()
-        # print(expression)
+
         for i in expression:
-            temp_totals = []
+            new_tmp = list()
             for j in i:
-                x = eval(j)
-                temp_totals.append(x)
-            totals.append(temp_totals)
+                tmp1 = list()
+                for k in j:
+                    tmp2 = list()
+                    for l in k:
+                        x = eval(l)
+                        tmp2.append(x)
+                    tmp1.append(tmp2)
+                new_tmp.append(tmp1)
+            totals.append(new_tmp)
         return totals
+
+
+    # def test_fit(self,totals):
+    #     import time
+    #     t0 = time.time()
+    #     differences = list()
+    #     for i in range(len(totals)):
+    #         tmp1 = list()
+    #         for j in range(len(totals[i])):
+    #             tmp2 = list()
+    #             for k in range(len(totals[i][j])):
+    #                 tmp3 = list()
+    #                 for l in range(len(totals[i][j][k])):
+    #                     x = totals[i][j][k][l] - GenExp.output[l]
+    #                     sq = x **2
+    #                     tmp3.append(sq)
+    #                 tmp2.append(tmp3)
+            
+    #                 for l in range(len(tmp2)):
+    #                     sum1 = sum(tmp2[l])
+                
+    #                 tmp1.append(sum1)
+    #         differences.append(tmp1)
+    #     print("differences:")
+    #     print(differences)
+    #     print()
+
+    #     mean = [sum(i)/len(i) for i in differences]
+    #     squareroot = [sqrt(i) for i in mean]
+    #     print(mean)
+
+
+    #     # squareroot = [sqrt(i) for i in mean]
+    #     # print("sqrt:")
+    #     # print(squareroot)
+
+    #     t1 = time.time()
+    #     total = t1-t0
+    #     print("time taken: ", total)
 
     def get_mean_squared_fitness(self, totals):
         """
         first find the difference between actual output and expected output for each X1 value
         square the differences, sum them all up and divide by number len(x1)
         """
-        # print("the outputs are::::: ")
-        # print(outputs)
-        # print("differences::::")
-        # print(totals)
+        import time
+        t0 = time.time()
         differences = list()
         for i in range(len(totals)):
-            tmp = list()
+            tmp1 = list()
             for j in range(len(totals[i])):
-                x = totals[i][j] - GenExp.output[j]
-                tmp.append(x)
-            differences.append(tmp)
-        # print("differences: ")
-        # print(differences) ######################################################
-        square = list()
-        for i in range(len(differences)):
-            tmp = list()
-            for j in range(len(differences[i])):
-                x = differences[i][j] ** 2
-                tmp.append(x)
-            square.append(tmp)
-        # print("differences squared: ")
-        # print(square)#############################################################
+                tmp2 = list()
+                for k in range(len(totals[i][j])):
+                    tmp3 = list()
+                    for l in range(len(totals[i][j][k])):
+                        x = totals[i][j][k][l] - GenExp.output[l]
+                        sq = x **2
+                        tmp3.append(sq)
+                    tmp2.append(tmp3)
+                tmp1.append(tmp2)
+            differences.append(tmp1)
+        # print("differeces")
+        # print(differences)
+
+        print()
+
+
+        print()
         new_total = list()
-        for i in range(len(square)):
-            x = sum(square[i])
-            new_total.append(x)
-        # print("new totals: ")
+        for i in range(len(differences)):
+            tmp1 = list()
+            for j in range(len(differences[i])):
+                tmp2 = list()
+                for k in range(len(differences[i][j])):
+                    x = sum(differences[i][j][k])
+                    tmp2.append(x)
+                tmp1.append(tmp2)
+            new_total.append(tmp1)
+        # print("old totals:")
         # print(new_total)
+
+
 
         root_mean_sq_err = list()
         for i in new_total:
-            x = i / len(GenExp.input1)
-            err = sqrt(x)
-            root_mean_sq_err.append(err)
-        # print("root mean sq err")
-        # print(root_mean_sq_err)
-        return root_mean_sq_err
+            tmp= list()
+            for j in i:
+                tmp2 = list()
+                for k in j:
+                    x = k/len(GenExp.input1)
+                    err = sqrt(x)
+                    tmp2.append(err)
+                tmp.append(tmp2)
+            root_mean_sq_err.append(tmp)
+
+        average_err = list()
+        for i in root_mean_sq_err:
+            for j in i:
+                x = sum(j)
+                y = x/len(j)
+            average_err.append(y)
+
+
+        return average_err
+
 
     def select_parents(self, population, num_parents):
         # print("population: ", population)
@@ -424,30 +515,6 @@ class Tree(object):
         return y.value, y.nodenum, y
 
     def swap_nodes(self, tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
-        # print("ln1: ", list_nodes_one)
-        # print("ln2: ", list_nodes_two)
-        # # print("node one: ", node_one.value, node_one.nodenum)
-        # # print("node two: ", node_two.value, node_two.nodenum)
-        # # tmp = [1,2,5,3,2,4,2,4,2,2]
-        # # new = [6,7,8,6,7,9,7,6,6,6]
-        # # # print("old list1: ",tmp)
-        # # # print("old list2: ", new)
-        # # # indices_one = [i for i, x in enumerate(tmp) if x == 2]
-        # # # indices_two = [i for i, x in enumerate(new) if x == 6]
-        # # # print("indicies one: ", indices_one)
-        # # # print("indicies two: ", indices_two)
-        # indices_one = [i for i, x in enumerate(list_nodes_one) if x == node_one.nodenum]
-        # # # print("indiciesssss: ", indices_one)
-        # indices_two = [i for i, x in enumerate(list_nodes_two) if x == node_two.nodenum]
-        # # # print("indicies 2: ", indices_two)
-
-        # for i in indices_one:
-        #     x = list_nodes_one[i]
-        #     for j in indices_two:
-        #         list_nodes_one[i],list_nodes_two[j] = list_nodes_two[j],list_nodes_one[i]
-        # print("new n1l: ", list_nodes_one)
-        # print("new nl2: ", list_nodes_two)
-
         node_one_parent = node_one.parent
         node_two_parent = node_two.parent
         if node_one_parent.left_child.value == node_one.value\
@@ -552,8 +619,6 @@ class Tree(object):
                         current_node = current_node.right_child
                         return self.make_list_nodes(current_node)
 
-
-
 class ToInfixParser:
     def __init__(self):
         self.stack = []
@@ -582,27 +647,26 @@ class ToInfixParser:
 
 
 def main2():
-    current_population = GenExp(256)
+    current_population = GenExp(8)
     to_pref = ToPrefixParser()
     tree = Tree()
 
-    population = current_population.get_valid_expressions(256, 500)  # (maxNumber,Population size)
-    # print("population!: ", population)
-    # eval_exp = current_population.eval_expressions(population)
-    # print(eval_exp)
+    population = current_population.get_valid_expressions(8, 50)  # (maxNumber,Population size)
     x = 1
-    while x <= 1000:
+    while x <= 100:
         # print("Population: ", population)
 
         eval_exp = current_population.eval_expressions(population)
-    # print("eval exp: ", eval_exp) ##################################################################
+        # print("eval exp: ", eval_exp) ##################################################################
         get_totals = current_population.get_totals(eval_exp)
-    # print("totals: ", get_totals)
+        # print("totals: ", get_totals)
         get_fitness = current_population.get_mean_squared_fitness(get_totals)
-        # print("fitness error: ", get_fitness)
+        # test_fitness = current_population.test_fit(get_totals)
+
+        print("fitness error: ", get_fitness)
 
         if min(get_fitness) <= 3:
-            print("getting the fitnesssss: ", get_fitness)
+            # print("getting the fitnesssss: ", get_fitness)
             print("the new min fitness is : ", min(get_fitness))
             print("it exists")
             break
@@ -617,11 +681,7 @@ def main2():
         # print("selecting parents:")
         # print(select_parents)
         split_parents = current_population.split_parents(select_parents)
-        # print("split parents: ", split_parents)
-        # # split_parents = [['(', 'X1', '-', '17', '*', '15', ')', 'end'], ['X1', '+', '13', 'end']]
-        # # split_parents = [['(', 'X1', '+', 'X1', '+', '5', ')', '-', '18', '+', '17', '+', '10', 'end'],
-        # #                  ['(', '(', 'X1', '*', '13', ')', '*', '18', '*', '6', ')', 'end']]
-        #
+
         # # # split_parents = [
         # # ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
         # # ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
@@ -659,13 +719,8 @@ def main2():
         # print(show_child_tree_one)
         # print("parent 2")
         # print(show_child_tree_two)
-        # select_child_node_one = (make_child_tree_one[0].right_child.value, make_child_tree_one[0].right_child.nodenum)
-        # select_child_node_two = (make_child_tree_two[0].right_child.value, make_child_tree_two[0].right_child.nodenum)
         select_child_node_one = tree.select_random_val(make_child_tree_one[1])
         select_child_node_two = tree.select_random_val(make_child_tree_two[1])
-
-        # print("selected node 1: ", select_child_node_one)
-        # print("selected node 2: ", select_child_node_two)
 
         random_node_one = tree.find_subtree(make_child_tree_one[0], make_child_tree_one[1], select_child_node_one)
         random_node_two = tree.find_subtree(make_child_tree_two[0], make_child_tree_two[1], select_child_node_two)
@@ -677,16 +732,6 @@ def main2():
                                     nodes_parent_tree_one, nodes_parent_tree_two, random_node_one, random_node_two)
         child_one = new_trees[0]
         child_two = new_trees[1]
-        # print("child one")
-        # print(child_one)
-        # print()
-        # print("building child two")
-        # print(child_two)
-        # print("complete!")
-        # print()
-
-        # print()
-        # print("making nodes:")
 
         child_one_list_node = list(tree.make_list_nodes(child_one))
         child_two_list_node = list(tree.make_list_nodes(child_two))
@@ -699,18 +744,18 @@ def main2():
         # print("mutating nodes: ")
         node_to_mutate_one = tree.select_random_val(child_one_list_node)
         # print("node to mutate one: ",node_to_mutate_one)
-        print()
+        # print()
         node_to_mutate_two = tree.select_random_val(child_two_list_node)
         # print("node to mutate two: ",node_to_mutate_two)
-        print()
+        # print()
 
         new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
         # print(new_child_one[0])
 
         new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
         # print(new_child_two[0])
-        print()
-        print()
+        # print()
+        # print()
         # print("deconstructing trees")
         p = ToInfixParser()
         # print("deconstructing child 1")
@@ -739,9 +784,9 @@ def main2():
         # print(update_popn1[0])
         # print("fitness of update 1")
         # print(update_popn1[1])
-        print()
-        print()
-        print()
+        # print()
+        # print()
+        # print()
         update_popn2 = current_population.update_population(update_popn1[0], update_popn1[1])
         # print("new population : ", update_popn2[0])
         # print("new fitnesses: ", update_popn2[1])

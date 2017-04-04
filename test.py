@@ -12,15 +12,15 @@ class GenExp:
     input1 = [4, 8, 12, 13]
     input2 = [1, 2, 3, 4]
     input3 = [5, 9, 2, 7]
-    input4 = [6, 4, 2, 1]
-    input5 = [7, 2, 6, 9]
+    # input4 = [6, 4, 2, 1]
+    # input5 = [7, 2, 6, 9]
     # output = [46, 66, 94,101 ]
     # X1 * 8 + (10 - X1)
     # (X1*10)-X2+(6+X2)
     # (X1+X3-6)+(X2+13)*18
-    # output = [8, 33, 72, 122]
-    output = [255, 400, 296, 320 ]
-    ideal_solution = "X1+X2*(7*X2)-3"
+    output = [8, 33, 72, 122]
+    # output = [255, 400, 296, 320 ]
+    # ideal_solution = "X1+X2*(7*X2)-3"
     randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1", "X2", "X3"]
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
@@ -646,176 +646,182 @@ class ToInfixParser:
         return self.stack.pop()
 
 
-def main2():
-    current_population = GenExp(8)
+def main2(max_num, popn_size, num_iterations):
+    import time
+    t0 = time.time()
+    current_population = GenExp(max_num)
     to_pref = ToPrefixParser()
     tree = Tree()
 
-    population = current_population.get_valid_expressions(8, 50)  # (maxNumber,Population size)
+    population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,Population size)
+    print("population")
+    print(population)
     x = 1
-    while x <= 100:
+    # while x <= num_iterations:
         # print("Population: ", population)
 
-        eval_exp = current_population.eval_expressions(population)
-        # print("eval exp: ", eval_exp) ##################################################################
-        get_totals = current_population.get_totals(eval_exp)
-        # print("totals: ", get_totals)
-        get_fitness = current_population.get_mean_squared_fitness(get_totals)
-        # test_fitness = current_population.test_fit(get_totals)
+        # eval_exp = current_population.eval_expressions(population)
+        # # print("eval exp: ", eval_exp) ##################################################################
+        # get_totals = current_population.get_totals(eval_exp)
+        # # print("totals: ", get_totals)
+        # get_fitness = current_population.get_mean_squared_fitness(get_totals)
+        # # test_fitness = current_population.test_fit(get_totals)
 
-        print("fitness error: ", get_fitness)
+        # # print("fitness error: ", get_fitness)
 
-        if min(get_fitness) <= 3:
-            # print("getting the fitnesssss: ", get_fitness)
-            print("the new min fitness is : ", min(get_fitness))
-            print("it exists")
-            break
+        # if min(get_fitness) <= 3:
+        #     # print("getting the fitnesssss: ", get_fitness)
+        #     print("the new min fitness is : ", min(get_fitness))
+        #     print("it exists")
+        #     break
 
-        # print()
-        # print("=======================================================")
-        # print("parents")
-        # select_parents = current_population.select_parents(population, 2)
-        # print("parents selected: ", select_parents)
+        # # print()
+        # # print("=======================================================")
+        # # print("parents")
+        # # select_parents = current_population.select_parents(population, 2)
+        # # print("parents selected: ", select_parents)
 
-        select_parents = current_population.tournament_selection(population, get_fitness, 4)
-        # print("selecting parents:")
-        # print(select_parents)
-        split_parents = current_population.split_parents(select_parents)
+        # select_parents = current_population.tournament_selection(population, get_fitness, 4)
+        # # print("selecting parents:")
+        # # print(select_parents)
+        # split_parents = current_population.split_parents(select_parents)
 
-        # # # split_parents = [
-        # # ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
-        # # ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
-        get_prefix_parents = to_pref.get_prefix_notation(split_parents)
-        # print(get_prefix_parents)
-        parent_tree1 = get_prefix_parents[0]
-        parent_tree2 = get_prefix_parents[1]
+        # # # # split_parents = [
+        # # # ['(', '14', '+', '12', '*', '(', '14', '-', '3', ')', '*', 'X1', '+', '8', '-', '14', '*', '5', ')', 'end'],
+        # # # ['(', 'X1', '+', '(', '14', '*', '16', ')', ')', 'end']]
+        # get_prefix_parents = to_pref.get_prefix_notation(split_parents)
+        # # print(get_prefix_parents)
+        # parent_tree1 = get_prefix_parents[0]
+        # parent_tree2 = get_prefix_parents[1]
 
-        # make the parent trees
-        make_parent_tree_one = tree.make_tree(parent_tree1)
-        make_parent_tree_two = tree.make_tree(parent_tree2)
+        # # make the parent trees
+        # make_parent_tree_one = tree.make_tree(parent_tree1)
+        # make_parent_tree_two = tree.make_tree(parent_tree2)
 
-        # print the trees
-        # show_parent_tree_one = tree.print_full_tree(make_parent_tree_one[0])
-        # show_parent_tree_two = tree.print_full_tree(make_parent_tree_two[0])
-        # show_parent_tree_one_nodes = tree.print_full_tree(make_parent_tree_one[1])
-        # show_parent_tree_two_nodes = tree.print_full_tree(make_parent_tree_two[1])
+        # # print the trees
+        # # show_parent_tree_one = tree.print_full_tree(make_parent_tree_one[0])
+        # # show_parent_tree_two = tree.print_full_tree(make_parent_tree_two[0])
+        # # show_parent_tree_one_nodes = tree.print_full_tree(make_parent_tree_one[1])
+        # # show_parent_tree_two_nodes = tree.print_full_tree(make_parent_tree_two[1])
 
-        nodes_parent_tree_one = tree.print_full_tree(make_parent_tree_one[2])
-        # print("parent one nodes: ", nodes_parent_tree_one)
-        nodes_parent_tree_two = tree.print_full_tree(make_parent_tree_two[2])
-        # print("parent two nodes: ", nodes_parent_tree_two)
+        # nodes_parent_tree_one = tree.print_full_tree(make_parent_tree_one[2])
+        # # print("parent one nodes: ", nodes_parent_tree_one)
+        # nodes_parent_tree_two = tree.print_full_tree(make_parent_tree_two[2])
+        # # print("parent two nodes: ", nodes_parent_tree_two)
 
-        # make a copy of the parents
-        make_child_tree_one = copy.deepcopy(make_parent_tree_one)
-        # show_child_tree_one = tree.print_full_tree(make_child_tree_one[0])
+        # # make a copy of the parents
+        # make_child_tree_one = copy.deepcopy(make_parent_tree_one)
+        # # show_child_tree_one = tree.print_full_tree(make_child_tree_one[0])
 
-        make_child_tree_two = copy.deepcopy(make_parent_tree_two)
-        # show_child_tree_two = tree.print_full_tree(make_child_tree_two[0])
+        # make_child_tree_two = copy.deepcopy(make_parent_tree_two)
+        # # show_child_tree_two = tree.print_full_tree(make_child_tree_two[0])
 
-        # these are currently identicle to the parents
-        # show_child_tree_one_nodes = tree.print_full_tree(make_child_tree_one[1])
-        # show_child_tree_two_nodes = tree.print_full_tree(make_child_tree_two[1])
-        # print("parent one: ")
-        # print(show_child_tree_one)
-        # print("parent 2")
-        # print(show_child_tree_two)
-        select_child_node_one = tree.select_random_val(make_child_tree_one[1])
-        select_child_node_two = tree.select_random_val(make_child_tree_two[1])
+        # # these are currently identicle to the parents
+        # # show_child_tree_one_nodes = tree.print_full_tree(make_child_tree_one[1])
+        # # show_child_tree_two_nodes = tree.print_full_tree(make_child_tree_two[1])
+        # # print("parent one: ")
+        # # print(show_child_tree_one)
+        # # print("parent 2")
+        # # print(show_child_tree_two)
+        # select_child_node_one = tree.select_random_val(make_child_tree_one[1])
+        # select_child_node_two = tree.select_random_val(make_child_tree_two[1])
 
-        random_node_one = tree.find_subtree(make_child_tree_one[0], make_child_tree_one[1], select_child_node_one)
-        random_node_two = tree.find_subtree(make_child_tree_two[0], make_child_tree_two[1], select_child_node_two)
+        # random_node_one = tree.find_subtree(make_child_tree_one[0], make_child_tree_one[1], select_child_node_one)
+        # random_node_two = tree.find_subtree(make_child_tree_two[0], make_child_tree_two[1], select_child_node_two)
 
-        # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,
-        #       random_node_two.nodenum)
+        # # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,
+        # #       random_node_two.nodenum)
 
-        new_trees = tree.swap_nodes(make_child_tree_one[0], make_child_tree_two[0],
-                                    nodes_parent_tree_one, nodes_parent_tree_two, random_node_one, random_node_two)
-        child_one = new_trees[0]
-        child_two = new_trees[1]
+        # new_trees = tree.swap_nodes(make_child_tree_one[0], make_child_tree_two[0],
+        #                             nodes_parent_tree_one, nodes_parent_tree_two, random_node_one, random_node_two)
+        # child_one = new_trees[0]
+        # child_two = new_trees[1]
 
-        child_one_list_node = list(tree.make_list_nodes(child_one))
-        child_two_list_node = list(tree.make_list_nodes(child_two))
-        child_two_list_node = tree.get_child_two(child_one_list_node, child_two_list_node)
+        # child_one_list_node = list(tree.make_list_nodes(child_one))
+        # child_two_list_node = list(tree.make_list_nodes(child_two))
+        # child_two_list_node = tree.get_child_two(child_one_list_node, child_two_list_node)
 
-        # print("child one nodes: ", child_one_list_node)
-        # print()
-        # print("child two nodes: ", child_two_list_node)
+        # # print("child one nodes: ", child_one_list_node)
+        # # print()
+        # # print("child two nodes: ", child_two_list_node)
 
-        # print("mutating nodes: ")
-        node_to_mutate_one = tree.select_random_val(child_one_list_node)
-        # print("node to mutate one: ",node_to_mutate_one)
-        # print()
-        node_to_mutate_two = tree.select_random_val(child_two_list_node)
-        # print("node to mutate two: ",node_to_mutate_two)
-        # print()
+        # # print("mutating nodes: ")
+        # node_to_mutate_one = tree.select_random_val(child_one_list_node)
+        # # print("node to mutate one: ",node_to_mutate_one)
+        # # print()
+        # node_to_mutate_two = tree.select_random_val(child_two_list_node)
+        # # print("node to mutate two: ",node_to_mutate_two)
+        # # print()
 
-        new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
-        # print(new_child_one[0])
+        # new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
+        # # print(new_child_one[0])
 
-        new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
-        # print(new_child_two[0])
-        # print()
-        # print()
-        # print("deconstructing trees")
-        p = ToInfixParser()
-        # print("deconstructing child 1")
-        deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
-        # print(deconstruct_child_one)
+        # new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
+        # # print(new_child_two[0])
+        # # print()
+        # # print()
+        # # print("deconstructing trees")
+        # p = ToInfixParser()
+        # # print("deconstructing child 1")
+        # deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
+        # # print(deconstruct_child_one)
 
-        c1 = p.convert_to_infix(deconstruct_child_one)
-        c1 = c1.replace(" ", "")
-        population.append(c1)
+        # c1 = p.convert_to_infix(deconstruct_child_one)
+        # c1 = c1.replace(" ", "")
+        # population.append(c1)
 
-        # print("deconstructing child 2")
-        deconstruct_child_two = ToInfixParser.deconstruct_tree(new_child_two[1])
-        # print(deconstruct_child_two)
+        # # print("deconstructing child 2")
+        # deconstruct_child_two = ToInfixParser.deconstruct_tree(new_child_two[1])
+        # # print(deconstruct_child_two)
 
-        c2 = p.convert_to_infix(deconstruct_child_two)
-        c2 = c2.replace(" ", "")
-        population.append(c2)
-        # print(population)
-        eval_exp = current_population.eval_expressions(population)
-        get_totals = current_population.get_totals(eval_exp)
-        get_fitness = current_population.get_mean_squared_fitness(get_totals)
-        # print("getting  new fitness: ")
-        # print("getting fitness: ",get_fitness)
-        update_popn1 = current_population.update_population(population, get_fitness)
-        # print("popn update one: ")
-        # print(update_popn1[0])
-        # print("fitness of update 1")
-        # print(update_popn1[1])
-        # print()
-        # print()
-        # print()
-        update_popn2 = current_population.update_population(update_popn1[0], update_popn1[1])
-        # print("new population : ", update_popn2[0])
-        # print("new fitnesses: ", update_popn2[1])
-        population = update_popn2[0]
+        # c2 = p.convert_to_infix(deconstruct_child_two)
+        # c2 = c2.replace(" ", "")
+        # population.append(c2)
+        # # print(population)
+        # eval_exp = current_population.eval_expressions(population)
+        # get_totals = current_population.get_totals(eval_exp)
+        # get_fitness = current_population.get_mean_squared_fitness(get_totals)
+        # # print("getting  new fitness: ")
+        # # print("getting fitness: ",get_fitness)
+        # update_popn1 = current_population.update_population(population, get_fitness)
+        # # print("popn update one: ")
+        # # print(update_popn1[0])
+        # # print("fitness of update 1")
+        # # print(update_popn1[1])
+        # # print()
+        # # print()
+        # # print()
+        # update_popn2 = current_population.update_population(update_popn1[0], update_popn1[1])
+        # # print("new population : ", update_popn2[0])
+        # # print("new fitnesses: ", update_popn2[1])
+        # population = update_popn2[0]
 
-        # print("popn update two: ")
-        # print(update_popn2[0])
-        # print("fitness of update 2")
-        # print("updated population fitness: ", update_popn2[1])
+        # # print("popn update two: ")
+        # # print(update_popn2[0])
+        # # print("fitness of update 2")
+        # # print("updated population fitness: ", update_popn2[1])
 
         
-        population = update_popn2[0]
-        # print("the newest population is ::::::: ", population)
+        # population = update_popn2[0]
+        # # print("the newest population is ::::::: ", population)
 
-        print("current iteration: ", x)
-        print("current best fitness: ",  min(update_popn2[1]))
-        x += 1
+        # print("current iteration: ", x)
+        # print("current best fitness: ",  min(update_popn2[1]))
+        # x += 1
 
-    new_popn = get_fitness
-    min_val = min(new_popn)
-    print("best fitness so far: ", min_val)
-    print("number of iterations: ", x-1)
-    for i in range(len(new_popn)):
-        if new_popn[i] == min_val:
-            print("index: ", i)
-            best = population[i]
-            print("equation ", best)
-
+    # new_popn = get_fitness
+    # min_val = min(new_popn)
+    # print("best fitness so far: ", min_val)
+    # print("number of iterations: ", x-1)
+    # for i in range(len(new_popn)):
+    #     if new_popn[i] == min_val:
+    #         print("index: ", i)
+    #         best = population[i]
+    #         print("equation ", best)
+    # t1 = time.time()
+    # time = t1-t0
+    # print("time taken: ", time)
 
 
 if __name__ == "__main__":
-    main2()
+    main2(16,4,1)
