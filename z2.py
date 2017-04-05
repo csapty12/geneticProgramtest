@@ -461,7 +461,13 @@ class Tree(object):
             """
             based on the fitness, alter value by +0.1 if negative, -0.1 if positive. contstantly learning
             """
+            if node.value not in ["X1", "X2", "X3", "X4", "X5"]:
+                flt = float(node.value)
+                print()
+
             node.value = choice(GenExp.randomVariable1)
+
+
             # print("new mutated node: ",node.value, node.nodenum)
             # print(node)
             # print("new list of nodes: ", list_nodes)
@@ -519,6 +525,9 @@ class Tree(object):
                     else:
                         current_node = current_node.right_child
                         return self.make_list_nodes(current_node)
+    
+    def build_child(self, tree, list_nodes):
+        return tree, list_nodes
 
 
 
@@ -549,7 +558,7 @@ class ToInfixParser:
         return self.stack.pop()
 
 
-def main2(max_num, popn_size, max_iter):
+def main2(max_num, popn_size, max_iter, ):
     loop_break = False
     print("Inputs: ", GenExp.input1)
     print("Outputs: ", GenExp.output)
@@ -596,6 +605,19 @@ def main2(max_num, popn_size, max_iter):
             print("current best fitness: ", min_val)
             # index = abs_list.index(min_val)
             # print("equation: ", population[index])
+        if x == max_iter:
+            print("max iteration met")
+            abs_list = list()
+            print("fitness: ", get_fitness)
+            for i in get_fitness:
+                abs_list.append(abs(i))
+            min_val = min(abs_list)
+            print("best fitness: ", min_val)
+            index = abs_list.index(min_val)
+            print("index: ",index)
+            print("population: ", population)
+            print("equation: ", population[index])
+            break
 
         # print(get_fitness)
         select_parents = current_population.tournament_selection(population, get_fitness, 4)
@@ -650,20 +672,33 @@ def main2(max_num, popn_size, max_iter):
         nodes_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[2])
         # print("parent two nodes: ", nodes_parent_tree_two)
 
-        select_xover_node_one = tree.select_random_val(make_parent_tree_one_clone[1])
-        select_xover_node_two = tree.select_random_val(make_parent_tree_two_clone[1])
 
-        # print("selected xover point 1: ", select_xover_node_one)
-        # print("selected xover point 2: ", select_xover_node_two)
+        """
 
-        random_node_one = tree.find_subtree(make_parent_tree_one_clone[0], make_parent_tree_one_clone[1], select_xover_node_one)
-        random_node_two = tree.find_subtree(make_parent_tree_two_clone[0], make_parent_tree_two_clone[1], select_xover_node_two)
+        Implement crossover and mutation rates here. 
 
-        # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,
-        #   random_node_two.nodenum)
+        """
+        rnd = random()
+        # print("rnd : ", rnd)
+        if rnd >= 0.1:
+            # print("crossing over")
+            select_xover_node_one = tree.select_random_val(make_parent_tree_one_clone[1])
+            select_xover_node_two = tree.select_random_val(make_parent_tree_two_clone[1])
 
-        new_trees = tree.swap_nodes(make_parent_tree_one_clone[0], make_parent_tree_two_clone[0],
+            # print("selected xover point 1: ", select_xover_node_one)
+            # print("selected xover point 2: ", select_xover_node_two)
+
+            random_node_one = tree.find_subtree(make_parent_tree_one_clone[0], make_parent_tree_one_clone[1], select_xover_node_one)
+            random_node_two = tree.find_subtree(make_parent_tree_two_clone[0], make_parent_tree_two_clone[1], select_xover_node_two)
+
+            # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,
+            #   random_node_two.nodenum)
+
+            new_trees = tree.swap_nodes(make_parent_tree_one_clone[0], make_parent_tree_two_clone[0],
                                     nodes_parent_tree_one_clone, nodes_parent_tree_two_clone, random_node_one, random_node_two)
+        else:
+            # print("not crossing over")
+            new_trees = [make_parent_tree_one_clone[0], make_parent_tree_two_clone[0]]
         # print()
         child_one = new_trees[0]
         child_two = new_trees[1]
@@ -677,23 +712,34 @@ def main2(max_num, popn_size, max_iter):
         child_two_list_node = list(tree.make_list_nodes(child_two))
         child_two_list_node = tree.get_child_two(child_one_list_node, child_two_list_node)
 
+
+
         # print("child one nodes: ", child_one_list_node)
         # print()
         # print("child two nodes: ", child_two_list_node)
 
         # print("mutating nodes: ")
-        node_to_mutate_one = tree.select_random_val(child_one_list_node)
-        # print("node to mutate one: ",node_to_mutate_one)
-        # print()
-        node_to_mutate_two = tree.select_random_val(child_two_list_node)
-        # print("node to mutate two: ",node_to_mutate_two)
-        # print()
+        rnd = random()
+        if rnd >=0.9:
+            # print("mutating nodes: ")
+            node_to_mutate_one = tree.select_random_val(child_one_list_node)
+            # print("node to mutate one: ",node_to_mutate_one)
+            # print()
+            node_to_mutate_two = tree.select_random_val(child_two_list_node)
+            # print("node to mutate two: ",node_to_mutate_two)
+            # print()
 
-        new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
-        # print(new_child_one[0])
+            new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
+            # print(new_child_one[0])
 
-        new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
-        # print(new_child_two[0])
+            new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
+            # print(new_child_two[0])
+
+        else:
+# 
+            # print("not mutating:")
+            new_child_one = tree.build_child(child_one, child_one_list_node)
+            new_child_two = tree.build_child(child_two, child_two_list_node)
 
 
         # print("deconstructing trees")
@@ -720,25 +766,11 @@ def main2(max_num, popn_size, max_iter):
         get_totals = current_population.get_totals(eval_exp)
         # print("get totals new: ", get_totals)
         get_fitness = current_population.get_fitness(get_totals)
-        # print("getting  new fitness: ")
-        # print("getting fitness: ",get_fitness)
         update_popn1 = current_population.update_population(population, get_fitness)
         population = update_popn1
         
-        
-        if x == max_iter:
-            print("max iteration met")
-            abs_list = list()
-            for i in get_fitness:
-                abs_fit.append(abs(i))
-            min_val = min(abs_list)
-            print("best fitness: ", min_val)
-            index = abs_list.index(min_val)
-            print("equation: ", population[index])
-            break
-
         x+=1
 
 
 if __name__ == "__main__":
-    main2(256,500,5000)
+    main2(8,4,1000)
