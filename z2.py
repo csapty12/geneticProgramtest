@@ -458,6 +458,9 @@ class Tree(object):
             # print(tree)
             return tree, list_nodes  # return the new tree, new list_nodes, new mutated node.
         else:
+            """
+            based on the fitness, alter value by +0.1 if negative, -0.1 if positive. contstantly learning
+            """
             node.value = choice(GenExp.randomVariable1)
             # print("new mutated node: ",node.value, node.nodenum)
             # print(node)
