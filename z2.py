@@ -1,4 +1,4 @@
-from random import randint, choice, random, sample
+from random import randint, choice, random, sample, uniform
 from math import log, sqrt
 import re
 import copy
@@ -8,13 +8,13 @@ import wget
 class GenExp:
     OPS = ['+', '-', '*']
     GROUP_PROB = 0.3
-    MIN_NUM, MAX_NUM = 0, 20
+    MIN_NUM, MAX_NUM = 0.00, 20.0
 
     input1 = [0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425]
-    ideal  = "4*8+16-44+12*13*2"
-    ideal = "X1*X2+16-44+X3*X4*X5"
+    # ideal  = "4*8+16-44+12*13*2"
+    # ideal = "X1*X2+16-44+X3*X4*X5"
     output = [-1]
-    randomVariable1 = [randint(MIN_NUM, MAX_NUM), "X1", "X2",'X3' ,"X4", "X5"]
+    randomVariable1 = [uniform(MIN_NUM, MAX_NUM), "X1", "X2",'X3' ,"X4", "X5"]
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
         self.left = None  # create the left and right nodes for an expression.
@@ -91,39 +91,64 @@ class GenExp:
             abs_fit.append(abs(i))
         # print("new fitness: ", abs_fit)
         zipped_population = list(zip(population, abs_fit))
+        # print("zipped popn: ", zipped_population)
+        tru_zipped_population = list(zip(population, fitness))
+        # print("true zipped popn: ",tru_zipped_population)
         # print("zipped list:")
         # print(zipped_population)
         candidates = sample(zipped_population, selection_size)
+
+        # print()
         # print("selection")
         # print(candidates)
         parent_one = min(candidates, key=lambda t: t[1])
 
-        p1_index = candidates.index(parent_one)
+        p1_index = zipped_population.index(parent_one)
         # print(p1_index)
-        candidates.pop(p1_index)
-        # print("candidates:")
-        # print(candidates)
+        p1_tru = tru_zipped_population[p1_index]
+        # print("hhh:,",p1_tru)
+        candidate_p1 = candidates.index(parent_one)
+        # print("candidate p1: ",candidate_p1)
+        candidates.pop(candidate_p1)
+        # print("new candidates: ", candidates)
+
+
         parent_two = min(candidates, key=lambda t: t[1])
-        p2_index = candidates.index(parent_two)
+
+        p2_index = zipped_population.index(parent_two)
         # print(p2_index)
-        candidates.pop(p2_index)
-        # print("candidates:")
-        # print(candidates)
+        p2_tru = tru_zipped_population[p2_index]
+        # print("hhhneww:,",p2_tru)
+        candidate_p2 = candidates.index(parent_two)
+        # print("candidate p2: ",candidate_p2)
+        candidates.pop(candidate_p2)
+        # print("new candidates: ", candidates)
+        
         parents = list()
-        # print(parent_one)
-        # print(parent_two)
-        parents.append(parent_one[0])
-        parents.append(parent_two[0])
-        # print(parents)
+        parents.append(p1_tru)
+        parents.append(p2_tru)
+
+        # print("parents: ",parents)
+
+ 
+
+        
+        # print("p2: ", tru_zipped_population[p2_index])
 
         return parents
 
     def split_parents(self, parents):
-        split_list = [re.findall('\w+|\W', s) for s in parents]
+        # print("parents:",parents)
+        split_list = [re.findall('\w+|\W', s[0]) for s in parents]
 
         for i in split_list:
             i.append("end")
-        return split_list
+        split_parents = list()
+        for i in range(len(parents)):
+            split_parents.append((split_list[i], parents[i][1]))
+
+
+        return split_parents
 
     def update_population(self, population, fitness):
         # print("current population")
@@ -282,16 +307,23 @@ class ToPrefixParser(object):
             return tree.val + " " + left + ' ' + right + ''
 
     def get_prefix_notation(self, token_list):
-        prefix = []
+        # print("tk: ", token_list)
+        prefix = list()
 
-        prefix_list = []
+        prefix_list = list()
+        pref_list = list()
         for i in token_list:
-            tree = self.get_expression(i)
+
+            tree = self.get_expression(i[0])
             y = self.print_tree_prefix(tree)
             prefix.append(y)
         for i in prefix:
             prefix_list.append(i.split())
-        return prefix_list
+
+        for i in range(len(prefix_list)):
+            pref_list.append((prefix_list[i], token_list[i][1]))
+        # print(pref_list)
+        return pref_list
 
 
 # manipulating the tree
@@ -300,9 +332,9 @@ class Tree(object):
         self.root = root_node
 
     def make_tree(self, pref_list):
-
-        nodes = []
-        nodenums = []
+        # print("pref list: ",pref_list)
+        nodes = list()
+        nodenums = list()
         root_node = Node(pref_list[0])
 
         nodes.append(root_node)
@@ -437,18 +469,16 @@ class Tree(object):
 
         return tree_one, tree_two, list_nodes_one, list_nodes_two
 
-    def mutate_node(self, tree, list_nodes, node):
+    def mutate_node(self, tree, list_nodes, node, fitness):
+        # print("fitness:")
+        # print(fitness)
+        # print("node value: ", node.value, node.nodenum)
+        # print("node type: ", type(node.value))
 
-        # print("tree: \n")
-        # print(tree)
-        # print()
-        # print("list nodes: ", list_nodes)
-        # print()
-        # print("selected node: ",node.value, node.nodenum)
-        # print("selected node subtree: ")
-        # print(node)
+        # print("node list: ", list_nodes)
         # perform mutation
         if node.value in ['+', '-', '*']:
+            # print("here")
             node.value = choice(['+', '-', '*'])
             # print("new mutated node: ",node.value, node.nodenum)
             # print(node)
@@ -462,17 +492,22 @@ class Tree(object):
             based on the fitness, alter value by +0.1 if negative, -0.1 if positive. contstantly learning
             """
             if node.value not in ["X1", "X2", "X3", "X4", "X5"]:
-                flt = float(node.value)
-                print()
+                val = float(node.value)
+                # print("value: ", val, type(val))
+                if fitness >0:
+                    val  = val -0.1
+                    # print("value now",val)
+                    node.value = str(val)
+                else:
+                    val = val + 0.1
+                    # print("value now: ", val)
+                    node.value = str(val)
+            else:
+                node.value = choice(["X1", "X2", "X3", "X4", "X5"])
 
-            node.value = choice(GenExp.randomVariable1)
-
-
-            # print("new mutated node: ",node.value, node.nodenum)
+            # print("new mutated node: ",node.value, node.nodenum, type(node.value))
             # print(node)
             # print("new list of nodes: ", list_nodes)
-            # print()
-            # print(tree)
             return tree, list_nodes
 
     def get_child_one(self, child_one):
@@ -580,16 +615,19 @@ def main2(max_num, popn_size, max_iter, ):
         get_fitness = current_population.get_fitness(get_totals)
         # print("getting fitness", get_fitness)
         for i in range(len(get_fitness)):
-            # if get_fitness[i] >= -1 and get_fitness[i] <=1:
-            if get_fitness[i] ==0:
-
+            if get_fitness[i] >= -0.2 and get_fitness[i] <=0.2:
+            # if get_fitness[i] ==0:
+                print("#########################################################################")
                 print(True)
+
                 print("Iteration: ", x)
                 print("fitness index:", get_fitness.index(get_fitness[i]))
                 print("fitness: ", get_fitness[i])
                 print()
                 # print(population)
                 print(population[i])
+                # evale = current_population.eval_expressions(population[i])
+                # print(evale)
                 loop_break = True
                 break
         if loop_break==True:
@@ -619,40 +657,45 @@ def main2(max_num, popn_size, max_iter, ):
             print("equation: ", population[index])
             break
 
-        # print(get_fitness)
+# #         # print(get_fitness)
         select_parents = current_population.tournament_selection(population, get_fitness, 4)
-        # print("parents selected")
-        # print(select_parents)
+        # print("parents selected", select_parents)
         split_parents = current_population.split_parents(select_parents)
-        # print("splitting parents")
-        # print(split_parents)
+#         # print("splitting parents")
+#         # print(split_parents)
         get_prefix_parents = to_pref.get_prefix_notation(split_parents)
-        # print("prefix notation: ")
-        # print(get_prefix_parents)
-
+#         # print("prefix notation: ")
+        # print("parent prefix: ",get_prefix_parents)
+# 
         # print()
         # print("parent trees")
         parent_tree1 = get_prefix_parents[0]
         parent_tree2 = get_prefix_parents[1]
+        parent_tree1_fitness = get_prefix_parents[0][1]
+        parent_tree2_fitness = get_prefix_parents[1][1]
 
-    #     print(parent_tree1)
-    #     print(parent_tree2)
-    # # 
-        # print("making trees!")
-        make_parent_tree_one = tree.make_tree(parent_tree1)
-        make_parent_tree_two = tree.make_tree(parent_tree2)
+        # print("here")
+        # print(parent_tree1_fitness)
+        # print(parent_tree2_fitness)
 
-        # print("Printing trees")
-        # print("Tree one")
+        # print("p1 prefix:",parent_tree1)
+        # print("p2 prefix:",parent_tree2)
+
+# #         # print("making trees!")
+        make_parent_tree_one = tree.make_tree(parent_tree1[0])
+        make_parent_tree_two = tree.make_tree(parent_tree2[0])
+
+#         # print("Printing trees")
+#         # print("Tree one")
         show_parent_tree_one = tree.print_full_tree(make_parent_tree_one[0])
-        # print(show_parent_tree_one)
+#         # print(show_parent_tree_one)
         show_parent_tree_one_nodes = tree.print_full_tree(make_parent_tree_one[1])
-        # print(show_parent_tree_one_nodes)
-        # print("Tree two")
+#         # print(show_parent_tree_one_nodes)
+#         # print("Tree two")
         show_parent_tree_two = tree.print_full_tree(make_parent_tree_two[0])
-        # print(show_parent_tree_two)
+#         # print(show_parent_tree_two)
         show_parent_tree_two_nodes = tree.print_full_tree(make_parent_tree_two[1])
-        # print(show_parent_tree_two_nodes)
+#         # print(show_parent_tree_two_nodes)
         nodes_parent_tree_one = tree.print_full_tree(make_parent_tree_one[2])
         # print("parent one nodes: ", nodes_parent_tree_one)
         nodes_parent_tree_two = tree.print_full_tree(make_parent_tree_two[2])
@@ -661,10 +704,15 @@ def main2(max_num, popn_size, max_iter, ):
         # make a copy of the parents
         make_parent_tree_one_clone = copy.deepcopy(make_parent_tree_one)
         show_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[0])
+        # print("here")
+        parent_tree1_fitness_clone = parent_tree1_fitness
+        # print(parent_tree1_fitness_clone)
         # print(show_parent_tree_one_clone)
 
         make_parent_tree_two_clone = copy.deepcopy(make_parent_tree_two)
         show_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[0])
+        parent_tree2_fitness_clone = parent_tree2_fitness
+        # print(parent_tree2_fitness_clone)
         # print(show_parent_tree_two_clone)
 
         nodes_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[2])
@@ -673,11 +721,11 @@ def main2(max_num, popn_size, max_iter, ):
         # print("parent two nodes: ", nodes_parent_tree_two)
 
 
-        """
+#         """
 
-        Implement crossover and mutation rates here. 
+#         Implement crossover and mutation rates here. 
 
-        """
+#         """
         rnd = random()
         # print("rnd : ", rnd)
         if rnd >= 0.1:
@@ -714,11 +762,11 @@ def main2(max_num, popn_size, max_iter, ):
 
 
 
-        # print("child one nodes: ", child_one_list_node)
-        # print()
-        # print("child two nodes: ", child_two_list_node)
+#         # print("child one nodes: ", child_one_list_node)
+#         # print()
+#         # print("child two nodes: ", child_two_list_node)
 
-        # print("mutating nodes: ")
+#         # print("mutating nodes: ")
         rnd = random()
         if rnd >=0.9:
             # print("mutating nodes: ")
@@ -729,10 +777,10 @@ def main2(max_num, popn_size, max_iter, ):
             # print("node to mutate two: ",node_to_mutate_two)
             # print()
 
-            new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
+            new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2], parent_tree1_fitness_clone)
             # print(new_child_one[0])
 
-            new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
+            new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2], parent_tree2_fitness_clone)
             # print(new_child_two[0])
 
         else:
@@ -773,4 +821,4 @@ def main2(max_num, popn_size, max_iter, ):
 
 
 if __name__ == "__main__":
-    main2(8,4,1000)
+    main2(256,500,1000)
