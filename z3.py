@@ -24,8 +24,8 @@ class GenExp(object):
     GROUP_PROB = 0.3
     MIN_NUM, MAX_NUM = 0.00, 20.0
 
-    input1 = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425], [0.16285377 , 0.2936199,   0.14842959,  2.1121061,   1.72671183]]
-    # output = [-1]
+    input1 = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425], [0.16285377 , 0.293619897 ,0.148429586, 2.112106101, 1.726711829], 
+    [0.133612951 , -0.012046736, 0.006117654,  0.217226284, 0.415622133]]
     randomVariable1 = [uniform(MIN_NUM, MAX_NUM), "X1", "X2",'X3' ,"X4", "X5"]
 
     def __init__(self, maxNumbers, maxdepth=None, depth=0):
@@ -66,70 +66,55 @@ class GenExp(object):
             expression_list = [i for i in expression_list if 'X1' and 'X2' and 'X3'and 'X4'and 'X5' in i]  
         return expression_list
 
-    # def eval_expressions(self,expression):
-    #     eval_list = list()
-    #     row = GenExp.input1
-        
-    #     # split_list = [re.findall('\w+|\W', s) for s in expression]
-    #     # print("row: ")
-    #     # for i in expression:
-    #     #     # print(i)
-
-    #     #     for j in row:
-    #     #         print(j)
-    #         #     new_exp = i.replace("X1", str(row[0])).replace("X2", str(row[1]))\
-    #         #     .replace("X3", str(row[2])).replace("X4",str(row[3])).replace("X5",str(row[4]))
-    #         # eval_list.append(new_exp)
-
-    #     # return eval_list
-
-    """
-    take in the expression,
-    for every expression in the list, replace the values with the input, and find the total of this. if the output is -ve, 
-    then classify as 0, else classify as 1. 
-    """
-
     def eval_expressions(self,expression):
         eval_list = list()
         row = GenExp.input1
-        print("row: ", row)
-        print("Expressions: ", expression)
-
-        for i in range(len(row)):
-            print("X1: ",row[i][0])
-            print("X2: ",row[i][1])
-            print("X3: ",row[i][2])
-            print("X4: ",row[i][3])
-            print("X5: ",row[i][4])
-
+        
+        split_list = [re.findall('\w+|\W', s) for s in expression]
         for i in range(len(expression)):
-            print(expression[i])
+            tmp = list()
+            for k in range(len(row)):
+                new_exp = expression[i].replace("X1",str(row[k][0])).replace("X2", str(row[k][1])).replace("X3", str(row[k][2]))\
+                .replace("X4", str(row[k][3])).replace("X5", str(row[k][4]))
+                tmp.append(new_exp)
 
+            eval_list.append(tmp)
 
-
-
-            
-            
-
+        return eval_list
 
 
     def get_totals(self, expression):
-
+        # print("expression: ", expression)
         totals = list()
         for i in expression:
-            x = eval(i)
-            totals.append(x)
+            # print(i)
+            tmp = list()
+            for j in i:
+                x = eval(j)
+                tmp.append(x)
+            totals.append(tmp)
+
+        # print(totals)
         return totals
 
     def get_fitness(self, totals):
-        truth = [0]
-        print("totals", totals)
-        # differences = list()
-        # for i in totals:
-        #     x = i - GenExp.output[0]
-        #     differences.append(x)
+        # print("totals: ", totals)
+        differences = list()
+        truth = [0,0,0]
+        pred_class = list()
+        for i in totals:
+            tmp = list()
+            for j in i:
+                if j >=0:
+                    tmp.append(1)
+                else:
+                    tmp.append(0)
+            pred_class.append(tmp)
+        print(pred_class)
 
-        return totals
+        x = 
+
+        return differences
 
     def tournament_selection(self, population, fitness, selection_size):
         abs_fit = list()
@@ -668,21 +653,23 @@ def main(max_num, popn_size, max_iter, debug = False):
     tree = Tree()
 
     population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,Population size)
-    print("population!: ", population)
+    # print("population!: ", population)
     x = 1
 
     while x<=max_iter:
 
-        # print("population!: ", population)
+        print("population!: ", population)
         # print()
         eval_exp = current_population.eval_expressions(population)
+        print()
+        print()
         print("eval exp: ",eval_exp)
-        # print()
-        # get_totals = current_population.get_totals(eval_exp)
-        # print("totals: ", get_totals)
-        # get_fitness = current_population.get_fitness(get_totals)
-        # print()
-        # print("getting fitness", get_fitness)
+        print()
+        get_totals = current_population.get_totals(eval_exp)
+        print("totals: ", get_totals)
+        get_fitness = current_population.get_fitness(get_totals)
+        print()
+        print("getting fitness", get_fitness)
 #         for i in range(len(get_fitness)):
 #             if get_fitness[i] >= -0.2 and get_fitness[i] <=0.2:
 #             # if get_fitness[i] ==0:
@@ -893,4 +880,4 @@ def main(max_num, popn_size, max_iter, debug = False):
 
 if __name__ == "__main__":
     # read_data()
-    main(8,4,1, debug = True)
+    main(16,4,1, debug = True)
