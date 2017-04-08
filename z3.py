@@ -135,6 +135,10 @@ class GenExp(object):
            fitness.append(y)
         # print(fitness)
 
+        """
+        try this 
+        # fitness = [fitness.append(len(i)-sum(i)) for i in trfa ]
+        """
 
         return fitness
 
@@ -688,7 +692,8 @@ class ToInfixParser:
 
 
 def main(max_num, popn_size, max_iter, debug = False):
-    from time import time
+    import time
+    start = time.time()
     loop_break = False
     print("Inputs: ", GenExp.input1)
     # print("Outputs: ", GenExp.output)
@@ -736,6 +741,9 @@ def main(max_num, popn_size, max_iter, debug = False):
                 loop_break = True
                 break
         if loop_break==True:
+            end = time.time()
+            elapsedTime = end-start
+            print("time elapsed: ", elapsedTime)
             print("here")
             break
                
@@ -754,6 +762,9 @@ def main(max_num, popn_size, max_iter, debug = False):
             print("index: ",index)
             # print("population: ", population)
             print("equation: ", population[index])
+            end = time.time()
+            elapsedTime = end-start
+            print("time elapsed: ", elapsedTime)
             break
 
         # print(get_fitness)
@@ -936,7 +947,7 @@ def main(max_num, popn_size, max_iter, debug = False):
 
 if __name__ == "__main__":
     # read_data()
-    main(128,300,500, debug = True)
+    main(128,200,1000, debug = True)
 
 
 # l = [0,0,0]
