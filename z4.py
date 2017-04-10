@@ -25,13 +25,13 @@ class GenExp(object):
     bracketing = 0.3
     MIN_NUM, MAX_NUM = 0.00, 50.0
 
-    # input1 = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425], 
+    # input1 = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425],
     # [0.16285377 , 0.293619897 ,0.148429586, 2.112106101, 1.726711829],
     # [0.133612951 , -0.012046736, 0.006117654,  0.217226284, 0.415622133],
     # [0.014110552,0.306378197,0.025120196,1.410020817,0.220180238],
-    # [0.089459236,0.498017156,0.130726372,4.138192315,0.327646754], 
+    # [0.089459236,0.498017156,0.130726372,4.138192315,0.327646754],
     # [0.18270599,0.314689998,0.146978993,0.960817256,2.441976174],
-    # [-0.182114883,-0.782310705,0.050261097,0.131185786,1.157310705], 
+    # [-0.182114883,-0.782310705,0.050261097,0.131185786,1.157310705],
     # [0.015860893, -0.104748498,0.034454832, 0.068872667 ,0.442914184],
     # [0.266438247,0.144166996,0.358351154,6.392246629,0.957753361],
     # [0.169908241, -0.091765234, 0.082865501, 0.420012564, 0.591372793]]
@@ -40,13 +40,13 @@ class GenExp(object):
     input1 = read_data[0]
     # randomVariable1 = [uniform(MIN_NUM, MAX_NUM), "X1", "X2", 'X3', "X4", "X5"]
 
-    def __init__(self, max_numbers, maxdepth=None, depth=0):
+    def __init__(self, maxNumbers, maxdepth=None, depth=0):
         random_variable1 = [uniform(self.MIN_NUM, self.MAX_NUM), "X1", "X2", 'X3', "X4", "X5"]
         self.left = None  # create the left and right nodes for an expression.
         self.right = None
 
         if maxdepth is None:
-            maxdepth = log(max_numbers, 2) - 1
+            maxdepth = log(maxNumbers, 2) - 1
 
         if depth < maxdepth and randint(0, maxdepth) > depth:
             self.left = GenExp(maxNumbers, maxdepth, depth + 1)  # generate part of the expression (on the left)
@@ -54,7 +54,7 @@ class GenExp(object):
             self.left = choice(random_variable1)
 
         if depth < maxdepth and randint(0, maxdepth) > depth:
-            self.right = GenExp(max_numbers, maxdepth, depth + 1)  # generate part of the expression (on the right)
+            self.right = GenExp(maxNumbers, maxdepth, depth + 1)  # generate part of the expression (on the right)
         else:
             self.right = randint(GenExp.MIN_NUM, GenExp.MAX_NUM)
 
@@ -83,7 +83,7 @@ class GenExp(object):
         eval_list = list()
         row = GenExp.input1
 
-        split_list = [re.findall('\w+|\W', s) for s in expression]
+        # split_list = [re.findall('\w+|\W', s) for s in expression]
         for i in range(len(expression)):
             tmp = list()
             for k in range(len(row)):
@@ -133,36 +133,88 @@ class GenExp(object):
 
         fitness = [len(i) - sum(i) for i in trfa]
         return fitness
+    #
+    # def tournament_selection(self, population, fitness, selection_size):
+    #     # zipped_population = [('X3-1-X5*12', 261), ('(X5-X3*16*3)', 183), ('X5*12', 305), ('X5+X4-11*(X3*X3+4)', 259)]
+    #     zipped_population = list(zip(population, fitness))
+    #     # print("zipped population: ", zipped_population)
+    #     parent_one = min(zipped_population, key=lambda t: t[1])
+    #     # print(parent_one)
+    #
+    #     p1_index = zipped_population.index(parent_one)
+    #     # print("p1_index: ", p1_index)
+    #     p1_tru = zipped_population[p1_index]
+    #     zipped_population.pop(p1_index)
+    #
+    #     # print("zipped population: ", zipped_population)
+    #
+    #     parent_two = min(zipped_population, key=lambda t: t[1])
+    #     p2_index = zipped_population.index(parent_two)
+    #     # # print(p2_index)
+    #     p2_tru = zipped_population[p2_index]
+    #     # # print("hhhneww:,",p2_tru)
+    #     # # print("candidate p2: ",candidate_p2)
+    #     zipped_population.pop(p2_index)
+    #     # # print("new candidates: ", candidates)
+    #
+    #     parents = list()
+    #     parents.append(p1_tru)
+    #     parents.append(p2_tru)
+    #
+    #     return parents
+    #
 
     def tournament_selection(self, population, fitness, selection_size):
-        # zipped_population = [('X3-1-X5*12', 261), ('(X5-X3*16*3)', 183), ('X5*12', 305), ('X5+X4-11*(X3*X3+4)', 259)]
-        zipped_population = list(zip(population, fitness))
-        # print("zipped population: ", zipped_population)
-        parent_one = min(zipped_population, key=lambda t: t[1])
-        # print(parent_one)
+        abs_fit = list()
+        for i in fitness:
+            abs_fit.append(abs(i))
+        # print("new fitness: ", abs_fit)
+        zipped_population = list(zip(population, abs_fit))
+        # print("zipped popn: ", zipped_population)
+        tru_zipped_population = list(zip(population, fitness))
+        # print("true zipped popn: ",tru_zipped_population)
+        # print("zipped list:")
+        # print(zipped_population)
+        candidates = sample(zipped_population, selection_size)
+
+        # print()
+        # print("selection")
+        # print(candidates)
+        parent_one = min(candidates, key=lambda t: t[1])
 
         p1_index = zipped_population.index(parent_one)
-        # print("p1_index: ", p1_index)
-        p1_tru = zipped_population[p1_index]
-        zipped_population.pop(p1_index)
+        # print(p1_index)
+        p1_tru = tru_zipped_population[p1_index]
+        # print("hhh:,",p1_tru)
+        candidate_p1 = candidates.index(parent_one)
+        # print("candidate p1: ",candidate_p1)
+        candidates.pop(candidate_p1)
+        # print("new candidates: ", candidates)
 
-        # print("zipped population: ", zipped_population)
 
-        parent_two = min(zipped_population, key=lambda t: t[1])
+        parent_two = min(candidates, key=lambda t: t[1])
+
         p2_index = zipped_population.index(parent_two)
-        # # print(p2_index)
-        p2_tru = zipped_population[p2_index]
-        # # print("hhhneww:,",p2_tru)
-        # # print("candidate p2: ",candidate_p2)
-        zipped_population.pop(p2_index)
-        # # print("new candidates: ", candidates)
+        # print(p2_index)
+        p2_tru = tru_zipped_population[p2_index]
+        # print("hhhneww:,",p2_tru)
+        candidate_p2 = candidates.index(parent_two)
+        # print("candidate p2: ",candidate_p2)
+        candidates.pop(candidate_p2)
+        # print("new candidates: ", candidates)
 
         parents = list()
         parents.append(p1_tru)
         parents.append(p2_tru)
 
-        return parents
+        # print("parents: ",parents)
 
+
+
+
+        # print("p2: ", tru_zipped_population[p2_index])
+
+        return parents
     def split_parents(self, parents):
         # print("parents:",parents)
         split_list = [re.findall('\w+|\W', s[0]) for s in parents]
@@ -644,12 +696,12 @@ def main(max_num, popn_size, max_iter, debug=False):
     y_val = list()
 
     population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,Population size)
-    print("population!: ", population)
+    # print("population!: ", population)
     eval_exp = current_population.eval_expressions(population)
     get_totals = current_population.get_totals(eval_exp)
     get_fitness = current_population.get_fitness(get_totals)
-    print("original: ", get_fitness)
-    print("best original fitness: ", min(get_fitness))
+    # print("original: ", get_fitness)
+    # print("best original fitness: ", min(get_fitness))
 
     x = 1
 
@@ -668,7 +720,7 @@ def main(max_num, popn_size, max_iter, debug=False):
         # print()
         # print("getting fitness", get_fitness)
         for i in range(len(get_fitness)):
-            if get_fitness[i] <= 1:
+            if get_fitness[i] <= 100:
                 # if get_fitness[i] ==0:
                 print("#########################################################################")
                 print(True)
@@ -695,7 +747,7 @@ def main(max_num, popn_size, max_iter, debug=False):
         # print("parents selected", select_parents)
         split_parents = current_population.split_parents(select_parents)
 
-        if x % 1 == 0:
+        if x % 100== 0:
             # print("parents: ", select_parents )
 
             print("iteration: ", x)
@@ -704,6 +756,7 @@ def main(max_num, popn_size, max_iter, debug=False):
             min_val = min(abs_list)
             print("current best fitness: ", min_val)
             y_val.append(min_val)
+            print("time elapsed: ", time.time())
             # print("x_val: ", x_val)
             # print("y_val: ", y_val)
 
@@ -717,9 +770,10 @@ def main(max_num, popn_size, max_iter, debug=False):
             print("index: ", index)
             # print("population: ", population)
             print("equation: ", population[index])
-            print("acc: ", GenExp.sigmoid(min_val))
+            print("acc: ", 1-(min_val/len(GenExp.input1)))
             end = time.time()
             elapsedTime = end - start
+
             print("time elapsed: ", elapsedTime)
 
             plt.figure()
@@ -734,7 +788,7 @@ def main(max_num, popn_size, max_iter, debug=False):
         fix_decimals = current_population.fix_dec(split_parents)
         get_prefix_parents = to_pref.get_prefix_notation(fix_decimals)
         # print("prefix notation: ")
-        print("parent prefix: ", get_prefix_parents)
+        # print("parent prefix: ", get_prefix_parents)
         #
         # print()
         # print("parent trees")
@@ -757,15 +811,15 @@ def main(max_num, popn_size, max_iter, debug=False):
         # print("Printing trees")
         # print("Tree one")
         show_parent_tree_one = tree.print_full_tree(make_parent_tree_one[0])
-        print("parent 1")
-        print(show_parent_tree_one)
+        # print("parent 1")
+        # print(show_parent_tree_one)
         show_parent_tree_one_nodes = tree.print_full_tree(make_parent_tree_one[1])
         # print(show_parent_tree_one_nodes)
         # print("Tree two")
         show_parent_tree_two = tree.print_full_tree(make_parent_tree_two[0])
-        print()
-        print("parent2: ")
-        print(show_parent_tree_two)
+        # print()
+        # print("parent2: ")
+        # print(show_parent_tree_two)
         show_parent_tree_two_nodes = tree.print_full_tree(make_parent_tree_two[1])
         # print(show_parent_tree_two_nodes)
         nodes_parent_tree_one = tree.print_full_tree(make_parent_tree_one[2])
@@ -795,7 +849,7 @@ def main(max_num, popn_size, max_iter, debug=False):
         rnd = random()
         # print("rnd : ", rnd)
         if rnd >= 0.1:
-            print("crossing over")
+            # print("crossing over")
             select_xover_node_one = tree.select_random_val(make_parent_tree_one_clone[1])
             # print("blooop: ",select_xover_node_one)
             select_xover_node_two = tree.select_random_val(make_parent_tree_two_clone[1])
@@ -808,7 +862,7 @@ def main(max_num, popn_size, max_iter, debug=False):
             random_node_two = tree.find_subtree(make_parent_tree_two_clone[0], make_parent_tree_two_clone[1],
                                                 select_xover_node_two)
 
-            print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,random_node_two.nodenum)
+            # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,random_node_two.nodenum)
 
             new_trees = tree.swap_nodes(make_parent_tree_one_clone[0], make_parent_tree_two_clone[0],
                                         nodes_parent_tree_one_clone, nodes_parent_tree_two_clone, random_node_one,
@@ -819,11 +873,11 @@ def main(max_num, popn_size, max_iter, debug=False):
         # print()
         child_one = new_trees[0]
         child_two = new_trees[1]
-        print("child one")
-        print(child_one)
-        print()
-        print("building child two")
-        print(child_two)
+        # print("child one")
+        # print(child_one)
+        # print()
+        # print("building child two")
+        # print(child_two)
 
         child_one_list_node = list(tree.make_list_nodes(child_one))
         child_two_list_node = list(tree.make_list_nodes(child_two))
@@ -836,7 +890,7 @@ def main(max_num, popn_size, max_iter, debug=False):
         # print("mutating nodes: ")
         rnd = random()
         if rnd <= 0.1:
-            print("mutating nodes: ")
+            # print("mutating nodes: ")
             node_to_mutate_one = tree.select_random_val(child_one_list_node)
             # print("node to mutate one: ",node_to_mutate_one)
             # print()
@@ -854,15 +908,15 @@ def main(max_num, popn_size, max_iter, debug=False):
 
         else:
             #
-            print("not mutating:")
+            # print("not mutating:")
             new_child_one = tree.build_child(child_one, child_one_list_node)
             new_child_two = tree.build_child(child_two, child_two_list_node)
 
-        print("deconstructing trees")
+        # print("deconstructing trees")
         p = ToInfixParser()
-        print("deconstructing child 1")
+        # print("deconstructing child 1")
         deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
-        print(deconstruct_child_one)
+        # print(deconstruct_child_one)
 
         c1 = p.convert_to_infix(deconstruct_child_one)
         c1 = c1.replace(" ", "")
@@ -876,21 +930,21 @@ def main(max_num, popn_size, max_iter, debug=False):
         c2 = p.convert_to_infix(deconstruct_child_two)
         c2 = c2.replace(" ", "")
         population.append(c2)
-        print("population + children: ", population)
+        # print("population + children: ", population)
 
         eval_exp = current_population.eval_expressions(population)
         # print("new eval_exp: ", eval_exp)
         get_totals = current_population.get_totals(eval_exp)
         # print("get totals new: ", get_totals)
         get_fitness = current_population.get_fitness(get_totals)
-        print("new fitnesses: ", get_fitness)
+        # print("new fitnesses: ", get_fitness)
         update_population1 = current_population.update_population(population, get_fitness)
         population = update_population1
-        print("population newww: ", population)
+        # print("population newww: ", population)
 
         x += 1
 
 
 if __name__ == "__main__":
     # read_data()
-    main(8, 4, 1000, debug=True)
+    main(128, 200, 5000, debug=True)
