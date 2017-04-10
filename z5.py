@@ -98,9 +98,11 @@ class GenExp(object):
     #     return eval_list
 
 
-    def eval_expressions(self, expression):
-        new = list()
+    def get_fitness(self, expression):
+        # new = list()
         row = GenExp.input1
+        truth = [0,0,0,0,0,1,1,1,1,1]
+        pred = list()
 
         
         for i in range(len(expression)):
@@ -111,39 +113,30 @@ class GenExp(object):
                     row[k][2])) \
                     .replace("X4", str(row[k][3])).replace("X5", str(row[k][4]))
                 x = eval(new_exp)
-
-                tmp2.append(x)
-
-            new.append(tmp2)
-
-        return new
-
-
-    def get_fitness(self, totals):
-        # print("totals: ", totals)
-        # labels = read_data()
-        # truth = labels[1]
-        truth = [0,0,0,0,0,1,1,1,1,1]
-        print("actual class: ", truth)
-        pred_class = list()
-        for i in totals:
-            tmp = list()
-            for j in i:
-                if j >= 0:
+                if x >= 0:
                     tmp.append(1)
                 else:
                     tmp.append(0)
-            pred_class.append(tmp)
-        print("predic class: ",pred_class)
+                # tmp2.append(x)
+
+            pred.append(tmp)
+            # new.append(tmp2)
+        # print("truth1: ", truth)
+        # print("predi1: ", pred)
 
         trfa = list()
-        for i in range(len(pred_class)):
+        for i in range(len(pred)):
             tmp = list()
-            [tmp.append(truth[j] == pred_class[i][j]) for j in range(len(pred_class[i]))]
+            [tmp.append(truth[j] == pred[i][j]) for j in range(len(pred[i]))]
             trfa.append(tmp)
-
         fitness = [len(i) - sum(i) for i in trfa]
+
         return fitness
+
+
+
+
+        
     #
     # def tournament_selection(self, population, fitness, selection_size):
     #     # zipped_population = [('X3-1-X5*12', 261), ('(X5-X3*16*3)', 183), ('X5*12', 305), ('X5+X4-11*(X3*X3+4)', 259)]
@@ -711,9 +704,7 @@ def main(max_num, popn_size, max_iter, debug=False):
 
     population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,Population size)
     # print("population!: ", population)
-    eval_exp = current_population.eval_expressions(population)
-    get_fitness = current_population.get_fitness(eval_exp)
-    # print("original: ", get_fitness)
+    population_fitness = current_population.get_fitness(population)
     # print("best original fitness: ", min(get_fitness))
 
     x = 1
@@ -722,14 +713,14 @@ def main(max_num, popn_size, max_iter, debug=False):
         print()
         print("population!: ", population)
         print()
-        eval_exp = current_population.eval_expressions(population)
+        population_fitness = current_population.get_fitness(population)
         print()
         print()
-        print("eval exp: ",eval_exp)
+        print("population fitness: ",population_fitness)
         print()
-        get_fitness = current_population.get_fitness(eval_exp)
-        print()
-        print("getting fitness", get_fitness)
+        # get_fitness = current_population.get_fitness(eval_exp)
+        # print()
+        # print("getting fitness", get_fitness)
         # for i in range(len(get_fitness)):
         #     if get_fitness[i] <= 3:
         #         # if get_fitness[i] ==0:
