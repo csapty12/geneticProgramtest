@@ -83,37 +83,6 @@ class GenExp(object):
             expression_list = [i for i in expression_list if 'X1' and 'X2' and 'X3' and 'X4' and 'X5' in i]
         return expression_list
 
-    # def get_fitness(self, expression):
-    #     # new = list()
-    #     row = GenExp.input1
-    #     truth = GenExp.labels
-    #     pred = list()
-    #     for i in range(len(expression)):
-    #         tmp = list()
-    #         for k in range(len(row)):
-    #             X1 = row[k][0]
-    #             X2 = row[k][1]
-    #             X3 = row[k][2]
-    #             X4 = row[k][3]
-    #             X5 = row[k][4]
-
-    #             new_exp = expression[i].replace("X1", str(X1)).replace("X2", str(X2)).replace("X3", str(X3))\
-    #             .replace("X4", str(X4)).replace("X5", str(X5))
-    #             x = eval(new_exp)
-    #             if x >= 0:
-    #                 tmp.append(1)
-    #             else:
-    #                 tmp.append(0)
-    #         pred.append(tmp)
-
-    #     trfa = list()
-    #     for i in range(len(pred)):
-    #         tmp = list()
-    #         [tmp.append(truth[j] == pred[i][j]) for j in range(len(pred[i]))]
-    #         trfa.append(tmp)
-    #     fitness = [len(i) - sum(i) for i in trfa]
-    #     return fitness
-
     def get_fitness(self, expression, child = False):
         # new = list()
         row = GenExp.input1
@@ -135,14 +104,16 @@ class GenExp(object):
 
                 new_exp = expression[i].replace("X1", str(X1)).replace("X2", str(X2)).replace("X3", str(X3))\
                 .replace("X4", str(X4)).replace("X5", str(X5))
-                x = eval(new_exp)
-                if x >= 0:
-                    tmp.append(1)
-                else:
-                    tmp.append(0)
+                try:
+                    x = eval(new_exp)
+                    if x >= 0:
+                        tmp.append(1)
+                    else:
+                        tmp.append(0)
+                except:
+                    x = 999999
+                    tmp.append(x)
             pred.append(tmp)
-
-
 
         trfa = list()
         for i in range(len(pred)):
@@ -151,6 +122,7 @@ class GenExp(object):
             trfa.append(tmp)
         fitness = [len(i) - sum(i) for i in trfa]
         return fitness
+
     # def tournament_selection(self, population, fitness, selection_size):
     #     zipped_population = list(zip(population, fitness))
     #     # print("zipped population: ", zipped_population)
@@ -186,56 +158,39 @@ class GenExp(object):
         do this twice to select the parents. 
         
         """
-        abs_fit = list()
-        for i in fitness:
-            abs_fit.append(abs(i))
-        # print("new fitness: ", abs_fit)
-        zipped_population = list(zip(population, abs_fit))
-        # print("zipped popn: ", zipped_population)
-        tru_zipped_population = list(zip(population, fitness))
-        # print("true zipped popn: ",tru_zipped_population)
-        # print("zipped list:")
-        # print(zipped_population)
+        zipped_population = list(zip(population,fitness))
+        # print("zipped population: ", zipped_population)
         candidates = sample(zipped_population, selection_size)
-
-        # print()
-        # print("selection")
-        # print(candidates)
+        # print("candidates:",candidates)
+        
         parent_one = min(candidates, key=lambda t: t[1])
-
+        # print(parent_one)
         p1_index = zipped_population.index(parent_one)
         # print(p1_index)
-        p1_tru = tru_zipped_population[p1_index]
-        # print("hhh:,",p1_tru)
-        candidate_p1 = candidates.index(parent_one)
-        # print("candidate p1: ",candidate_p1)
-        candidates.pop(candidate_p1)
-        # print("new candidates: ", candidates)
+        zipped_population.pop(p1_index)
+        # print("new popilation:", zipped_population)
 
-
+        candidates = sample(zipped_population, selection_size)
         parent_two = min(candidates, key=lambda t: t[1])
-
         p2_index = zipped_population.index(parent_two)
-        # print(p2_index)
-        p2_tru = tru_zipped_population[p2_index]
-        # print("hhhneww:,",p2_tru)
-        candidate_p2 = candidates.index(parent_two)
-        # print("candidate p2: ",candidate_p2)
-        candidates.pop(candidate_p2)
-        # print("new candidates: ", candidates)
+        zipped_population.pop(p2_index)
+        # print("new popilation:", zipped_population)
+
+        # print("parents1: ", parent_one)
+        # print("parents2: ", parent_two)
 
         parents = list()
-        parents.append(p1_tru)
-        parents.append(p2_tru)
-
-        # print("parents: ",parents)
-
-
-
-
-        # print("p2: ", tru_zipped_population[p2_index])
-
+        parents.append(parent_one)
+        parents.append(parent_two)
         return parents
+
+
+
+
+
+
+
+
 
     def split_parents(self, parents):
         # print("parents:",parents)
@@ -299,15 +254,13 @@ class GenExp(object):
             zipped_population.append((c2,child_fit2[0]))
 
         # print("zipped population: ", zipped_population)
-
         new_population = [i[0] for i in zipped_population]
-        print("new population: ", new_population)
+        new_population_fitness = [i[1] for i in zipped_population]
+        # print("new populationnnnnnnnnn:", new_population)
+        # print("new population fitneess:", new_population_fitness)
 
-        return new_population
+        return new_population, new_population_fitness
 
-    @staticmethod
-    def sigmoid(x):
-        return 1 / (1 + exp(-x))
 
 
 # class to manipulate node objects that make up a tree.
@@ -714,8 +667,8 @@ def main(max_num, popn_size, max_iter, debug=False):
     x_val = list()
     y_val = list()
 
-    population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,Population size)
-    print("population!: ", population)
+    population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,population size)
+    # print("population!: ", population)
     # population_fitness = current_population.get_fitness(population)
     # print("population fitness: ",population_fitness)
     # print("best original fitness: ", min(population_fitness))
@@ -723,42 +676,40 @@ def main(max_num, popn_size, max_iter, debug=False):
     x = 1
 
     while x <= max_iter:
-        # print()
-    #     print("population!: ", population)
-        print()
+    #     # print()
+    # #     print("population!: ", population)
+    #     print()
         if x ==1:
             population_fitness = current_population.get_fitness(population)
-    #     print()
-    #     print()
-        print("population fitness: ", population_fitness)
-    #     print()
-    #     for i in range(len(population_fitness)):
-    #         if population_fitness[i] <= 3:
-    #             # if get_fitness[i] ==0:
-    #             print("#########################################################################")
-    #             print(True)
+            # print("fitness: ",population_fitness)
+        # else:
 
-    #             print("Iteration: ", x)
-    #             print("fitness index:", population_fitness.index(population_fitness[i]))
-    #             print("fitness: ", population_fitness[i])
-    #             print()
-    #             # print(population)
-    #             print(population[i])
-    #             # evale = current_population.eval_expressions(population[i])
-    #             # print(evale)
-    #             loop_break = True
-    #             break
-    #     if loop_break == True:
-    #         end = time.time()
-    #         elapsedTime = end - start
-    #         print("time elapsed: ", elapsedTime)
-    #         print("here")
-    #         break
+            # print("population = ", population)
+            # print("fitness: ", population_fitness)
+        for i in range(len(population_fitness)):
+            if population_fitness[i] <= 2:
+                # if get_fitness[i] ==0:
+                print("#########################################################################")
+                print(True)
 
-    #     # # print(get_fitness)
-        select_parents = current_population.tournament_selection(population, population_fitness, 4)
-        # print("parents selected", select_parents)
-        split_parents = current_population.split_parents(select_parents)
+                print("Iteration: ", x)
+                print("fitness index:", population_fitness.index(population_fitness[i]))
+                print("fitness: ", population_fitness[i])
+                print()
+                # print(population)
+                print(population[i])
+                # evale = current_population.eval_expressions(population[i])
+                # print(evale)
+                loop_break = True
+                break
+        if loop_break == True:
+            end = time.time()
+            elapsedTime = end - start
+            print("time elapsed: ", elapsedTime)
+            print("here")
+            return population[i]
+
+        # # print(get_fitness)
 
         if x % 1== 0:
             # print("parents: ", select_parents )
@@ -773,31 +724,32 @@ def main(max_num, popn_size, max_iter, debug=False):
             # print("x_val: ", x_val)
             # print("y_val: ", y_val)
 
-    #     if x == max_iter:
-    #         print("max iteration met")
-    #         # print("fitness: ", get_fitness)
-    #         abs_list = [abs(i) for i in population_fitness]
-    #         min_val = min(abs_list)
-    #         print("best fitness: ", min_val)
-    #         index = abs_list.index(min_val)
-    #         print("index: ", index)
-    #         # print("population: ", population)
-    #         print("equation: ", population[index])
-    #         print("acc: ", 1-(min_val/len(GenExp.input1)))
-    #         end = time.time()
-    #         elapsedTime = end - start
+        if x == max_iter:
+            print("max iteration met")
+            # print("fitness: ", get_fitness)
+            abs_list = [abs(i) for i in population_fitness]
+            min_val = min(abs_list)
+            print("best fitness: ", min_val)
+            index = abs_list.index(min_val)
+            print("index: ", index)
+            # print("population: ", population)
+            print("equation: ", population[index])
+            print("acc: ", 1-(min_val/len(GenExp.input1)))
+            end = time.time()
+            elapsedTime = end - start
 
-    #         print("time elapsed: ", elapsedTime)
+            print("time elapsed: ", elapsedTime)
 
-    #         plt.figure()
-    #         plt.plot(x_val, y_val, "b", label="fitness")
-    #         plt.legend(loc="best")
-    #         plt.show()
+            plt.figure()
+            plt.plot(x_val, y_val, "b", label="fitness")
+            plt.legend(loc="best")
+            plt.show()
 
-    #         return population[index]
+            return population[index]
 
-        # print("splitting parents")
-        # print("split parents: ", split_parents)
+        select_parents = current_population.tournament_selection(population, population_fitness, 4)
+        # print("parents selected", select_parents)
+        split_parents = current_population.split_parents(select_parents)
         fix_decimals = current_population.fix_dec(split_parents)
         get_prefix_parents = to_pref.get_prefix_notation(fix_decimals)
         # print("prefix notation: ")
@@ -934,7 +886,7 @@ def main(max_num, popn_size, max_iter, debug=False):
         c1 = p.convert_to_infix(deconstruct_child_one)
         c1 = c1.replace(" ", "")
 
-        print("child one: ", c1)
+        # print("child one: ", c1)
         # print("population :", population)
 
         # population.append(c1)
@@ -945,7 +897,7 @@ def main(max_num, popn_size, max_iter, debug=False):
 
         c2 = p.convert_to_infix(deconstruct_child_two)
         c2 = c2.replace(" ", "")
-        print("child two:", c2)
+        # print("child two:", c2)
 
         #get the fitness of the 
         new_fit1 = current_population.get_fitness(c1, child = True)
@@ -960,27 +912,18 @@ def main(max_num, popn_size, max_iter, debug=False):
             c1,new_fit1,c2,new_fit2)
 
         
-
-    #     population.append(c2)
-    #     # print("population + children: ", population)
-
-    #     eval_exp = current_population.eval_expressions(population)
-    #     # print("new eval_exp: ", eval_exp)
-    #     get_totals = current_population.get_totals(eval_exp)
-    #     # print("get totals new: ", get_totals)
-    #     get_fitness = current_population.get_fitness(get_totals)
-    #     # print("new fitnesses: ", get_fitness)
-    #     update_population1 = current_population.update_population(population, get_fitness)
-    #     population = update_population1
-    #     print("population newww: ", population)
+        population = update_population1[0]
+        # print(" new population: ", population)
+        population_fitness = update_population1[1]
+        # print(" new population fitness:: ", population_fitness)
 
         x += 1
 
 
 if __name__ == "__main__":
     # read_data()
-    expression = main(8, 4, 1, debug=True)
-    print("expression: ", expression)
+    expression = main(8, 50, 10, debug=True)
+    print("optimal expression: ", expression)
 
     # """
     # need to feed in the data into here
