@@ -36,6 +36,8 @@ class GenExp(object):
               [0.266438247, 0.144166996, 0.358351154, 6.392246629, 0.957753361],
               [0.169908241, -0.091765234, 0.082865501, 0.420012564, 0.591372793]]
 
+    labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+
     # read_data = read_data()
 
     # input1 = read_data[0]
@@ -81,22 +83,66 @@ class GenExp(object):
             expression_list = [i for i in expression_list if 'X1' and 'X2' and 'X3' and 'X4' and 'X5' in i]
         return expression_list
 
-    def get_fitness(self, expression):
+    # def get_fitness(self, expression):
+    #     # new = list()
+    #     row = GenExp.input1
+    #     truth = GenExp.labels
+    #     pred = list()
+    #     for i in range(len(expression)):
+    #         tmp = list()
+    #         for k in range(len(row)):
+    #             X1 = row[k][0]
+    #             X2 = row[k][1]
+    #             X3 = row[k][2]
+    #             X4 = row[k][3]
+    #             X5 = row[k][4]
+
+    #             new_exp = expression[i].replace("X1", str(X1)).replace("X2", str(X2)).replace("X3", str(X3))\
+    #             .replace("X4", str(X4)).replace("X5", str(X5))
+    #             x = eval(new_exp)
+    #             if x >= 0:
+    #                 tmp.append(1)
+    #             else:
+    #                 tmp.append(0)
+    #         pred.append(tmp)
+
+    #     trfa = list()
+    #     for i in range(len(pred)):
+    #         tmp = list()
+    #         [tmp.append(truth[j] == pred[i][j]) for j in range(len(pred[i]))]
+    #         trfa.append(tmp)
+    #     fitness = [len(i) - sum(i) for i in trfa]
+    #     return fitness
+
+    def get_fitness(self, expression, child = False):
         # new = list()
         row = GenExp.input1
-        truth = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+        truth = GenExp.labels
+        if child == True:
+            exp = list()
+            exp.append(expression)
+            expression = exp
+            # print("expression child: ", expression)
         pred = list()
         for i in range(len(expression)):
             tmp = list()
             for k in range(len(row)):
-                new_exp = expression[i].replace("X1", str(row[k][0])).replace("X2", str(row[k][1])).replace("X3", str(
-                    row[k][2])).replace("X4", str(row[k][3])).replace("X5", str(row[k][4]))
+                X1 = row[k][0]
+                X2 = row[k][1]
+                X3 = row[k][2]
+                X4 = row[k][3]
+                X5 = row[k][4]
+
+                new_exp = expression[i].replace("X1", str(X1)).replace("X2", str(X2)).replace("X3", str(X3))\
+                .replace("X4", str(X4)).replace("X5", str(X5))
                 x = eval(new_exp)
                 if x >= 0:
                     tmp.append(1)
                 else:
                     tmp.append(0)
             pred.append(tmp)
+
+
 
         trfa = list()
         for i in range(len(pred)):
@@ -105,21 +151,19 @@ class GenExp(object):
             trfa.append(tmp)
         fitness = [len(i) - sum(i) for i in trfa]
         return fitness
-
-    #
     # def tournament_selection(self, population, fitness, selection_size):
     #     zipped_population = list(zip(population, fitness))
     #     # print("zipped population: ", zipped_population)
     #     parent_one = min(zipped_population, key=lambda t: t[1])
     #     # print(parent_one)
-    #
+    
     #     p1_index = zipped_population.index(parent_one)
     #     # print("p1_index: ", p1_index)
     #     p1_tru = zipped_population[p1_index]
     #     zipped_population.pop(p1_index)
-    #
+    
     #     # print("zipped population: ", zipped_population)
-    #
+    
     #     parent_two = min(zipped_population, key=lambda t: t[1])
     #     p2_index = zipped_population.index(parent_two)
     #     # # print(p2_index)
@@ -128,13 +172,13 @@ class GenExp(object):
     #     # # print("candidate p2: ",candidate_p2)
     #     zipped_population.pop(p2_index)
     #     # # print("new candidates: ", candidates)
-    #
+    
     #     parents = list()
     #     parents.append(p1_tru)
     #     parents.append(p2_tru)
-    #
+    
     #     return parents
-    #
+    
 
     def tournament_selection(self, population, fitness, selection_size):
         """
@@ -220,49 +264,44 @@ class GenExp(object):
                     del i[0][dec]
         return split_parents
 
-    def update_population(self, population, fitness):
+    def update_population(self, population, fitness, c1,child_fit1,c2,child_fit2):
         # print("current population")
         # print(population)
         # print("fitenss: ")
         # print(fitness)
-        # abs_fit = list()
-        # for i in fitness:
-        #     abs_fit.append(abs(i))
+        child1 = list()
+        child2 = list()
 
-        abs_fit = [abs(i) for i in fitness]
-        # print("fitness")
-        # print(abs_fit)
+        child1.append(c1)
+        child2.append(c2)
 
-        zipped_population = list(zip(population, abs_fit))
-        # print("new population: ")
-        # print(zipped_population)
-
-
-        # print("worst candidate 1: ")
+        zipped_population = list(zip(population, fitness))
+        # print("zipped popn",zipped_population)
+        child2 = list(zip(child2,child_fit2))
+        # print("child2: ", child2)
+        
+        # # print("worst candidate 1: ")
         worst_one = max(zipped_population, key=lambda t: t[1])
-        # print(worst_one)
-
         w1_index = zipped_population.index(worst_one)
-        # print(w1_index)
-        zipped_population.pop(w1_index)
-        # print("new population: ")
-        # print(zipped_population)
+        # print("worst one: ", worst_one)
+        if child_fit1[0] <= worst_one[1]:
+            zipped_population.pop(w1_index)
+            zipped_population.append((c1,child_fit1[0]))
 
+        # print("zipped population: ", zipped_population)
 
-        # print("worst candidate 2: ")
         worst_two = max(zipped_population, key=lambda t: t[1])
-        # print(worst_two)
-
         w2_index = zipped_population.index(worst_two)
-        # print(w2_index)
-        zipped_population.pop(w2_index)
-        # print("new population: ")
-        # print(zipped_population)
-        # new_population = list()
-        # for i in zipped_population:
-        #     new_population.append(i[0])
+        # print("worst2: ", worst_two)
+
+        if child_fit2[0] <= worst_two[1]:
+            zipped_population.pop(w2_index)
+            zipped_population.append((c2,child_fit2[0]))
+
+        # print("zipped population: ", zipped_population)
 
         new_population = [i[0] for i in zipped_population]
+        print("new population: ", new_population)
 
         return new_population
 
@@ -676,224 +715,229 @@ def main(max_num, popn_size, max_iter, debug=False):
     y_val = list()
 
     population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,Population size)
-    # print("population!: ", population)
-    population_fitness = current_population.get_fitness(population)
-    # print("best original fitness: ", min(get_fitness))
+    print("population!: ", population)
+    # population_fitness = current_population.get_fitness(population)
+    # print("population fitness: ",population_fitness)
+    # print("best original fitness: ", min(population_fitness))
 
     x = 1
 
     while x <= max_iter:
+        # print()
+    #     print("population!: ", population)
         print()
-        print("population!: ", population)
-        print()
-        population_fitness = current_population.get_fitness(population)
-        print()
-        print()
+        if x ==1:
+            population_fitness = current_population.get_fitness(population)
+    #     print()
+    #     print()
         print("population fitness: ", population_fitness)
-        print()
-        for i in range(len(population_fitness)):
-            if population_fitness[i] <= 3:
-                # if get_fitness[i] ==0:
-                print("#########################################################################")
-                print(True)
+    #     print()
+    #     for i in range(len(population_fitness)):
+    #         if population_fitness[i] <= 3:
+    #             # if get_fitness[i] ==0:
+    #             print("#########################################################################")
+    #             print(True)
 
-                print("Iteration: ", x)
-                print("fitness index:", population_fitness.index(population_fitness[i]))
-                print("fitness: ", population_fitness[i])
-                print()
-                # print(population)
-                print(population[i])
-                # evale = current_population.eval_expressions(population[i])
-                # print(evale)
-                loop_break = True
-                break
-        if loop_break == True:
-            end = time.time()
-            elapsedTime = end - start
-            print("time elapsed: ", elapsedTime)
-            print("here")
-            break
+    #             print("Iteration: ", x)
+    #             print("fitness index:", population_fitness.index(population_fitness[i]))
+    #             print("fitness: ", population_fitness[i])
+    #             print()
+    #             # print(population)
+    #             print(population[i])
+    #             # evale = current_population.eval_expressions(population[i])
+    #             # print(evale)
+    #             loop_break = True
+    #             break
+    #     if loop_break == True:
+    #         end = time.time()
+    #         elapsedTime = end - start
+    #         print("time elapsed: ", elapsedTime)
+    #         print("here")
+    #         break
 
-        # # print(get_fitness)
+    #     # # print(get_fitness)
         select_parents = current_population.tournament_selection(population, population_fitness, 4)
-        print("parents selected", select_parents)
+        # print("parents selected", select_parents)
         split_parents = current_population.split_parents(select_parents)
 
         if x % 1== 0:
             # print("parents: ", select_parents )
 
-            print("iteration: ", x)
+            # print("iteration: ", x)
             x_val.append(x)
             abs_list = [abs(i) for i in population_fitness]
             min_val = min(abs_list)
-            print("current best fitness: ", min_val)
+            # print("current best fitness: ", min_val)
             y_val.append(min_val)
             # print("time elapsed: ", time.time())
             # print("x_val: ", x_val)
             # print("y_val: ", y_val)
 
-        if x == max_iter:
-            print("max iteration met")
-            # print("fitness: ", get_fitness)
-            abs_list = [abs(i) for i in population_fitness]
-            min_val = min(abs_list)
-            print("best fitness: ", min_val)
-            index = abs_list.index(min_val)
-            print("index: ", index)
-            # print("population: ", population)
-            print("equation: ", population[index])
-            print("acc: ", 1-(min_val/len(GenExp.input1)))
-            end = time.time()
-            elapsedTime = end - start
+    #     if x == max_iter:
+    #         print("max iteration met")
+    #         # print("fitness: ", get_fitness)
+    #         abs_list = [abs(i) for i in population_fitness]
+    #         min_val = min(abs_list)
+    #         print("best fitness: ", min_val)
+    #         index = abs_list.index(min_val)
+    #         print("index: ", index)
+    #         # print("population: ", population)
+    #         print("equation: ", population[index])
+    #         print("acc: ", 1-(min_val/len(GenExp.input1)))
+    #         end = time.time()
+    #         elapsedTime = end - start
 
-            print("time elapsed: ", elapsedTime)
+    #         print("time elapsed: ", elapsedTime)
 
-            plt.figure()
-            plt.plot(x_val, y_val, "b", label="fitness")
-            plt.legend(loc="best")
-            plt.show()
+    #         plt.figure()
+    #         plt.plot(x_val, y_val, "b", label="fitness")
+    #         plt.legend(loc="best")
+    #         plt.show()
 
-            return population[index]
+    #         return population[index]
 
-        print("splitting parents")
-        print("split parents: ", split_parents)
+        # print("splitting parents")
+        # print("split parents: ", split_parents)
         fix_decimals = current_population.fix_dec(split_parents)
         get_prefix_parents = to_pref.get_prefix_notation(fix_decimals)
-        print("prefix notation: ")
-        print("parent prefix: ", get_prefix_parents)
-        #
-        # print()
-        # print("parent trees")
+        # print("prefix notation: ")
+        # print("parent prefix: ", get_prefix_parents)
+    #     #
+    #     # print()
+    #     # print("parent trees")
         parent_tree1 = get_prefix_parents[0]
         parent_tree2 = get_prefix_parents[1]
         parent_tree1_fitness = get_prefix_parents[0][1]
         parent_tree2_fitness = get_prefix_parents[1][1]
 
-        # print("here")
-        # print(parent_tree1_fitness)
-        # print(parent_tree2_fitness)
+    #     # print("here")
+    #     # print(parent_tree1_fitness)
+    #     # print(parent_tree2_fitness)
 
-        # print("p1 prefix:",parent_tree1)
-        # print("p2 prefix:",parent_tree2)
+    #     # print("p1 prefix:",parent_tree1)
+    #     # print("p2 prefix:",parent_tree2)
 
-        # print("making trees!")
+    #     # print("making trees!")
         make_parent_tree_one = tree.make_tree(parent_tree1[0])
         make_parent_tree_two = tree.make_tree(parent_tree2[0])
 
-        # print("Printing trees")
-        # print("Tree one")
-        # show_parent_tree_one = tree.print_full_tree(make_parent_tree_one[0])
-        # print("parent 1")
-        # print(show_parent_tree_one)
+    #     # print("Printing trees")
+    #     # print("Tree one")
+    #     # show_parent_tree_one = tree.print_full_tree(make_parent_tree_one[0])
+    #     # print("parent 1")
+    #     # print(show_parent_tree_one)
         show_parent_tree_one_nodes = tree.print_full_tree(make_parent_tree_one[1])
-        # print(show_parent_tree_one_nodes)
-        # print("Tree two")
-        # show_parent_tree_two = tree.print_full_tree(make_parent_tree_two[0])
-        # print()
-        # print("parent2: ")
-        # print(show_parent_tree_two)
+    #     # print(show_parent_tree_one_nodes)
+    #     # print("Tree two")
+    #     # show_parent_tree_two = tree.print_full_tree(make_parent_tree_two[0])
+    #     # print()
+    #     # print("parent2: ")
+    #     # print(show_parent_tree_two)
         show_parent_tree_two_nodes = tree.print_full_tree(make_parent_tree_two[1])
-        # print(show_parent_tree_two_nodes)
+    #     # print(show_parent_tree_two_nodes)
         nodes_parent_tree_one = tree.print_full_tree(make_parent_tree_one[2])
-        # print("parent one nodes: ", nodes_parent_tree_one)
+    #     # print("parent one nodes: ", nodes_parent_tree_one)
         nodes_parent_tree_two = tree.print_full_tree(make_parent_tree_two[2])
-        # print("parent two nodes: ", nodes_parent_tree_two)
+    #     # print("parent two nodes: ", nodes_parent_tree_two)
 
-        # make a copy of the parents
+    #     # make a copy of the parents
         make_parent_tree_one_clone = copy.deepcopy(make_parent_tree_one)
-        # show_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[0])
-        # print("here")
+    #     # show_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[0])
+    #     # print("here")
         parent_tree1_fitness_clone = parent_tree1_fitness
-        # print(parent_tree1_fitness_clone)
-        # print(show_parent_tree_one_clone)
+    #     # print(parent_tree1_fitness_clone)
+    #     # print(show_parent_tree_one_clone)
 
         make_parent_tree_two_clone = copy.deepcopy(make_parent_tree_two)
-        # show_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[0])
+    #     # show_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[0])
         parent_tree2_fitness_clone = parent_tree2_fitness
-        # print(parent_tree2_fitness_clone)
-        # print(show_parent_tree_two_clone)
+    #     # print(parent_tree2_fitness_clone)
+    #     # print(show_parent_tree_two_clone)
 
         nodes_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[2])
-        # print("parent one nodes: ", nodes_parent_tree_one)
+    #     # print("parent one nodes: ", nodes_parent_tree_one)
         nodes_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[2])
-        # print("parent two nodes: ", nodes_parent_tree_two)
+    #     # print("parent two nodes: ", nodes_parent_tree_two)
 
         rnd = random()
-        # print("rnd : ", rnd)
+    #     # print("rnd : ", rnd)
         if rnd >= 0.1:
-            # print("crossing over")
+    #         # print("crossing over")
             select_xover_node_one = tree.select_random_val(make_parent_tree_one_clone[1])
-            # print("blooop: ",select_xover_node_one)
+    #         # print("blooop: ",select_xover_node_one)
             select_xover_node_two = tree.select_random_val(make_parent_tree_two_clone[1])
 
-            # print("selected xover point 1: ", select_xover_node_one)
-            # print("selected xover point 2: ", select_xover_node_two)
+    #         # print("selected xover point 1: ", select_xover_node_one)
+    #         # print("selected xover point 2: ", select_xover_node_two)
 
             random_node_one = tree.find_subtree(make_parent_tree_one_clone[0], make_parent_tree_one_clone[1],
                                                 select_xover_node_one)
             random_node_two = tree.find_subtree(make_parent_tree_two_clone[0], make_parent_tree_two_clone[1],
                                                 select_xover_node_two)
 
-            # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,random_node_two.nodenum)
+    #         # print('swapping: ', random_node_one.value, random_node_one.nodenum, " with ", random_node_two.value,random_node_two.nodenum)
 
             new_trees = tree.swap_nodes(make_parent_tree_one_clone[0], make_parent_tree_two_clone[0],
                                         nodes_parent_tree_one_clone, nodes_parent_tree_two_clone, random_node_one,
                                         random_node_two)
         else:
-            # print("not crossing over")
+    #         # print("not crossing over")
             new_trees = [make_parent_tree_one_clone[0], make_parent_tree_two_clone[0]]
-        # print()
+    #     # print()
         child_one = new_trees[0]
         child_two = new_trees[1]
-        # print("child one")
-        # print(child_one)
-        # print()
-        # print("building child two")
-        # print(child_two)
+    #     # print("child one")
+    #     # print(child_one)
+    #     # print()
+    #     # print("building child two")
+    #     # print(child_two)
 
         child_one_list_node = list(tree.make_list_nodes(child_one))
         child_two_list_node = list(tree.make_list_nodes(child_two))
         child_two_list_node = tree.get_child_two(child_one_list_node, child_two_list_node)
 
-        # print("child one nodes: ", child_one_list_node)
-        # print()
-        # print("child two nodes: ", child_two_list_node)
+    #     # print("child one nodes: ", child_one_list_node)
+    #     # print()
+    #     # print("child two nodes: ", child_two_list_node)
 
-        # print("mutating nodes: ")
+    #     # print("mutating nodes: ")
         rnd = random()
         if rnd <= 0.1:
-            # print("mutating nodes: ")
+    #         # print("mutating nodes: ")
             node_to_mutate_one = tree.select_random_val(child_one_list_node)
-            # print("node to mutate one: ",node_to_mutate_one)
-            # print()
+    #         # print("node to mutate one: ",node_to_mutate_one)
+    #         # print()
             node_to_mutate_two = tree.select_random_val(child_two_list_node)
-            # print("node to mutate two: ",node_to_mutate_two)
-            # print()
+    #         # print("node to mutate two: ",node_to_mutate_two)
+    #         # print()
 
             new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2],
                                              parent_tree1_fitness_clone)
-            # print(new_child_one[0])
-            #
+    #         # print(new_child_one[0])
+    #         #
             new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2],
                                              parent_tree2_fitness_clone)
-            # print(new_child_two[0])
+    #         # print(new_child_two[0])
 
         else:
-            #
-            # print("not mutating:")
+    #         #
+    #         # print("not mutating:")
             new_child_one = tree.build_child(child_one, child_one_list_node)
             new_child_two = tree.build_child(child_two, child_two_list_node)
 
-        # print("deconstructing trees")
+    #     # print("deconstructing trees")
         p = ToInfixParser()
-        # print("deconstructing child 1")
+    #     # print("deconstructing child 1")
         deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
-        # print(deconstruct_child_one)
+    #     # print(deconstruct_child_one)
 
         c1 = p.convert_to_infix(deconstruct_child_one)
         c1 = c1.replace(" ", "")
 
-        population.append(c1)
+        print("child one: ", c1)
+        # print("population :", population)
+
+        # population.append(c1)
 
         # print("deconstructing child 2")
         deconstruct_child_two = ToInfixParser.deconstruct_tree(new_child_two[1])
@@ -901,18 +945,34 @@ def main(max_num, popn_size, max_iter, debug=False):
 
         c2 = p.convert_to_infix(deconstruct_child_two)
         c2 = c2.replace(" ", "")
-        population.append(c2)
-        # print("population + children: ", population)
+        print("child two:", c2)
 
-        eval_exp = current_population.eval_expressions(population)
-        # print("new eval_exp: ", eval_exp)
-        get_totals = current_population.get_totals(eval_exp)
-        # print("get totals new: ", get_totals)
-        get_fitness = current_population.get_fitness(get_totals)
-        # print("new fitnesses: ", get_fitness)
-        update_population1 = current_population.update_population(population, get_fitness)
-        population = update_population1
-        print("population newww: ", population)
+        #get the fitness of the 
+        new_fit1 = current_population.get_fitness(c1, child = True)
+        # print("child: ", c1)
+        # print("fitness: ", new_fit1)
+        new_fit2 = current_population.get_fitness(c2, child = True)
+        # print("child 2: ", c2)
+        # print("fitness: ", new_fit2)
+
+        # print("population fitness:", population_fitness)
+        update_population1 = current_population.update_population(population, population_fitness, 
+            c1,new_fit1,c2,new_fit2)
+
+        
+
+    #     population.append(c2)
+    #     # print("population + children: ", population)
+
+    #     eval_exp = current_population.eval_expressions(population)
+    #     # print("new eval_exp: ", eval_exp)
+    #     get_totals = current_population.get_totals(eval_exp)
+    #     # print("get totals new: ", get_totals)
+    #     get_fitness = current_population.get_fitness(get_totals)
+    #     # print("new fitnesses: ", get_fitness)
+    #     update_population1 = current_population.update_population(population, get_fitness)
+    #     population = update_population1
+    #     print("population newww: ", population)
 
         x += 1
 
@@ -920,25 +980,26 @@ def main(max_num, popn_size, max_iter, debug=False):
 if __name__ == "__main__":
     # read_data()
     expression = main(8, 4, 1, debug=True)
+    print("expression: ", expression)
 
-    """
-    need to feed in the data into here
-    and print out the accuracy and classification
-    """
-    expression  = ["((((X4*44)*3)+(((X2*44)*(X2+X1))*(19.567910387462327+(X1*4))))+(19*(X5+(43-((X4*(X1+((X4+(X5*(((45.95900354306407*((X4*30)-39))+((((X2*(41.796741427375856*41))-(((X3-(33.83369339908452-5))*(X1+((((((X2*(41.796741427375856*41))-(((X4-(33.83369339908452-4.9))*((X2*(41.796741427375856*41))-(((X3-(33.83369339908452-5))*((X2*(41.796741427375856*41))-(((X3-(33.83369339908452-4.9))*(X1+(((((X2*30)-14)-44)+(X4*44))+(X4*44))))+(X1*((X2*28)*(X2+X1))))))+(12.784264050562333*((X2*28)*(X2+X1))))))+(X1*((X2*28)*(X2+X1)))))*30)-X5)-44)+(X4*44))))+(12.784264050562333*4)))+(X4*44))*((X4*44)*3)))+(24-11))))+15)))-((X3*12)-(X3+(((45.95900354306407*((X4*30)-39))+(((X2*((X1+(11*30))*X5))-(X5+17))*((X4*44)*3)))+(24-11)))))))))"]
-    # row = [0.16285377,0.293619897,0.148429586,2.112106101,1.726711829]
-    row = [0.482871627, 0.105524477,0.023228635, 0.199942427, 1.417678104]
-    print("new expression: ", expression)
-    for i in expression:
-        new_exp = i.replace("X1",str(row[0])).replace("X2",str(row[1])).replace("X3",str(row[2]))\
-        .replace("X4",str(row[3])) .replace("X5",str(row[4]))
-    # print(new_exp)
+    # """
+    # need to feed in the data into here
+    # and print out the accuracy and classification
+    # """
+    # expression  = ["((((X4*44)*3)+(((X2*44)*(X2+X1))*(19.567910387462327+(X1*4))))+(19*(X5+(43-((X4*(X1+((X4+(X5*(((45.95900354306407*((X4*30)-39))+((((X2*(41.796741427375856*41))-(((X3-(33.83369339908452-5))*(X1+((((((X2*(41.796741427375856*41))-(((X4-(33.83369339908452-4.9))*((X2*(41.796741427375856*41))-(((X3-(33.83369339908452-5))*((X2*(41.796741427375856*41))-(((X3-(33.83369339908452-4.9))*(X1+(((((X2*30)-14)-44)+(X4*44))+(X4*44))))+(X1*((X2*28)*(X2+X1))))))+(12.784264050562333*((X2*28)*(X2+X1))))))+(X1*((X2*28)*(X2+X1)))))*30)-X5)-44)+(X4*44))))+(12.784264050562333*4)))+(X4*44))*((X4*44)*3)))+(24-11))))+15)))-((X3*12)-(X3+(((45.95900354306407*((X4*30)-39))+(((X2*((X1+(11*30))*X5))-(X5+17))*((X4*44)*3)))+(24-11)))))))))"]
+    # # row = [0.16285377,0.293619897,0.148429586,2.112106101,1.726711829]
+    # row = [0.482871627, 0.105524477,0.023228635, 0.199942427, 1.417678104]
+    # print("new expression: ", expression)
+    # for i in expression:
+    #     new_exp = i.replace("X1",str(row[0])).replace("X2",str(row[1])).replace("X3",str(row[2]))\
+    #     .replace("X4",str(row[3])) .replace("X5",str(row[4]))
+    # # print(new_exp)
 
-    print("company data: ", row)
-    eva = eval(new_exp)
-    if eva >= 0:
-        print("class 1 bankrupt")
-    else:
-        print("class 0 Non bankrupt")
+    # print("company data: ", row)
+    # eva = eval(new_exp)
+    # if eva >= 0:
+    #     print("class 1 bankrupt")
+    # else:
+    #     print("class 0 Non bankrupt")
 
     
