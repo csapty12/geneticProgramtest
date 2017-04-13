@@ -757,10 +757,10 @@ def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1
             print("time elapsed: ", elapsedTime)
             print("ben was right")
 
-            plt.figure()
-            plt.plot(x_val, y_val, "b", label="fitness")
-            plt.legend(loc="best")
-            plt.show()
+            # plt.figure()
+            # plt.plot(x_val, y_val, "b", label="fitness")
+            # plt.legend(loc="best")
+            # plt.show()
 
             return population[index]
 
