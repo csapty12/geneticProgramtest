@@ -4,6 +4,7 @@ import re
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
+from sys import stdout
 
 
 def read_data():
@@ -754,6 +755,7 @@ def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1
             elapsedTime = end - start
 
             print("time elapsed: ", elapsedTime)
+            print("ben was right")
 
             plt.figure()
             plt.plot(x_val, y_val, "b", label="fitness")
@@ -938,7 +940,7 @@ def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1
 if __name__ == "__main__":
     # read_data()
 
-    expression = main(max_num = 128, popn_size = 300, max_iter = 2000, cross_over_rate = 0.1, mutation_rate = 0.1, debug=True)
+    expression = main(max_num = 128, popn_size = 300, max_iter = 5, cross_over_rate = 0.1, mutation_rate = 0.1, debug=True)
     print("optimal expression: ", expression)
     exp = list()
     exp.append(expression)
