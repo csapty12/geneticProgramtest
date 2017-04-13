@@ -823,7 +823,7 @@ def main(max_num, popn_size, max_iter, debug=False):
 
             return population[index]
 
-        select_parents = current_population.tournament_selection(population, population_fitness, 4)
+        select_parents = current_population.tournament_selection(population, population_fitness, 50)
         # print("parents selected", select_parents)
         split_parents = current_population.split_parents(select_parents)
         fix_decimals = current_population.fix_dec(split_parents)
