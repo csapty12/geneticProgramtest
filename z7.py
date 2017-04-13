@@ -4,7 +4,7 @@ import re
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
-from sys import stdout
+
 
 
 def read_data():
@@ -672,6 +672,7 @@ class ToInfixParser:
 
 
 def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1, debug=False):
+    import sys
     import time
     start = time.time()
     loop_break = False
@@ -731,10 +732,14 @@ def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1
             # print("parents: ", select_parents )
 
             print("iteration: ", x)
+            sys.stdout.write("iteration: {} \n".format(x))
+
             x_val.append(x)
             abs_list = [abs(i) for i in population_fitness]
             min_val = min(abs_list)
             print("current best fitness: ", min_val)
+            sys.stdout.write("current best fitness:{} \n".format(min_val))
+            sys.stdout.flush()
             y_val.append(min_val)
             # print("time elapsed: ", time.time())
             # print("x_val: ", x_val)
@@ -830,7 +835,7 @@ def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1
 
         rnd = random()
     #     # print("rnd : ", rnd)
-        if rnd >= cross_over_rate:
+        if rnd <= cross_over_rate:
     #         # print("crossing over")
             select_xover_node_one = tree.select_random_val(make_parent_tree_one_clone[1])
     #         # print("blooop: ",select_xover_node_one)
@@ -940,7 +945,7 @@ def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1
 if __name__ == "__main__":
     # read_data()
 
-    expression = main(max_num = 128, popn_size = 300, max_iter = 5, cross_over_rate = 0.1, mutation_rate = 0.1, debug=True)
+    expression = main(max_num = 128, popn_size = 300, max_iter = 5, cross_over_rate = 0.9, mutation_rate = 0.1, debug=True)
     print("optimal expression: ", expression)
     exp = list()
     exp.append(expression)
