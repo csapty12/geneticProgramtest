@@ -35,7 +35,7 @@ class GenExp(object):
     #           [0.015860893, -0.104748498, 0.034454832, 0.068872667, 0.442914184],
     #           [0.266438247, 0.144166996, 0.358351154, 6.392246629, 0.957753361],
     #           [0.169908241, -0.091765234, 0.082865501, 0.420012564, 0.591372793]]
-# 
+
     # labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
 
     read_data = read_data()
@@ -144,67 +144,6 @@ class GenExp(object):
             trfa.append(tmp)
         fitness = [len(i) - sum(i) for i in trfa]
         return fitness
-
-
-
-        # pred = list()
-        # for i in expression:
-        #     tmp = list()
-        #     try:    
-        #         x = eval(i)
-        #         print(x)
-        #         # for i in x:
-        #         #     if i >=0:
-        #         #         tmp.append(1)
-        #         #     else:
-        #         #         tmp.append(0)
-        #         # pred.append(tmp)
-
-        #     except ZeroDivisionError:
-        #         for i in x:
-        #             tmp.append(99999)
-        # # print(pred)
-
-        # trfa = list()
-        # for i in range(len(pred)):
-        #     tmp = list()
-        #     [tmp.append(labels[j] == pred[i][j]) for j in range(len(pred[i]))]
-        #     trfa.append(tmp)
-        # fitness = [len(i) - sum(i) for i in trfa]
-        # return fitness
-
-
-
-
-        # for i in range(len(expression)):
-        #     tmp = list()
-        #     for k in range(len(row)):
-        #         X1 = row[k][0]
-        #         X2 = row[k][1]
-        #         X3 = row[k][2]
-        #         X4 = row[k][3]
-        #         X5 = row[k][4]
-
-        #         new_exp = expression[i].replace("X1", str(X1)).replace("X2", str(X2)).replace("X3", str(X3))\
-        #         .replace("X4", str(X4)).replace("X5", str(X5))
-        #         try:
-        #             x = eval(new_exp)
-        #             if x >= 0:
-        #                 tmp.append(1)
-        #             else:
-        #                 tmp.append(0)
-        #         except:
-        #             x = 999999
-        #             tmp.append(x)
-        #     pred.append(tmp)
-
-        # trfa = list()
-        # for i in range(len(pred)):
-        #     tmp = list()
-        #     [tmp.append(truth[j] == pred[i][j]) for j in range(len(pred[i]))]
-        #     trfa.append(tmp)
-        # fitness = [len(i) - sum(i) for i in trfa]
-        # return fitness
 
     # def tournament_selection(self, population, fitness, selection_size):
     #     zipped_population = list(zip(population, fitness))
@@ -731,7 +670,7 @@ class ToInfixParser:
         return self.stack.pop()
 
 
-def main(max_num, popn_size, max_iter, debug=False):
+def main(max_num, popn_size, max_iter, cross_over_rate =0.1, mutation_rate = 0.1, debug=False):
     import time
     start = time.time()
     loop_break = False
@@ -889,7 +828,7 @@ def main(max_num, popn_size, max_iter, debug=False):
 
         rnd = random()
     #     # print("rnd : ", rnd)
-        if rnd >= 0.1:
+        if rnd >= cross_over_rate:
     #         # print("crossing over")
             select_xover_node_one = tree.select_random_val(make_parent_tree_one_clone[1])
     #         # print("blooop: ",select_xover_node_one)
@@ -930,7 +869,7 @@ def main(max_num, popn_size, max_iter, debug=False):
 
     #     # print("mutating nodes: ")
         rnd = random()
-        if rnd <= 0.1:
+        if rnd <= mutation_rate:
     #         # print("mutating nodes: ")
             node_to_mutate_one = tree.select_random_val(child_one_list_node)
     #         # print("node to mutate one: ",node_to_mutate_one)
@@ -998,7 +937,8 @@ def main(max_num, popn_size, max_iter, debug=False):
 
 if __name__ == "__main__":
     # read_data()
-    expression = main(128, 300, 2000, debug=True)
+
+    expression = main(max_num = 128, popn_size = 300, max_iter = 2000, cross_over_rate = 0.1, mutation_rate = 0.1, debug=True)
     print("optimal expression: ", expression)
     exp = list()
     exp.append(expression)
