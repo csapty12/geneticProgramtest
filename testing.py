@@ -21,71 +21,32 @@ def read_data():
 
 
 class GenExp(object):
-    OPS = ['+', '-', '*', "/"]
-    bracketing = 0.3
-    MIN_NUM, MAX_NUM = 1.0, 50.0
-
-    # input1 = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425],
-    #           [0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],
-    #           [0.133612951, -0.012046736, 0.006117654, 0.217226284, 0.415622133],
-    #           [0.014110552, 0.306378197, 0.025120196, 1.410020817, 0.220180238],
-    #           [0.089459236, 0.498017156, 0.130726372, 4.138192315, 0.327646754],
-    #           [0.18270599, 0.314689998, 0.146978993, 0.960817256, 2.441976174],
-    #           [-0.182114883, -0.782310705, 0.050261097, 0.131185786, 1.157310705],
-    #           [0.015860893, -0.104748498, 0.034454832, 0.068872667, 0.442914184],
-    #           [0.266438247, 0.144166996, 0.358351154, 6.392246629, 0.957753361],
-    #           [0.169908241, -0.091765234, 0.082865501, 0.420012564, 0.591372793]]
-
-    # labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
-
     read_data = read_data()
 
     input1 = read_data[0]
     labels = read_data[1]
+    operations = ['+', '-', '*', '/']
 
-    # function to initialise the expressions in any order, there is no structure for this.
-    def __init__(self, maxNumbers, maxdepth=None, depth=0):
-        """
-        Constructor to generate an expression. An expression consists of a functional and a terminal set.
-        The functional set consists of operations {+,-,*,/}, the terminal set consists of a set of float numbers
-        between 1 and 50, as well as the variables X1,X2,....X5.
-        :param maxNumbers: maximum amount of numbers allowed in an expression
-        :param maxdepth: ensures that the
-        :param depth:
-        """
+    def expr(self, max_depth):
 
-        random_variable1 = [uniform(self.MIN_NUM, self.MAX_NUM), "X1", "X2", 'X3', "X4", "X5"]
-        self.left = None  # create the left and right nodes for an expression.
-        self.right = None
+        if max_depth == 1 or random() < 1.0 / (2 * max_depth - 1):
+            terminals = [random() * 50, "X1", "X2", 'X3', "X4", "X5"]
+            return self.__str__(choice(terminals))
 
-        if maxdepth is None:
-            maxdepth = log(maxNumbers, 2) - 1
-
-        if depth < maxdepth and randint(0, maxdepth) > depth:
-            self.left = GenExp(maxNumbers, maxdepth, depth + 1)  # generate part of the expression (on the left)
+        rand = random()
+        if rand >= 0.8:
+            return '(' + self.expr(max_depth - 1) + choice(self.operations) + self.expr(max_depth - 1) + ')'
         else:
-            self.left = choice(random_variable1)
+            return self.expr(max_depth - 1) + choice(self.operations) + self.expr(max_depth - 1)
 
-        if depth < maxdepth and randint(0, maxdepth) > depth:
-            self.right = GenExp(maxNumbers, maxdepth, depth + 1)  # generate part of the expression (on the right)
-        else:
-            self.right = randint(GenExp.MIN_NUM, GenExp.MAX_NUM)
+    def __str__(self, num):
+        return str(num)
 
-        self.grouped = random() < GenExp.bracketing
-        self.operator = choice(GenExp.OPS)
-
-    def __str__(self):
-        s = '{}{}{}'.format(self.left, self.operator, self.right)
-        s = str(s)
-        if self.grouped:
-            return '({})'.format(s)
-        else:
-            return s
-
-    def get_valid_expressions(self, maxNumbers, populationSize):
+    def get_valid_expressions(self, max_depth, population_size):
         expression_list = list()
-        while len(expression_list) < populationSize:
-            exps = GenExp(maxNumbers)
+        while len(expression_list) < population_size:
+            init = GenExp()
+            exps = init.expr(max_depth)
             str_exps = str(exps)
             expression_list.append(str_exps)
             # print out valid expressions with varibales
@@ -93,11 +54,11 @@ class GenExp(object):
         return expression_list
 
     def get_fitness(self, expression, child=False):
-        if child == True:
-            # print("trueeeee")
+        if child is True:
+
             exp = list()
             exp.append(expression)
-            # print("expppp: ", exp)
+
             expression = exp
 
         else:
@@ -115,30 +76,23 @@ class GenExp(object):
         pred = list()
 
         for i in expression:
-
-            # print(i)
             tmp = list()
             try:
-
                 x = eval(i)
-
                 if isinstance(x, float) or isinstance(x, int):
-
-                    for i in range(len(X1)):
+                    for l in range(len(X1)):
                         tmp = [9999] * len(X1)
                     pred.append(tmp)
                 else:
-
                     for j in x:
                         if j >= 0:
                             tmp.append(1)
                         else:
                             tmp.append(0)
                     pred.append(tmp)
-
             except ZeroDivisionError:
                 # print("cannot divide by 0!!!")
-                for i in range(len(X1)):
+                for k in range(len(X1)):
                     tmp = [9999] * len(X1)
                 pred.append(tmp)
 
@@ -150,40 +104,11 @@ class GenExp(object):
         fitness = [len(j) - sum(j) for j in trfa]
         return fitness
 
-    # def tournament_selection(self, population, fitness, selection_size):
-    #     zipped_population = list(zip(population, fitness))
-    #     # print("zipped population: ", zipped_population)
-    #     parent_one = min(zipped_population, key=lambda t: t[1])
-    #     # print(parent_one)
-
-    #     p1_index = zipped_population.index(parent_one)
-    #     # print("p1_index: ", p1_index)
-    #     p1_tru = zipped_population[p1_index]
-    #     zipped_population.pop(p1_index)
-
-    #     # print("zipped population: ", zipped_population)
-
-    #     parent_two = min(zipped_population, key=lambda t: t[1])
-    #     p2_index = zipped_population.index(parent_two)
-    #     # # print(p2_index)
-    #     p2_tru = zipped_population[p2_index]
-    #     # # print("hhhneww:,",p2_tru)
-    #     # # print("candidate p2: ",candidate_p2)
-    #     zipped_population.pop(p2_index)
-    #     # # print("new candidates: ", candidates)
-
-    #     parents = list()
-    #     parents.append(p1_tru)
-    #     parents.append(p2_tru)
-
-    #     return parents
-
-
     def tournament_selection(self, population, fitness, selection_size):
         """
         function to select 4 random individuals in the population, and select the best one as the winner to be the parent
-        do this twice to select the parents. 
-        
+        do this twice to select the parents.
+
         """
         zipped_population = list(zip(population, fitness))
         # print("zipped population: ", zipped_population)
@@ -277,6 +202,7 @@ class GenExp(object):
         new_population_fitness = [i[1] for i in zipped_population]
 
         return new_population, new_population_fitness
+
 
 
 # class to manipulate node objects that make up a tree.
@@ -431,7 +357,7 @@ class Tree(object):
         while len(pref_list) > 0:
             # print("value of current node1: ",current_node)
             # print("pref list now2: ",pref_list)
-            if current_node.value in GenExp.OPS:
+            if current_node.value in GenExp.operations:
                 # print("current node has value 3: ", current_node.value, "in param")
                 if current_node.left_child is None:
                     current_node.add_child(pref_list[0], left=True)  # add a left child with its value
@@ -454,7 +380,7 @@ class Tree(object):
                     nodenums.append(current_node.nodenum)
                     # print(current_node.value, " appended to l1")
 
-            elif current_node.value not in GenExp.OPS:
+            elif current_node.value not in GenExp.operations:
                 # print("current node value 6: ", current_node.value, " not in param")
                 current_node = current_node.parent
                 # print("back at parent 7: ", current_node.value)
@@ -670,29 +596,29 @@ class ToInfixParser:
             self.add_to_stack(e)
         return self.stack.pop()
 
-
-def main(max_num, popn_size, max_iter, cross_over_rate=0.1, mutation_rate=0.1):
+def main():
     import sys
     import time
     start = time.time()
     loop_break = False
-    # print("Inputs: ", GenExp.input1)
-    # print("Outputs: ", GenExp.output)
-    current_population = GenExp(max_num)
     to_pref = ToPrefixParser()
     tree = Tree()
     x_val = list()
     y_val = list()
 
-    population = current_population.get_valid_expressions(max_num, popn_size)  # (maxNumber,population size)
-    # print("population!: ", population)
-    # population_fitness = current_population.get_fitness(population)
-    # print("population fitness: ",population_fitness)
-    # print("best original fitness: ", min(population_fitness))
+
+
+    max_depth = 5
+    population_size = 500
+    max_iteration = 1000
+    cross_over_rate = 0.9
+    mutation_rate = 0.1
+    current_population = GenExp()
+    population = current_population.get_valid_expressions(max_depth, population_size)
 
     x = 1
 
-    while x <= max_iter:
+    while x <= max_iteration:
         #     # print()
         # #     print("population!: ", population)
         #     print()
@@ -718,13 +644,13 @@ def main(max_num, popn_size, max_iter, cross_over_rate=0.1, mutation_rate=0.1):
                 # evale = current_population.eval_expressions(population[i])
                 # print(evale)
                 loop_break = True
-                break
-        if loop_break is True:
-            end = time.time()
-            elapsed_time = end - start
-            print("time elapsed: ", elapsed_time)
-            print("here")
-            return population[i]
+
+            if loop_break is True:
+                end = time.time()
+                elapsed_time = end - start
+                print("time elapsed: ", elapsed_time)
+                print("here")
+                return population[i]
 
         # # print(get_fitness)
 
@@ -745,7 +671,7 @@ def main(max_num, popn_size, max_iter, cross_over_rate=0.1, mutation_rate=0.1):
             # print("x_val: ", x_val)
             # print("y_val: ", y_val)
 
-        if x == max_iter:
+        if x == max_iteration:
             print("max iteration met")
             # print("fitness: ", get_fitness)
             abs_list = [abs(j) for j in population_fitness]
@@ -941,31 +867,7 @@ def main(max_num, popn_size, max_iter, cross_over_rate=0.1, mutation_rate=0.1):
 
         x += 1
 
-
 if __name__ == "__main__":
-    # read_data()
+    expression = main()
+    print("expression: ", expression)
 
-    expression = main(max_num=128, popn_size=300, max_iter=1000, cross_over_rate=0.9, mutation_rate=0.1)
-    print("optimal expression: ", expression)
-    exp = list()
-    exp.append(expression)
-    # print("expression: ", exp)
-    expression = exp
-
-    # """
-    # need to feed in the data into here
-    # and print out the accuracy and classification
-    # """
-    # row = [0.414778159, 0.233613556, 0.094397251, 0.962392775, 1.016819994] # 0
-    row = [0.092685526, 0.03905168, -0.005799479, 0.379883666, 1.024567409]  # 1
-    # print("new expression: ", expression)
-    for i in expression:
-        new_exp = i.replace("X1", str(row[0])).replace("X2", str(row[1])).replace("X3", str(row[2])) \
-            .replace("X4", str(row[3])).replace("X5", str(row[4]))
-
-    # print("company data: ", row)
-    eva = eval(new_exp)
-    if eva >= 0:
-        print("class 1 bankrupt")
-    else:
-        print("class 0 Non bankrupt")
