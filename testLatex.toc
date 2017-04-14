@@ -8,10 +8,21 @@
 \contentsline {subsection}{\numberline {2.1}Literature Review}{3}
 \contentsline {subsection}{\numberline {2.2}Project Specification}{4}
 \contentsline {section}{\numberline {3}Design}{5}
-\contentsline {section}{\numberline {4}Development}{6}
-\contentsline {section}{\numberline {5}Testing}{7}
-\contentsline {section}{\numberline {6}Description of the final product}{8}
-\contentsline {section}{\numberline {7}Evaluation of the final product}{9}
-\contentsline {section}{\numberline {8}Critical assessment of the project }{10}
-\contentsline {section}{\numberline {9}Conclusion}{11}
-\contentsline {section}{\numberline {10}Antohny page}{12}
+\contentsline {subsection}{\numberline {3.1}Data Collection}{5}
+\contentsline {subsection}{\numberline {3.2}Artificial Neural Network Design}{5}
+\contentsline {subsubsection}{\numberline {3.2.1}Input Layer and Synaptic Weights}{5}
+\contentsline {subsubsection}{\numberline {3.2.2}Hidden Layers and Activation Function }{6}
+\contentsline {subsubsection}{\numberline {3.2.3}Output Layer and Learning Mechanism}{6}
+\contentsline {subsection}{\numberline {3.3}Genetic Program Design}{8}
+\contentsline {subsubsection}{\numberline {3.3.1}Generating a Population}{8}
+\contentsline {subsubsection}{\numberline {3.3.2}Selection}{8}
+\contentsline {subsubsection}{\numberline {3.3.3}Crossover and Mutation}{8}
+\contentsline {subsubsection}{\numberline {3.3.4}Termination Criteria}{8}
+\contentsline {subsection}{\numberline {3.4}Choice of Programming Language}{8}
+\contentsline {section}{\numberline {4}Development}{9}
+\contentsline {section}{\numberline {5}Testing}{10}
+\contentsline {section}{\numberline {6}Description of the final product}{11}
+\contentsline {section}{\numberline {7}Evaluation of the final product}{12}
+\contentsline {section}{\numberline {8}Critical assessment of the project }{13}
+\contentsline {section}{\numberline {9}Future Work}{14}
+\contentsline {section}{\numberline {10}Conclusion}{15}
