@@ -157,39 +157,45 @@ class GenExp(object):
         """
         Function to select the parents of the population using tournament selection. Select n individuals from the
         population at random, and select the best two individuals from the selection to be the parents.
-        :param population: the list of expressions being passed in
+        :param population: the population generated - the list of expressions
         :param fitness: the population fitnesses
         :param selection_size: the number of individuals to compete against each other
-        :return: two parents that will be used to create offspring.
+        :return: two parents that will be used to create offspring - type: list(strings)
         """
         zipped_population = list(zip(population, fitness))
         # print("zipped population: ", zipped_population)
+
+        # select potential candidate solutions to be assessed.
         candidates = sample(zipped_population, selection_size)
         # print("candidates:",candidates)
 
+        # select the first parent with the best fitness out of the candidates
         parent_one = min(candidates, key=lambda t: t[1])
         # print(parent_one)
         p1_index = zipped_population.index(parent_one)
         # print(p1_index)
+        # remove parent for now to prevent parent being selected twice
         zipped_population.pop(p1_index)
         # print("new popilation:", zipped_population)
 
         candidates = sample(zipped_population, selection_size)
+        # select another sample and get the second parent
         parent_two = min(candidates, key=lambda t: t[1])
         p2_index = zipped_population.index(parent_two)
         zipped_population.pop(p2_index)
-        # print("new popilation:", zipped_population)
 
-        # print("parents1: ", parent_one)
-        # print("parents2: ", parent_two)
-
+        # return the parents as a list of strings.
         parents = list()
         parents.append(parent_one)
         parents.append(parent_two)
         return parents
 
     def split_parents(self, parents):
-        # print("parents:",parents)
+        """
+        function to split the parents to enable parents to be converted into prefix notation later.
+        :param parents: the two parents selected from selection process
+        :return: parents, split up into individual gene characteristics -> ["x1+1"] -> ["X1","+","1","end"]
+        """
         split_list = [re.findall('\w+|\W', s[0]) for s in parents]
 
         [i.append("end") for i in split_list]
@@ -199,20 +205,26 @@ class GenExp(object):
         return split_parents
 
     def fix_dec(self, split_parents):
-        for i in split_parents:
-            for item in i[0]:
+        """
+        function to repair the split parents if expression contains floating point numbers.
+        e.g ["1",".","234","+","X4"] ->["1.234","+","X4"]
+        :param split_parents: the parents that have now been split up
+        :return: the split parents with all correct values.
+        """
+        for p in split_parents:
+            for item in p[0]:
                 # print(item)
                 if item == ".":
-                    dec = i[0].index(item)
+                    dec = p[0].index(item)
 
-                    val1 = i[0][dec - 1]
-                    val2 = i[0][dec + 1]
+                    val1 = p[0][dec - 1]
+                    val2 = p[0][dec + 1]
                     x = val1 + item + val2
 
-                    i[0].insert(dec, x)
-                    del i[0][dec - 1]
-                    del i[0][dec]
-                    del i[0][dec]
+                    p[0].insert(dec, x)
+                    del p[0][dec - 1]
+                    del p[0][dec]
+                    del p[0][dec]
         return split_parents
 
     def update_population(self, population, fitness, c1, child_fit1, c2, child_fit2):
