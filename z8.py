@@ -137,7 +137,7 @@ class GenMember(object):
                         else:
                             tmp.append(0)
                     predictions.append(tmp)
-            # if expression contains "÷0" throw ZeroDivisionError and give individual a poor fitness.
+            # if expression contains "/0" throw ZeroDivisionError and give individual a poor fitness.
             except ZeroDivisionError:
                 # print("cannot divide by 0!!!")
                 for k in range(len(X1)):
