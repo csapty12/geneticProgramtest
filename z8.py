@@ -421,16 +421,16 @@ class ToPrefixParser(object):
         :param expression: expression being passed in
         :return: the product or - or + in the correct places in prefix notation
         """
-        a = self.get_product(expression)
+        op1 = self.get_product(expression)
 
         if self.get_operation(expression, '-'):
-            b = self.get_expression(expression)
-            return ToPrefixParser('-', a, b)
+            op2 = self.get_expression(expression)
+            return ToPrefixParser('-', op1, op2)
         elif self.get_operation(expression, '+'):
-            b = self.get_expression(expression)
-            return ToPrefixParser('+', a, b)
+            op2 = self.get_expression(expression)
+            return ToPrefixParser('+', op1, op2)
         else:
-            return a
+            return op1
 
     def print_tree_prefix(self, tree):
         """
@@ -451,7 +451,7 @@ class ToPrefixParser(object):
         """
         Function to take the parents expressions from infix notation and convert them to prefix notation.
         :param parent_expression: the parent expression in infix notation
-        :return: parents in infix notation. 
+        :return: parents in infix notation.
         """
         prefix = list()
         prefix_list = list()
@@ -465,7 +465,6 @@ class ToPrefixParser(object):
 
         for k in range(len(prefix_list)):
             pref_list.append((prefix_list[k], parent_expression[k][1]))
-        # print(pref_list)
         return pref_list
 
 
