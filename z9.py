@@ -40,7 +40,7 @@ class GenMember(object):
     # the set of functional values. - consider expanding this.
     operations = ['+', '-', '*', '/']
 
-    def generate_expression(self, max_depth=4):
+    def generate_expression(self, max_depth = 4):
         """
         Function to generate a valid mathematical expression. An expression consists of values from the functional
         set -> ['+', '-', '*', '/'] and values from a terminal set -> [random number between 0-50, X1,...,X5] where
@@ -57,11 +57,9 @@ class GenMember(object):
         # include bracketing 20% of the time.
         rand = random()
         if rand <= 0.2:
-            return '(' + self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(
-                max_depth - 1) + ')'
+            return '(' + self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(max_depth - 1) + ')'
         else:
-            return self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(
-                max_depth - 1)
+            return self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(max_depth - 1)
 
     def __str__(self, num):
         """
@@ -191,6 +189,7 @@ class GenMember(object):
         parents.append(parent_one)
         parents.append(parent_two)
         return parents
+
 
     def update_population(self, population, fitness, c1, child_fit1, c2, child_fit2):
         """
@@ -348,6 +347,7 @@ class ToPrefixParser(object):
         """
         for p in split_parents:
             for item in p[0]:
+                # print(item)
                 if item == ".":
                     dec = p[0].index(item)
 
@@ -360,28 +360,19 @@ class ToPrefixParser(object):
                     del p[0][dec]
                     del p[0][dec]
         return split_parents
-
-    def get_operation(self, expression, expected):
+    def get_operation(self, token_list, expected):
         """
-        Function to compare the item in the expression list is the expected item.
-        If the string values match, then pop it from the token list.
-        :param expression: the expression list
-        :param expected: the expected value of the list index
-        :return: boolean
+        compares the expected token to the first token on the list. if they match, remove it, return True
+        this is to get the operator
         """
 
-        if expression[0] == expected:
-            expression.pop(0)
+        if token_list[0] == expected:
+            del token_list[0]
             return True
         else:
             return False
 
     def get_number(self, token_list):
-        """
-        Function that
-        :param token_list:
-        :return:
-        """
         if self.get_operation(token_list, '('):
             x = self.get_expression(token_list)  # get the subexpression
             self.get_operation(token_list, ')')  # remove the closing parenthesis
@@ -394,11 +385,6 @@ class ToPrefixParser(object):
             return ToPrefixParser(val=x)
 
     def get_product(self, token_list):
-        """
-
-        :param token_list:
-        :return:
-        """
         a = self.get_number(token_list)
 
         if self.get_operation(token_list, '*'):
@@ -411,11 +397,6 @@ class ToPrefixParser(object):
             return a
 
     def get_expression(self, token_list):
-        """
-
-        :param token_list:
-        :return:
-        """
         a = self.get_product(token_list)
 
         if self.get_operation(token_list, '-'):
@@ -428,11 +409,6 @@ class ToPrefixParser(object):
             return a
 
     def print_tree_prefix(self, tree):
-        """
-
-        :param tree:
-        :return:
-        """
         if tree.left is None and tree.right is None:
             return tree.val
         else:
@@ -441,11 +417,6 @@ class ToPrefixParser(object):
             return tree.val + " " + left + ' ' + right + ''
 
     def get_prefix_notation(self, token_list):
-        """
-
-        :param token_list:
-        :return:
-        """
         # print("tk: ", token_list)
         prefix = list()
 
@@ -812,7 +783,7 @@ def main():
             print("equation: ", population[index])
             acc = 1 - (min_val / len(GenMember.data))
             print("acc: ", acc)
-            print("acc: ", round(acc, 2) * 100, "%")
+            print("acc: ", round(acc,2) * 100, "%")
             end = time.time()
             elapsed_time = end - start
 
