@@ -13,16 +13,27 @@
 \contentsline {subsubsection}{\numberline {3.2.1}Input Layer and Synaptic Weights}{5}
 \contentsline {subsubsection}{\numberline {3.2.2}Hidden Layers and Activation Function }{6}
 \contentsline {subsubsection}{\numberline {3.2.3}Output Layer and Learning Mechanism}{6}
-\contentsline {subsection}{\numberline {3.3}Genetic Program Design}{8}
+\contentsline {subsection}{\numberline {3.3}Genetic Program Design}{7}
 \contentsline {subsubsection}{\numberline {3.3.1}Generating a Population}{8}
-\contentsline {subsubsection}{\numberline {3.3.2}Selection}{8}
-\contentsline {subsubsection}{\numberline {3.3.3}Crossover and Mutation}{8}
-\contentsline {subsubsection}{\numberline {3.3.4}Termination Criteria}{8}
-\contentsline {subsection}{\numberline {3.4}Choice of Programming Language}{8}
-\contentsline {section}{\numberline {4}Development}{9}
-\contentsline {section}{\numberline {5}Testing}{10}
-\contentsline {section}{\numberline {6}Description of the final product}{11}
-\contentsline {section}{\numberline {7}Evaluation of the final product}{12}
-\contentsline {section}{\numberline {8}Critical assessment of the project }{13}
-\contentsline {section}{\numberline {9}Future Work}{14}
-\contentsline {section}{\numberline {10}Conclusion}{15}
+\contentsline {subsubsection}{\numberline {3.3.2}Fitness Function}{8}
+\contentsline {subsubsection}{\numberline {3.3.3}Selection}{9}
+\contentsline {subsubsection}{\numberline {3.3.4}Crossover and Mutation}{9}
+\contentsline {subsubsection}{\numberline {3.3.5}Termination Criteria}{9}
+\contentsline {subsection}{\numberline {3.4}Choice of Programming Language}{10}
+\contentsline {section}{\numberline {4}Development}{10}
+\contentsline {subsection}{\numberline {4.1}Development of the Artificial Neural Network}{10}
+\contentsline {subsection}{\numberline {4.2}Developing The Genetic Program}{10}
+\contentsline {subsubsection}{\numberline {4.2.1}Generating and Handling the Population}{10}
+\contentsline {subsubsection}{\numberline {4.2.2}Infix to Prefix Conversion}{11}
+\contentsline {subsubsection}{\numberline {4.2.3}The Node Object}{11}
+\contentsline {subsubsection}{\numberline {4.2.4}The Tree Object}{11}
+\contentsline {subsubsection}{\numberline {4.2.5}Crossover and Mutation}{11}
+\contentsline {subsubsection}{\numberline {4.2.6}Prefix to Infix Conversion}{11}
+\contentsline {subsubsection}{\numberline {4.2.7}Reading Company Data}{11}
+\contentsline {subsubsection}{\numberline {4.2.8}Running the Genetic Program - Training and Testing}{11}
+\contentsline {section}{\numberline {5}Testing}{12}
+\contentsline {section}{\numberline {6}Description of the final product}{13}
+\contentsline {section}{\numberline {7}Evaluation of the final product}{14}
+\contentsline {section}{\numberline {8}Critical assessment of the project }{15}
+\contentsline {section}{\numberline {9}Future Work}{16}
+\contentsline {section}{\numberline {10}Conclusion}{17}

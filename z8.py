@@ -24,7 +24,7 @@ def read_data():
     return data_cbd, class_labels_cfd
 
 
-class GenExp(object):
+class GenMember(object):
     """
     Class that is used to create valid mathematical expressions, get the fitness of the each of the individuals in the
     population, select two parents, and also to update the population once the children are ready to be added into the
@@ -40,7 +40,7 @@ class GenExp(object):
     # the set of functional values. - consider expanding this.
     operations = ['+', '-', '*', '/']
 
-    def expr(self, max_depth):
+    def generate_expression(self, max_depth = 4):
         """
         Function to generate a valid mathematical expression. An expression consists of values from the functional
         set -> ['+', '-', '*', '/'] and values from a terminal set -> [random number between 0-50, X1,...,X5] where
@@ -50,16 +50,16 @@ class GenExp(object):
         """
 
         # print out either a random number between 0 and 50, or a variable X1-X5.
-        if max_depth == 1 or random() < 1.0 / (2 * max_depth - 1):
+        if max_depth == 1:
             terminals = [random() * 50, "X1", "X2", 'X3', "X4", "X5"]
             return self.__str__(choice(terminals))
 
         # include bracketing 20% of the time.
         rand = random()
-        if rand >= 0.8:
-            return '(' + self.expr(max_depth - 1) + choice(self.operations) + self.expr(max_depth - 1) + ')'
+        if rand <= 0.2:
+            return '(' + self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(max_depth - 1) + ')'
         else:
-            return self.expr(max_depth - 1) + choice(self.operations) + self.expr(max_depth - 1)
+            return self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(max_depth - 1)
 
     def __str__(self, num):
         """
@@ -79,8 +79,8 @@ class GenExp(object):
         expression_list = list()
         while len(expression_list) < population_size:
             # generate the expressions and cast them to strings.
-            init = GenExp()
-            exps = init.expr(max_depth)
+            init = GenMember()
+            exps = init.generate_expression(max_depth)
             str_exps = str(exps)
             expression_list.append(str_exps)
             # print out valid expressions which contain all the variables.
@@ -104,12 +104,12 @@ class GenExp(object):
         else:
             expression = expressions
         # get all the rows of the data being passed in to get the fitness.
-        row = np.asarray(GenExp.data, dtype=object)
+        row = np.asarray(GenMember.data, dtype=object)
 
         # transpose the data to get all the X1 values in a list and repeat for X2,...,X5
         new_row = row.T
         # get the labels of the company data.
-        labels = GenExp.labels
+        labels = GenMember.labels
 
         # store the data in the variables to make evaluation of expression easier.
         X1 = new_row[0]  # length = len of data set
@@ -198,7 +198,7 @@ class GenExp(object):
         """
         split_list = [re.findall('\w+|\W', s[0]) for s in parents]
 
-        [i.append("end") for i in split_list]
+        [i.append("stop") for i in split_list]
 
         split_parents = [(split_list[i], parents[i][1]) for i in range(len(parents))]
 
@@ -228,6 +228,18 @@ class GenExp(object):
         return split_parents
 
     def update_population(self, population, fitness, c1, child_fit1, c2, child_fit2):
+        """
+        Function to update the population, by comparing the two worst individuals in the current population,
+        with the two new children produced. Insert the children into the population if they have a better fitness
+        relative to the two worst in the population to improve the population fitness.
+        :param population: the current population
+        :param fitness: fitness of each individual in the current population
+        :param c1: first child produced
+        :param child_fit1: first child produced fitness
+        :param c2: second child produced
+        :param child_fit2: second child produced fitness
+        :return: the new updated population with the new population fitnesses.
+        """
         # print("current population")
         # print(population)
         # print("fitenss: ")
@@ -247,12 +259,12 @@ class GenExp(object):
         worst_one = max(zipped_population, key=lambda t: t[1])
         w1_index = zipped_population.index(worst_one)
         # print("worst one: ", worst_one)
+        # if the child fitness is better than the worst in the population, replace them with first child
         if child_fit1[0] <= worst_one[1]:
             zipped_population.pop(w1_index)
             zipped_population.append((c1, child_fit1[0]))
 
-        # print("zipped population: ", zipped_population)
-
+        # if the child fitness is better than the worst in the population, replace them with first child
         worst_two = max(zipped_population, key=lambda t: t[1])
         w2_index = zipped_population.index(worst_two)
         # print("worst2: ", worst_two)
@@ -270,15 +282,27 @@ class GenExp(object):
 
 # class to manipulate node objects that make up a tree.
 class Node(object):
+    """
+    Class that creates a Node object which will either contain a functional operator e.g. +,-,*,/ or will hold a
+    terminal value from the terminal set.
+    """
     nodeid = 0
 
     def __repr__(self):
+        """
+        function to give a visual presentation of the tree.
+        :return: node object and the parent that it is associated with.
+        """
         if self.parent is not None:
             return "Node (" + str(self.value) + ") parent val:" + str(self.parent.value)
         else:
             return "Node (" + str(self.value) + ")"
 
     def __str__(self, level=0):
+        """
+        Function to print out a node at the current level within the tree.
+        :param level: determines how many indents to put the each nod at.
+        """
         ret = "\t" * level + self.__repr__() + "\n"
         if self.left_child is not None:
             ret += self.left_child.__str__(level + 1)
@@ -287,6 +311,11 @@ class Node(object):
         return ret
 
     def __init__(self, value=None):
+        """
+        Constructor to initialise the nodes. Each node has an ID associated with it, a value, and the possibility of
+        having two children.
+        :param value:
+        """
         Node.nodeid += 1
         self.nodenum = Node.nodeid
         self.value = value
@@ -297,6 +326,13 @@ class Node(object):
         self.checkedAgain = False
 
     def add_child(self, value, left=True):
+        """
+        Function to add a child into the tree. Start by adding children to the left branch of the parent, then add
+        the next child to the right branch of the tree.
+        :param value:
+        :param left:
+        :return:
+        """
         if left is True:
             new_node = Node(value)
             self.left_child = new_node
@@ -310,6 +346,10 @@ class Node(object):
 
 # class to convert the infix notation into prefix notation.
 class ToPrefixParser(object):
+    """
+    Class that converts infix notation to prefix notation, to get ready to construct a binary tree.
+    """
+
     # every instance of a tree is a node.
     def __init__(self, val=None, left=None, right=None):
 
@@ -342,7 +382,7 @@ class ToPrefixParser(object):
             if not isinstance(x, str):
                 return None
             token_list[0:1] = []
-            return ToPrefixParser(x, None, None)
+            return ToPrefixParser(val=x)
 
     def get_product(self, token_list):
         a = self.get_number(token_list)
@@ -361,7 +401,7 @@ class ToPrefixParser(object):
 
         if self.get_operation(token_list, '-'):
             b = self.get_expression(token_list)
-            return ToPrefixParser('-', a, b, )
+            return ToPrefixParser('-', a, b)
         elif self.get_operation(token_list, '+'):
             b = self.get_expression(token_list)
             return ToPrefixParser('+', a, b)
@@ -418,7 +458,7 @@ class Tree(object):
         while len(pref_list) > 0:
             # print("value of current node1: ",current_node)
             # print("pref list now2: ",pref_list)
-            if current_node.value in GenExp.operations:
+            if current_node.value in GenMember.operations:
                 # print("current node has value 3: ", current_node.value, "in param")
                 if current_node.left_child is None:
                     current_node.add_child(pref_list[0], left=True)  # add a left child with its value
@@ -441,7 +481,7 @@ class Tree(object):
                     nodenums.append(current_node.nodenum)
                     # print(current_node.value, " appended to l1")
 
-            elif current_node.value not in GenExp.operations:
+            elif current_node.value not in GenMember.operations:
                 # print("current node value 6: ", current_node.value, " not in param")
                 current_node = current_node.parent
                 # print("back at parent 7: ", current_node.value)
@@ -673,7 +713,7 @@ def main():
     max_iteration = 1000
     cross_over_rate = 0.9
     mutation_rate = 0.1
-    current_population = GenExp()
+    current_population = GenMember()
     population = current_population.get_valid_expressions(max_depth, population_size)
 
     x = 1
@@ -741,7 +781,9 @@ def main():
             print("index: ", index)
             # print("population: ", population)
             print("equation: ", population[index])
-            print("acc: ", 1 - (min_val / len(GenExp.data)))
+            acc = 1 - (min_val / len(GenMember.data))
+            print("acc: ", acc)
+            print("acc: ", round(acc,2) * 100, "%")
             end = time.time()
             elapsed_time = end - start
 
