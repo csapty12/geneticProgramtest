@@ -823,12 +823,12 @@ def main():
             print("time elapsed: ", elapsed_time)
             # print("ben was right")
 
-            plt.figure()
-            plt.plot(x_val, y_val, "b", label="fitness")
-            plt.xlabel("iteration")
-            plt.ylabel("fitness")
-            plt.legend(loc="best")
-            plt.show()
+            # plt.figure()
+            # plt.plot(x_val, y_val, "b", label="fitness")
+            # plt.xlabel("iteration")
+            # plt.ylabel("fitness")
+            # plt.legend(loc="best")
+            # plt.show()
 
             return population[index]
 
