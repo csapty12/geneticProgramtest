@@ -40,7 +40,7 @@ class GenMember(object):
     # the set of functional values. - consider expanding this.
     operations = ['+', '-', '*', '/']
 
-    def generate_expression(self, max_depth = 4):
+    def generate_expression(self, max_depth=4):
         """
         Function to generate a valid mathematical expression. An expression consists of values from the functional
         set -> ['+', '-', '*', '/'] and values from a terminal set -> [random number between 0-50, X1,...,X5] where
@@ -57,9 +57,11 @@ class GenMember(object):
         # include bracketing 20% of the time.
         rand = random()
         if rand <= 0.2:
-            return '(' + self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(max_depth - 1) + ')'
+            return '(' + self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(
+                max_depth - 1) + ')'
         else:
-            return self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(max_depth - 1)
+            return self.generate_expression(max_depth - 1) + choice(self.operations) + self.generate_expression(
+                max_depth - 1)
 
     def __str__(self, num):
         """
@@ -189,7 +191,6 @@ class GenMember(object):
         parents.append(parent_one)
         parents.append(parent_two)
         return parents
-
 
     def update_population(self, population, fitness, c1, child_fit1, c2, child_fit2):
         """
@@ -347,7 +348,6 @@ class ToPrefixParser(object):
         """
         for p in split_parents:
             for item in p[0]:
-                # print(item)
                 if item == ".":
                     dec = p[0].index(item)
 
@@ -360,55 +360,86 @@ class ToPrefixParser(object):
                     del p[0][dec]
                     del p[0][dec]
         return split_parents
-    def get_operation(self, token_list, expected):
+
+    def get_operation(self, expression, expected):
         """
-        compares the expected token to the first token on the list. if they match, remove it, return True
-        this is to get the operator
+        Function to compare the item in the expression list is the expected item.
+        If the string values match, then pop it from the token list.
+        :param expression: the expression list
+        :param expected: the expected value of the list index
+        :return: boolean
         """
 
-        if token_list[0] == expected:
-            del token_list[0]
+        if expression[0] == expected:
+            expression.pop(0)
             return True
         else:
             return False
 
-    def get_number(self, token_list):
-        if self.get_operation(token_list, '('):
-            x = self.get_expression(token_list)  # get the subexpression
-            self.get_operation(token_list, ')')  # remove the closing parenthesis
+    def is_number(self, expression):
+        """
+        Function that checks to see whether or not the value to be checked is a number or not.
+        If the next value is a number, then return the value itself. Since it is a number, it will not have a left
+        or right child as this is a leaf value. This function also handles parentheses to ensure that sub-expressions
+        are handled.
+        :param expression: the expression
+        :return: a numerical value or None
+        """
+        if self.get_operation(expression, '('):
+            x = self.get_expression(expression)  # get the subexpression
+            self.get_operation(expression, ')')  # remove the closing parenthesis
             return x
         else:
-            x = token_list[0]
+            x = expression[0]
             if not isinstance(x, str):
                 return None
-            token_list[0:1] = []
+            expression[0:1] = []
             return ToPrefixParser(val=x)
 
-    def get_product(self, token_list):
-        a = self.get_number(token_list)
+    def get_product(self, expression):
+        """
+        Function to put the * and / operator into the appropraite place when converting to prefix notation.
+        * and / have a higher precedence than + and -, therefore these should be handled first.
+        :param expression: expression being passed through
+        :return: prefix notation of expression containing * and / in the right places.
+        """
+        a = self.is_number(expression)
 
-        if self.get_operation(token_list, '*'):
-            b = self.get_product(token_list)
+        if self.get_operation(expression, '*'):
+            b = self.get_product(expression)
             return ToPrefixParser('*', a, b)
-        elif self.get_operation(token_list, '/'):
-            b = self.get_product(token_list)
+        elif self.get_operation(expression, '/'):
+            b = self.get_product(expression)
             return ToPrefixParser("/", a, b)
         else:
             return a
 
-    def get_expression(self, token_list):
-        a = self.get_product(token_list)
+    def get_expression(self, expression):
+        """
+        Function to handle the - and + operators. get_sum tries to build a tree with a product on the left and a sum on
+        the right. But if it doesn’t find a +, it just builds a product.
+        :param expression: expression being passed in
+        :return: the product or - or + in the correct places in prefix notation
+        """
+        op1 = self.get_product(expression)
 
-        if self.get_operation(token_list, '-'):
-            b = self.get_expression(token_list)
-            return ToPrefixParser('-', a, b)
-        elif self.get_operation(token_list, '+'):
-            b = self.get_expression(token_list)
-            return ToPrefixParser('+', a, b)
+        if self.get_operation(expression, '-'):
+            op2 = self.get_expression(expression)
+            return ToPrefixParser('-', op1, op2)
+        elif self.get_operation(expression, '+'):
+            op2 = self.get_expression(expression)
+            return ToPrefixParser('+', op1, op2)
         else:
-            return a
+            return op1
 
     def print_tree_prefix(self, tree):
+        """
+        Function that takes in the tree, and prints out the tree in the correct prefix notation with 'stop' at the
+        end of the prefix notation list -> ['*','3','4','stop']
+        :param tree: the prefix notation list
+
+        :return: the tree in appropraite positions.
+        """
         if tree.left is None and tree.right is None:
             return tree.val
         else:
@@ -416,13 +447,16 @@ class ToPrefixParser(object):
             right = self.print_tree_prefix(tree.right)
             return tree.val + " " + left + ' ' + right + ''
 
-    def get_prefix_notation(self, token_list):
-        # print("tk: ", token_list)
+    def get_prefix_notation(self, parent_expression):
+        """
+        Function to take the parents expressions from infix notation and convert them to prefix notation.
+        :param parent_expression: the parent expression in infix notation
+        :return: parents in infix notation.
+        """
         prefix = list()
-
         prefix_list = list()
         pref_list = list()
-        for i in token_list:
+        for i in parent_expression:
             tree = self.get_expression(i[0])
             y = self.print_tree_prefix(tree)
             prefix.append(y)
@@ -430,8 +464,7 @@ class ToPrefixParser(object):
             prefix_list.append(j.split())
 
         for k in range(len(prefix_list)):
-            pref_list.append((prefix_list[k], token_list[k][1]))
-        # print(pref_list)
+            pref_list.append((prefix_list[k], parent_expression[k][1]))
         return pref_list
 
 
@@ -710,7 +743,7 @@ def main():
 
     max_depth = 5
     population_size = 500
-    max_iteration = 1000
+    max_iteration = 3000
     cross_over_rate = 0.9
     mutation_rate = 0.1
     current_population = GenMember()
@@ -783,7 +816,7 @@ def main():
             print("equation: ", population[index])
             acc = 1 - (min_val / len(GenMember.data))
             print("acc: ", acc)
-            print("acc: ", round(acc,2) * 100, "%")
+            print("acc: ", round(acc, 2) * 100, "%")
             end = time.time()
             elapsed_time = end - start
 
