@@ -470,10 +470,23 @@ class ToPrefixParser(object):
 
 # manipulating the tree
 class Tree(object):
+    """
+    Class to create, crossover and mutate trees based on the parents selected.
+    """
+
     def __init__(self, root_node=None):
+        """
+        constructor to initialise a root node of the tree
+        :param root_node: root node set to None by default
+        """
         self.root = root_node
 
     def make_tree(self, pref_list):
+        """
+        Function to build the a binary expression tree based on the prefix list passed in
+        :param pref_list: parent in prefix expression notation
+        :return: root_node, nodes, nodenums
+        """
         # print("pref list: ",pref_list)
         nodes = list()
         nodenums = list()
@@ -482,42 +495,38 @@ class Tree(object):
         nodes.append(root_node)
         nodenums.append(root_node.nodenum)
 
+        # create a pointer to keep a tack of the current node being dealt with.
         current_node = root_node
-
+        # remove the root node as it has been dealt with.
         pref_list.pop(0)
 
-        # print("pref list now: ",pref_list)
-        # while pref_list != []:
         while len(pref_list) > 0:
-            # print("value of current node1: ",current_node)
-            # print("pref list now2: ",pref_list)
+            # check current node in functional set
             if current_node.value in GenMember.operations:
-                # print("current node has value 3: ", current_node.value, "in param")
                 if current_node.left_child is None:
+                    # if no child in left, create left child
                     current_node.add_child(pref_list[0], left=True)  # add a left child with its value
                     pref_list.pop(0)
                     current_node = current_node.left_child
-                    # print("current node is now lc 4: ",current_node.value)
                     nodes.append(current_node)
                     nodenums.append(current_node.nodenum)
+
                 elif current_node.left_child is not None and current_node.right_child is not None:
                     current_node = current_node.parent
                     nodes.append(current_node)
                     nodenums.append(current_node.nodenum)
 
                 else:
+                    # if there is no right child, create a right child
                     current_node.add_child(pref_list[0], left=False)
                     pref_list.pop(0)
                     current_node = current_node.right_child
-                    # print("current node now in right 5: ",current_node.value)
                     nodes.append(current_node)
                     nodenums.append(current_node.nodenum)
-                    # print(current_node.value, " appended to l1")
 
             elif current_node.value not in GenMember.operations:
-                # print("current node value 6: ", current_node.value, " not in param")
+                # go back to the parent node
                 current_node = current_node.parent
-                # print("back at parent 7: ", current_node.value)
                 if current_node.left_child is not None and current_node.right_child is not None:
                     current_node = current_node.parent
                     nodes.append(current_node)
@@ -526,17 +535,24 @@ class Tree(object):
         return root_node, nodes, nodenums
 
     def print_full_tree(self, tree):
+        """
+        Function to print out the tree
+        :param tree: the root node of the tree
+        :return: the tree.
+        """
         return tree
 
     def find_subtree(self, tree, list_nodes, rnd_val):
-
-        # print("list nodes: ", list_nodes)
-
-        # print("value to be found: ",rnd_val)
+        """
+        Function to use depth first search to find the randomly selected node within the tree.
+        :param tree: the parent tree
+        :param list_nodes: the parent tree list of nodes
+        :param rnd_val: the random noode that was selected from select_random_val()
+        :return:
+        """
         current_node = tree
-        # print("current node value : ", current_node.value)
+
         if current_node.value == rnd_val[0] and current_node.nodenum == rnd_val[1]:
-            # print("found")
             current_node.checked = True
             return current_node
         else:
@@ -547,6 +563,7 @@ class Tree(object):
                 # move into the left child node.
                 current_node = current_node.left_child
                 return self.find_subtree(current_node, list_nodes, rnd_val)
+
             else:
                 # if the curent node left child doesnt exist i.e is a leaf node
                 current_node.checked = True
@@ -558,20 +575,22 @@ class Tree(object):
 
                 else:
                     current_node = current_node.parent
-                    # print("current node is now: ", current_node)
                     # if the current node left and right child both have been cheked, move to the curren node parent
                     if current_node.left_child.checked is True and current_node.right_child.checked is True:
                         current_node = current_node.parent
                         return self.find_subtree(current_node, list_nodes, rnd_val)
+
                     else:
                         # move pointer to the right child
                         current_node = current_node.right_child
                         return self.find_subtree(current_node, list_nodes, rnd_val)
 
     def select_random_val(self, list_nodes):
-        # print("list nodes: ", list_nodes)
-        ln = [(i.value, i.nodenum) for i in list_nodes]
-        # print("ln: ",ln)
+        """
+        Function to select a random node from a list of node objects.
+        :param list_nodes: list of node objects
+        :return: selected node and selected node id.
+        """
 
         root = list_nodes[0].nodenum
         x = list_nodes.pop(0)
@@ -583,6 +602,16 @@ class Tree(object):
         return y.value, y.nodenum, y
 
     def swap_nodes(self, tree_one, tree_two, list_nodes_one, list_nodes_two, node_one, node_two):
+        """
+
+        :param tree_one:
+        :param tree_two:
+        :param list_nodes_one:
+        :param list_nodes_two:
+        :param node_one:
+        :param node_two:
+        :return:
+        """
 
         node_one_parent = node_one.parent
         node_two_parent = node_two.parent
@@ -609,44 +638,32 @@ class Tree(object):
         return tree_one, tree_two, list_nodes_one, list_nodes_two
 
     def mutate_node(self, tree, list_nodes, node, fitness):
-        # print("fitness:")
-        # print(fitness)
-        # print("node value: ", node.value, node.nodenum)
-        # print("node type: ", type(node.value))
+        """
 
-        # print("node list: ", list_nodes)
-        # perform mutation
+        :param tree:
+        :param list_nodes:
+        :param node:
+        :param fitness:
+        :return:
+        """
         if node.value in ['+', '-', '*', '/']:
-            # print("here")
             node.value = choice(['+', '-', '*', '/'])
-            # print("new mutated node: ",node.value, node.nodenum)
-            # print(node)
-            # print("new list of nodes: ", list_nodes)
-            # print()
-            # print("new tree")
-            # print(tree)
             return tree, list_nodes  # return the new tree, new list_nodes, new mutated node.
         else:
-            """
-            based on the fitness, alter value by +0.1 if negative, -0.1 if positive. contstantly learning
-            """
+
+            # based on the fitness, alter value by +0.1 if negative, -0.1 if positive. contstantly learning
             if node.value not in ["X1", "X2", "X3", "X4", "X5"]:
                 val = float(node.value)
-                # print("value: ", val, type(val))
+
                 if fitness > 0:
                     val -= 0.1
-                    # print("value now",val)
                     node.value = str(val)
                 else:
                     val += 0.1
-                    # print("value now: ", val)
                     node.value = str(val)
             else:
                 node.value = choice(["X1", "X2", "X3", "X4", "X5"])
 
-            # print("new mutated node: ",node.value, node.nodenum, type(node.value))
-            # print(node)
-            # print("new list of nodes: ", list_nodes)
             return tree, list_nodes
 
     def get_child_one(self, child_one):
