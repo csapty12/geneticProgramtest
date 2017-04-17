@@ -743,7 +743,7 @@ def main():
 
     max_depth = 5
     population_size = 500
-    max_iteration = 5000
+    max_iteration = 3000
     cross_over_rate = 0.9
     mutation_rate = 0.1
     current_population = GenMember()
