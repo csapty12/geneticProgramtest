@@ -763,7 +763,7 @@ def main():
             # print("population = ", population)
             # print("fitness: ", population_fitness)
         for i in range(len(population_fitness)):
-            if population_fitness[i] <= 2:
+            if population_fitness[i] <= 133:
                 # if get_fitness[i] ==0:
                 print("#########################################################################")
                 print(True)
