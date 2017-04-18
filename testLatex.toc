@@ -23,14 +23,14 @@
 \contentsline {section}{\numberline {4}Development}{10}
 \contentsline {subsection}{\numberline {4.1}Development of the Artificial Neural Network}{10}
 \contentsline {subsection}{\numberline {4.2}Developing The Genetic Program}{10}
-\contentsline {subsubsection}{\numberline {4.2.1}Generating and Handling the Population}{10}
-\contentsline {subsubsection}{\numberline {4.2.2}Infix to Prefix Conversion}{11}
-\contentsline {subsubsection}{\numberline {4.2.3}The Node Object}{12}
-\contentsline {subsubsection}{\numberline {4.2.4}The Tree Object}{13}
-\contentsline {subsubsection}{\numberline {4.2.5}Crossover and Mutation}{14}
-\contentsline {subsubsection}{\numberline {4.2.6}Prefix to Infix Conversion}{15}
-\contentsline {subsubsection}{\numberline {4.2.7}Updating The population}{16}
-\contentsline {subsubsection}{\numberline {4.2.8}Reading Company Data}{16}
+\contentsline {subsubsection}{\numberline {4.2.1}Reading Company Data}{10}
+\contentsline {subsubsection}{\numberline {4.2.2}Generating and Handling the Population}{11}
+\contentsline {subsubsection}{\numberline {4.2.3}Infix to Prefix Conversion}{12}
+\contentsline {subsubsection}{\numberline {4.2.4}The Node Object}{13}
+\contentsline {subsubsection}{\numberline {4.2.5}The Tree Object}{13}
+\contentsline {subsubsection}{\numberline {4.2.6}Crossover and Mutation}{14}
+\contentsline {subsubsection}{\numberline {4.2.7}Prefix to Infix Conversion}{16}
+\contentsline {subsubsection}{\numberline {4.2.8}Updating The population}{16}
 \contentsline {subsubsection}{\numberline {4.2.9}Running the Genetic Program - Training and Testing}{16}
 \contentsline {section}{\numberline {5}Testing}{17}
 \contentsline {section}{\numberline {6}Description of the final product}{18}

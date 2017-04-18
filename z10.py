@@ -1,9 +1,9 @@
 from random import choice, random, sample
-
 import re
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 class Data(object):
     """
@@ -12,7 +12,7 @@ class Data(object):
     def __init__(self, text_file):
         self.text_file = text_file
 
-    def read_data(self, shuffle_d = True):
+    def read_data(self, shuffle_d = False):
         """
         Function to load in the text file. Function splits the data into two sets.
         set 1: company data
@@ -33,7 +33,6 @@ class Data(object):
 
         data_cfd = cfd[:, 0:-1]
         return data_cfd, class_labels_cfd
-
 
 class GenMember(object):
     """
@@ -64,7 +63,7 @@ class GenMember(object):
 
         # print out either a random number between 0 and 50, or a variable X1-X5.
         if max_depth == 1:
-            terminals = [ "X1", "X2", 'X3', "X4", "X5"] # random() * 50,
+            terminals = [random()*50, "X1", "X2", 'X3', "X4", "X5"] # random() * 50,
             return self.__str__(choice(terminals))
 
         # include bracketing 20% of the time.
@@ -796,13 +795,13 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
             # print("parents: ", select_parents )
 
             # print("iteration: ", x)
-            sys.stdout.write("iteration: {} \n".format(x))
+            # sys.stdout.write("iteration: {} \n".format(x))
 
             x_val.append(x)
             abs_list = [abs(j) for j in population_fitness]
             min_val = min(abs_list)
             # print("current best fitness: ", min_val)
-            sys.stdout.write("current best fitness:{} \n".format(min_val))
+            # sys.stdout.write("current best fitness:{} \n".format(min_val))
             sys.stdout.flush()
             y_val.append(min_val)
             # print("time elapsed: ", time.time())
@@ -1008,7 +1007,8 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
 
 
 if __name__ == "__main__":
-    optimal_expression = main(max_depth = 3, population_size = 500, max_iteration = 500, cross_over_rate = 0.9, mutation_rate = 0.9)
+    import math
+    optimal_expression = main(max_depth = 3, population_size = 500, max_iteration = 1500, cross_over_rate = 0.9, mutation_rate = 0.9)
 
 
     print("expression: ", optimal_expression)
@@ -1023,15 +1023,63 @@ if __name__ == "__main__":
     # and print out the accuracy and classification
     # """
     # row = [0.414778159, 0.233613556, 0.094397251, 0.962392775, 1.016819994] # 0
-    row = [0.092685526, 0.03905168, -0.005799479, 0.379883666, 1.024567409]  # 1
-    # print("new expression: ", expression)
-    for i in optimal_expression:
-        new_exp = i.replace("X1", str(row[0])).replace("X2", str(row[1])).replace("X3", str(row[2])) \
-            .replace("X4", str(row[3])).replace("X5", str(row[4]))
 
-    # print("company data: ", row)
-    eva = eval(new_exp)
-    if eva >= 0:
-        print("class 1 bankrupt")
-    else:
-        print("class 0 Non bankrupt")
+    test_dataset = Data('testingDataSet.txt')
+    # print("testing dataset: ")
+    # test_dataset = test_dataset.read_data()
+    # data = test_dataset[0]
+    # labels = test_dataset[1]
+
+    # print("data: ")
+    # print(data)
+    row =[[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425 ],[0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],
+            [0.149332758, 0.347589881, 0.139985797, 1.689751437, 1.734865801],[0.137193647, 0.416721256, 0.147865432, 2.116532577, 1.761369401],
+        [0.082350665, 0.480389313, 0.174387346, 2.342011704, 1.766493641]]
+    label = [0,0,0,0,0]
+
+    prediction = list()
+    for i in optimal_expression:
+        tmp = list()
+        for j in row:
+            # print(j)
+            new_exp = i.replace("X1", str(j[0])).replace("X2", str(j[1])).replace("X3", str(j[2]))\
+            .replace("X4", str(j[3])).replace("X5", str(j[4]))
+            eva = eval(new_exp)
+            print()
+            print("eval: ",eva)
+            if eva >= 0:
+                print("evaluation : ", eva)
+                print("Company likely to go bankrupt")
+                x = eva
+                print("val of x is = ", x)
+                tmp.append(x)            
+                # tmp.append(1)
+            else:
+                print("evaluation here : ", eva)
+                print("Company not likely to go bankrupt")
+                y = eva
+                print("val of y is = ", y)
+                tmp.append(y)
+        prediction.append(tmp)
+
+    print("predictions")
+    print(prediction)
+
+    prob = list()
+
+    for i in prediction:
+        for j in i:
+            sig = 1/(1+math.exp(-j))
+            print("sig")
+            print(sig)   
+            print()             
+                # tmp.append(0)
+        # prediction.append(tmp)
+
+    # print("predictions: ")
+    # print(prediction)
+
+
+
+
+            
