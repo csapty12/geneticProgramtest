@@ -28,12 +28,13 @@
 \contentsline {subsubsection}{\numberline {4.2.3}The Node Object}{12}
 \contentsline {subsubsection}{\numberline {4.2.4}The Tree Object}{13}
 \contentsline {subsubsection}{\numberline {4.2.5}Crossover and Mutation}{14}
-\contentsline {subsubsection}{\numberline {4.2.6}Prefix to Infix Conversion}{14}
-\contentsline {subsubsection}{\numberline {4.2.7}Reading Company Data}{14}
-\contentsline {subsubsection}{\numberline {4.2.8}Running the Genetic Program - Training and Testing}{14}
-\contentsline {section}{\numberline {5}Testing}{15}
-\contentsline {section}{\numberline {6}Description of the final product}{16}
-\contentsline {section}{\numberline {7}Evaluation of the final product}{17}
-\contentsline {section}{\numberline {8}Critical assessment of the project }{18}
-\contentsline {section}{\numberline {9}Future Work}{19}
-\contentsline {section}{\numberline {10}Conclusion}{20}
+\contentsline {subsubsection}{\numberline {4.2.6}Prefix to Infix Conversion}{15}
+\contentsline {subsubsection}{\numberline {4.2.7}Updating The population}{16}
+\contentsline {subsubsection}{\numberline {4.2.8}Reading Company Data}{16}
+\contentsline {subsubsection}{\numberline {4.2.9}Running the Genetic Program - Training and Testing}{16}
+\contentsline {section}{\numberline {5}Testing}{17}
+\contentsline {section}{\numberline {6}Description of the final product}{18}
+\contentsline {section}{\numberline {7}Evaluation of the final product}{19}
+\contentsline {section}{\numberline {8}Critical assessment of the project }{20}
+\contentsline {section}{\numberline {9}Future Work}{21}
+\contentsline {section}{\numberline {10}Conclusion}{22}

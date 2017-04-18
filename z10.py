@@ -5,23 +5,34 @@ import copy
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-def read_data():
+class Data(object):
     """
-    Function to load in the text file. Function splits the data into two sets.
-    set 1: company data
-    set 2: company data labels - either a 0 or 1.
-    :return: tuple - (company data, company class)
+    Class to manipulate the data such to be shuffled, read in and split the data. 
     """
-    from numpy import loadtxt
-    cbd = loadtxt('dataset2.txt')  # read in the data
-    class_labels_cfd = cbd[:, -1]  # get the classification categories.
-    class_labels_cfd = [int(x) for x in class_labels_cfd]
-    class_labels_cfd = np.asarray(class_labels_cfd, dtype=int)
+    def __init__(self, text_file):
+        self.text_file = text_file
 
-    data_cbd = cbd[:, 0:-1]
-    # print(data_CBD)
-    return data_cbd, class_labels_cfd
+    def read_data(self, shuffle_d = True):
+        """
+        Function to load in the text file. Function splits the data into two sets.
+        set 1: company data
+        set 2: company data labels - either a 0 or 1.
+        :return: tuple - (company data, company class)
+        """
+        from numpy import loadtxt
+        from numpy.random import shuffle
+        cfd = loadtxt(self.text_file)  # read in the data
+        if shuffle_d == True:
+            shuffle(cfd)
+
+        # print(cfd)
+        # print(cfd.shape)
+        class_labels_cfd = cfd[:, -1]  # get the classification categories.
+        class_labels_cfd = [int(x) for x in class_labels_cfd]
+        class_labels_cfd = np.asarray(class_labels_cfd, dtype=int)
+
+        data_cfd = cfd[:, 0:-1]
+        return data_cfd, class_labels_cfd
 
 
 class GenMember(object):
@@ -32,8 +43,10 @@ class GenMember(object):
 
     """
 
+
     # Read the data from the text file
-    read_data = read_data()
+    d = Data('dataset2.txt')
+    read_data = d.read_data(shuffle_d = False)
     data = read_data[0]
     labels = read_data[1]
 
@@ -51,7 +64,7 @@ class GenMember(object):
 
         # print out either a random number between 0 and 50, or a variable X1-X5.
         if max_depth == 1:
-            terminals = [random() * 50, "X1", "X2", 'X3', "X4", "X5"]
+            terminals = [ "X1", "X2", 'X3', "X4", "X5"] # random() * 50,
             return self.__str__(choice(terminals))
 
         # include bracketing 20% of the time.
@@ -608,7 +621,7 @@ class Tree(object):
 
         return tree_one, tree_two
 
-    def mutate_node(self, tree, list_nodes, node, fitness):
+    def mutate_node(self, tree, list_nodes, node):
         # print("fitness:")
         # print(fitness)
         # print("node value: ", node.value, node.nodenum)
@@ -633,14 +646,11 @@ class Tree(object):
             if node.value not in ["X1", "X2", "X3", "X4", "X5"]:
                 val = float(node.value)
                 # print("value: ", val, type(val))
-                if fitness > 0:
-                    val -= 0.1
-                    # print("value now",val)
-                    node.value = str(val)
-                else:
-                    val += 0.1
-                    # print("value now: ", val)
-                    node.value = str(val)
+                
+                val -= 0.1
+                # print("value now",val)
+                node.value = str(val)
+
             else:
                 node.value = choice(["X1", "X2", "X3", "X4", "X5"])
 
@@ -716,22 +726,21 @@ class ToInfixParser:
             pref.append(str(i.value))
         return pref
 
-    def add_to_stack(self, p):
-        if p in ['+', '-', '*', '/']:
-            op1 = self.stack.pop()
-            op2 = self.stack.pop()
-            self.stack.append('({} {} {})'.format(op1, p, op2))
-        else:
-            self.stack.append(p)
 
-    def convert_to_infix(self, l):
-        l.reverse()
-        for e in l:
-            self.add_to_stack(e)
-        return self.stack.pop()
+    def conv_inf(self, l):
+        for e in l[::-1]:
+            if e not in GenMember.operations:
+                self.stack.append(e)
+                
+            else:
+                operand1 = self.stack.pop(-1)
+                operand2 = self.stack.pop(-1)
+                self.stack.append("({}{}{})".format(operand1, e, operand2))
+
+        return self.stack.pop()[1:-1]
 
 
-def main():
+def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_rate = 0.9, mutation_rate = 0.1):
     import sys
     import time
     start = time.time()
@@ -741,11 +750,7 @@ def main():
     x_val = list()
     y_val = list()
 
-    max_depth = 3
-    population_size = 500
-    max_iteration = 500
-    cross_over_rate = 0.9
-    mutation_rate = 0.1
+
     current_population = GenMember()
     population = current_population.get_valid_expressions(max_depth, population_size)
 
@@ -823,12 +828,12 @@ def main():
             print("time elapsed: ", elapsed_time)
             # print("ben was right")
 
-            # plt.figure()
-            # plt.plot(x_val, y_val, "b", label="fitness")
-            # plt.xlabel("iteration")
-            # plt.ylabel("fitness")
-            # plt.legend(loc="best")
-            # plt.show()
+            plt.figure()
+            plt.plot(x_val, y_val, "b", label="fitness")
+            plt.xlabel("iteration")
+            plt.ylabel("fitness")
+            plt.legend(loc="best")
+            plt.show()
 
             return population[index]
 
@@ -948,12 +953,10 @@ def main():
             #         # print("node to mutate two: ",node_to_mutate_two)
             #         # print()
 
-            new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2],
-                                             parent_tree1_fitness_clone)
+            new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
             #         # print(new_child_one[0])
             #         #
-            new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2],
-                                             parent_tree2_fitness_clone)
+            new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
             #         # print(new_child_two[0])
 
         else:
@@ -966,9 +969,9 @@ def main():
         p = ToInfixParser()
         #     # print("deconstructing child 1")
         deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
-        #     # print(deconstruct_child_one)
+        # print(deconstruct_child_one)
 
-        c1 = p.convert_to_infix(deconstruct_child_one)
+        c1 = p.conv_inf(deconstruct_child_one)
         c1 = c1.replace(" ", "")
 
         # print("child one: ", c1)
@@ -980,7 +983,7 @@ def main():
         deconstruct_child_two = ToInfixParser.deconstruct_tree(new_child_two[1])
         # print(deconstruct_child_two)
 
-        c2 = p.convert_to_infix(deconstruct_child_two)
+        c2 = p.conv_inf(deconstruct_child_two)
         c2 = c2.replace(" ", "")
         # print("child two:", c2)
         # print("jere")
@@ -1005,7 +1008,9 @@ def main():
 
 
 if __name__ == "__main__":
-    optimal_expression = main()
+    optimal_expression = main(max_depth = 3, population_size = 500, max_iteration = 500, cross_over_rate = 0.9, mutation_rate = 0.9)
+
+
     print("expression: ", optimal_expression)
 
     exp = list()
