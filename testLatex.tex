@@ -106,7 +106,7 @@ At every hidden layer node, the weighted sum of the input to that node will be c
 \subsubsection{Output Layer and Learning Mechanism}
 After the input has been fed forward through the network, the output will be produced. When training the network, I will classify the outputs as either a 0 or 1 by passing the raw value through another activation function. If the value outputted is below 0.5, then it will be classified as a 0, otherwise it would be classified as a 1. Using this, the error percentage can then be measured against the true results, and the weights will be altered accordingly using a learning mechanism. For this network, through the research conducted, the back - propagation learning method should be sufficient enough to allow the network to learn, to try to minimise the error rate, to give the best possible accuracy, showing that the network has trained.\\
 Once the ANN has produced an accuracy of 80\% or higher on the training dataset, I will then use a testing dataset to test the predictive accuracy of the classifier on unknown data. This process will occur multiple times during the process of cross validation as the network will be selecting various weights and number of nodes with the aim of producing the most optimal network within a sufficient amount of time.
-%\newpage
+
 \subsection{Genetic Program Design}
 \begin{figure}[h]
 \centering
@@ -131,7 +131,7 @@ Using this expression that has now been returned, it should be tested on the tes
 
 \subsection{Choice of Programming Language}
 The final part of the design stage was to determine what programming language that could be used for this project. Through careful consideration, I decided to choose Python as my main programming language. The main reasons for this were that since the ANN was going to be used as a benchmark, rather than trying to implement an ANN from scratch, I chose to use a library - sklearn, as this provided all the functionality to allow a feed forward ANN with back propagation to be created, along with many other functions which could be used to test the network e.g. using other transfer functions, methods of splitting the data and how to train and test the network. Since Python was what I was going to use for the ANN, for consistency, I also decided to use Python as the choice of language for the regression tree GP. This was because of the fact that Python offers object orientation, speed, high level abstraction for memory allocation and offered others optimised mathematical libraries such as Numpy which can make data handing easier, and Matplotlib which offers easy to make graphs which can then be used for data analysis.
-
+\newpage
 \section{Development}
 Based on the design of the project, I was now able to start creating the ANN and the GP to predict the likelihood of CF within a one year period. To make the development more manageable, I decided to work on using smaller problems, with static data such that if issues did occur, debugging and understanding the errors would be easier. \\
 \subsection{Development of the Artificial Neural Network}
@@ -190,6 +190,7 @@ Once the child fitness's have been found for the children, the population can be
 
 
 \subsubsection{Running the Genetic Program - Training and Testing}
+
 \newpage
 \section{Testing}
 

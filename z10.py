@@ -10,6 +10,7 @@ class Data(object):
     Class to manipulate the data such to be shuffled, read in and split the data. 
     """
     def __init__(self, text_file):
+        
         self.text_file = text_file
 
     def read_data(self, shuffle_d = False):

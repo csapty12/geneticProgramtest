@@ -20,21 +20,21 @@
 \contentsline {subsubsection}{\numberline {3.3.4}Crossover and Mutation}{9}
 \contentsline {subsubsection}{\numberline {3.3.5}Termination Criteria}{9}
 \contentsline {subsection}{\numberline {3.4}Choice of Programming Language}{10}
-\contentsline {section}{\numberline {4}Development}{10}
-\contentsline {subsection}{\numberline {4.1}Development of the Artificial Neural Network}{10}
-\contentsline {subsection}{\numberline {4.2}Developing The Genetic Program}{10}
-\contentsline {subsubsection}{\numberline {4.2.1}Reading Company Data}{10}
+\contentsline {section}{\numberline {4}Development}{11}
+\contentsline {subsection}{\numberline {4.1}Development of the Artificial Neural Network}{11}
+\contentsline {subsection}{\numberline {4.2}Developing The Genetic Program}{11}
+\contentsline {subsubsection}{\numberline {4.2.1}Reading Company Data}{11}
 \contentsline {subsubsection}{\numberline {4.2.2}Generating and Handling the Population}{11}
-\contentsline {subsubsection}{\numberline {4.2.3}Infix to Prefix Conversion}{12}
+\contentsline {subsubsection}{\numberline {4.2.3}Infix to Prefix Conversion}{13}
 \contentsline {subsubsection}{\numberline {4.2.4}The Node Object}{13}
-\contentsline {subsubsection}{\numberline {4.2.5}The Tree Object}{13}
-\contentsline {subsubsection}{\numberline {4.2.6}Crossover and Mutation}{14}
+\contentsline {subsubsection}{\numberline {4.2.5}The Tree Object}{14}
+\contentsline {subsubsection}{\numberline {4.2.6}Crossover and Mutation}{15}
 \contentsline {subsubsection}{\numberline {4.2.7}Prefix to Infix Conversion}{16}
-\contentsline {subsubsection}{\numberline {4.2.8}Updating The population}{16}
-\contentsline {subsubsection}{\numberline {4.2.9}Running the Genetic Program - Training and Testing}{16}
-\contentsline {section}{\numberline {5}Testing}{17}
-\contentsline {section}{\numberline {6}Description of the final product}{18}
-\contentsline {section}{\numberline {7}Evaluation of the final product}{19}
-\contentsline {section}{\numberline {8}Critical assessment of the project }{20}
-\contentsline {section}{\numberline {9}Future Work}{21}
-\contentsline {section}{\numberline {10}Conclusion}{22}
+\contentsline {subsubsection}{\numberline {4.2.8}Updating The population}{17}
+\contentsline {subsubsection}{\numberline {4.2.9}Running the Genetic Program - Training and Testing}{17}
+\contentsline {section}{\numberline {5}Testing}{18}
+\contentsline {section}{\numberline {6}Description of the final product}{19}
+\contentsline {section}{\numberline {7}Evaluation of the final product}{20}
+\contentsline {section}{\numberline {8}Critical assessment of the project }{21}
+\contentsline {section}{\numberline {9}Future Work}{22}
+\contentsline {section}{\numberline {10}Conclusion}{23}
