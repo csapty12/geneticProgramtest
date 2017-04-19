@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 
 class Data(object):
     """
-    Class to manipulate the data such to be shuffled, read in and split the data. 
+    Class to read data, and  manipulate the data such to be shuffled, as well as split th
     """
+
     def __init__(self, text_file):
-        
         self.text_file = text_file
 
-    def read_data(self, shuffle_d = False):
+    def read_data(self, shuffle_d=False):
         """
         Function to load in the text file. Function splits the data into two sets.
         set 1: company data
@@ -23,17 +23,18 @@ class Data(object):
         from numpy import loadtxt
         from numpy.random import shuffle
         cfd = loadtxt(self.text_file)  # read in the data
-        if shuffle_d == True:
+
+        # if the shuffle flag true, then shuffle the data.
+        if shuffle_d is True:
             shuffle(cfd)
 
-        # print(cfd)
-        # print(cfd.shape)
-        class_labels_cfd = cfd[:, -1]  # get the classification categories.
+        class_labels_cfd = cfd[:, -1]  # get the classification categories - [0,1].
         class_labels_cfd = [int(x) for x in class_labels_cfd]
         class_labels_cfd = np.asarray(class_labels_cfd, dtype=int)
 
         data_cfd = cfd[:, 0:-1]
         return data_cfd, class_labels_cfd
+
 
 class GenMember(object):
     """
@@ -43,10 +44,9 @@ class GenMember(object):
 
     """
 
-
     # Read the data from the text file
     d = Data('dataset2.txt')
-    read_data = d.read_data(shuffle_d = False)
+    read_data = d.read_data(shuffle_d=False)
     data = read_data[0]
     labels = read_data[1]
 
@@ -64,7 +64,7 @@ class GenMember(object):
 
         # print out either a random number between 0 and 50, or a variable X1-X5.
         if max_depth == 1:
-            terminals = [random()*50, "X1", "X2", 'X3', "X4", "X5"] # random() * 50,
+            terminals = [random() * 50, "X1", "X2", 'X3', "X4", "X5"]  # random() * 50,
             return self.__str__(choice(terminals))
 
         # include bracketing 20% of the time.
@@ -79,8 +79,8 @@ class GenMember(object):
     def __str__(self, num):
         """
         cast terminal value to a string.
-        :param num:
-        :return:
+        :param num: the value to be parsed as a string.
+        :return: value parsed as a string
         """
         return str(num)
 
@@ -483,11 +483,23 @@ class ToPrefixParser(object):
 
 # manipulating the tree
 class Tree(object):
+    """
+    Class to make a tree, find a subtree, and and perform genetic operations on the tree.
+    """
     def __init__(self, root_node=None):
+        """
+        Constructor to initialise the root node of a tree.
+        :param root_node: None until value given to the node.
+        """
         self.root = root_node
 
     def make_tree(self, pref_list):
-        # print("pref list: ",pref_list)
+        """
+        Function to build the tree structure using the prefix expression
+        :param pref_list: prefix list
+        :return: root node, list of nodes and node ID's
+        """
+
         nodes = list()
         nodenums = list()
         root_node = Node(pref_list[0])
@@ -495,24 +507,18 @@ class Tree(object):
         nodes.append(root_node)
         nodenums.append(root_node.nodenum)
 
-        current_node = root_node
-
+        current_node = root_node  # use current node to point the current being being used.
         pref_list.pop(0)
 
-        # print("pref list now: ",pref_list)
-        # while pref_list != []:
         while len(pref_list) > 0:
-            # print("value of current node1: ",current_node)
-            # print("pref list now2: ",pref_list)
             if current_node.value in GenMember.operations:
-                # print("current node has value 3: ", current_node.value, "in param")
                 if current_node.left_child is None:
                     current_node.add_child(pref_list[0], left=True)  # add a left child with its value
                     pref_list.pop(0)
                     current_node = current_node.left_child
-                    # print("current node is now lc 4: ",current_node.value)
                     nodes.append(current_node)
                     nodenums.append(current_node.nodenum)
+
                 elif current_node.left_child is not None and current_node.right_child is not None:
                     current_node = current_node.parent
                     nodes.append(current_node)
@@ -522,15 +528,12 @@ class Tree(object):
                     current_node.add_child(pref_list[0], left=False)
                     pref_list.pop(0)
                     current_node = current_node.right_child
-                    # print("current node now in right 5: ",current_node.value)
                     nodes.append(current_node)
                     nodenums.append(current_node.nodenum)
-                    # print(current_node.value, " appended to l1")
 
             elif current_node.value not in GenMember.operations:
-                # print("current node value 6: ", current_node.value, " not in param")
                 current_node = current_node.parent
-                # print("back at parent 7: ", current_node.value)
+
                 if current_node.left_child is not None and current_node.right_child is not None:
                     current_node = current_node.parent
                     nodes.append(current_node)
@@ -539,19 +542,27 @@ class Tree(object):
         return root_node, nodes, nodenums
 
     def print_full_tree(self, tree):
+        """
+        Function to print out the the tree in the tree structure, list of nodes or the node ID's
+        :param tree: the tree
+        :return: the representation of the tree.
+        """
         return tree
 
     def find_subtree(self, tree, list_nodes, rnd_val):
-
-        # print("list nodes: ", list_nodes)
-
-        # print("value to be found: ",rnd_val)
+        """
+        Function to find a subtree within the tree to ensure that subtree exists. Function uses a depth first
+        search to locate the subtree.
+        :param tree: the tree to search
+        :param list_nodes: list of nodes of that tree.
+        :param rnd_val: the random value selected which find subtree is searching for.
+        :return: the node that has been located within the subtree.
+        """
         current_node = tree
-        # print("current node value : ", current_node.value)
         if current_node.value == rnd_val[0] and current_node.nodenum == rnd_val[1]:
-            # print("found")
             current_node.checked = True
             return current_node
+
         else:
             # if the current node left child exists:
             if current_node.left_child is not None and current_node.left_child.checked is False:
@@ -560,6 +571,7 @@ class Tree(object):
                 # move into the left child node.
                 current_node = current_node.left_child
                 return self.find_subtree(current_node, list_nodes, rnd_val)
+
             else:
                 # if the curent node left child doesnt exist i.e is a leaf node
                 current_node.checked = True
@@ -571,21 +583,24 @@ class Tree(object):
 
                 else:
                     current_node = current_node.parent
-                    # print("current node is now: ", current_node)
                     # if the current node left and right child both have been cheked, move to the curren node parent
                     if current_node.left_child.checked is True and current_node.right_child.checked is True:
                         current_node = current_node.parent
                         return self.find_subtree(current_node, list_nodes, rnd_val)
+
                     else:
                         # move pointer to the right child
                         current_node = current_node.right_child
                         return self.find_subtree(current_node, list_nodes, rnd_val)
 
     def select_random_val(self, list_nodes):
-        # print("list nodes: ", list_nodes)
-        ln = [(i.value, i.nodenum) for i in list_nodes]
-        # print("ln: ",ln)
+        """
+        Function to select a random node value from the list of nodes.
+        :param list_nodes: list of nodes
+        :return: the selected node value, the selected node ID, the selected node.
+        """
 
+        # pop the root node out to prevent root node being selected.
         root = list_nodes[0].nodenum
         x = list_nodes.pop(0)
         while True:
@@ -596,9 +611,20 @@ class Tree(object):
         return y.value, y.nodenum, y
 
     def swap_nodes(self, tree_one, tree_two, node_one, node_two):
+        """
+        Function to take two trees and their selected subtrees to swap them over to simulate genetic crossover.
+        :param tree_one: parent tree one
+        :param tree_two: parent tree two
+        :param node_one: parent tree one randomly selected node
+        :param node_two: parent tree two randomly selected node
+        :return: child tree one, child tree two.
+        """
 
+        # get the parents of each node selected
         node_one_parent = node_one.parent
         node_two_parent = node_two.parent
+
+        # check value and nodenum to ensure correct subtree is being swapped.
         if node_one_parent.left_child.value == node_one.value \
                 and node_one_parent.left_child.nodenum == node_one.nodenum:
             node_one_parent.left_child = node_two
@@ -622,116 +648,135 @@ class Tree(object):
         return tree_one, tree_two
 
     def mutate_node(self, tree, list_nodes, node):
-        # print("fitness:")
-        # print(fitness)
-        # print("node value: ", node.value, node.nodenum)
-        # print("node type: ", type(node.value))
+        """
+        Function to mutate the randomly selected node based on its current value and arity
+        :param tree: tree to be mutated
+        :param list_nodes: list of nodes associated with the tree
+        :param node: the node selected for mutation
+        :return: the updated tree, the updated list of nodes associated with the tree
+        """
 
-        # print("node list: ", list_nodes)
-        # perform mutation
+        # check if node selected is an operator.
         if node.value in ['+', '-', '*', '/']:
-            # print("here")
+            # select operator based on same arity of node to be changed
             node.value = choice(['+', '-', '*', '/'])
-            # print("new mutated node: ",node.value, node.nodenum)
-            # print(node)
-            # print("new list of nodes: ", list_nodes)
-            # print()
-            # print("new tree")
-            # print(tree)
             return tree, list_nodes  # return the new tree, new list_nodes, new mutated node.
+
         else:
-            """
-            based on the fitness, alter value by +0.1 if negative, -0.1 if positive. contstantly learning
-            """
+            # check if terminal value and not a variable
             if node.value not in ["X1", "X2", "X3", "X4", "X5"]:
+                # alter the value by a small amount
                 val = float(node.value)
-                # print("value: ", val, type(val))
-                
                 val -= 0.1
-                # print("value now",val)
                 node.value = str(val)
 
             else:
+                # if value is a variable, then select another variable
                 node.value = choice(["X1", "X2", "X3", "X4", "X5"])
 
-            # print("new mutated node: ",node.value, node.nodenum, type(node.value))
-            # print(node)
-            # print("new list of nodes: ", list_nodes)
             return tree, list_nodes
 
     def get_child_one(self, child_one):
+        """
+        Function to get the first child that is produced
+        :param child_one: the child produced
+        :return: the first child
+        """
         return child_one
 
     def get_child_two(self, child_one, child_two):
+        """
+        Function to get the second child independently
+        :param child_one: the first child
+        :param child_two: the second child
+        :return: only the values of the second child.
+        """
         return child_two[len(child_one):]
 
     def make_list_nodes(self, tree, l1=list()):
+        """
+        Function to make a list of nodes based on the tree that has been inputted
+        :param tree: the tree to be converted to a list of nodes.
+        :param l1: empty list which is appended to recursively.
+        :return: the list of nodes
+        """
         root_node = tree
         current_node = root_node
-        # print(current_node)
 
         if current_node.checkedAgain is True and current_node.parent is None and current_node.left_child.checkedAgain \
                 is True and current_node.right_child.checkedAgain is True:
-
             return l1
+
         else:
-            # print("in here fam")
             if current_node.left_child is not None and current_node.left_child.checkedAgain is False:
                 current_node.checkedAgain = True
                 l1.append(current_node)
                 current_node = current_node.left_child
-                # print("current node 1: ", current_node.value)
                 return self.make_list_nodes(current_node)
+
             else:
-                # print("now im here")
                 current_node.checkedAgain = True
                 if current_node.right_child is not None and current_node.right_child.checkedAgain is False:
-                    # print("moving into this bit")
-                    # current_node.checkedAgain = True
                     current_node = current_node.right_child
-                    # l1.append(current_node)
-                    # print("current node : ", current_node.value)
                     return self.make_list_nodes(current_node)
+
                 else:
-                    # print("shit gone down")
                     if current_node not in l1:
                         l1.append(current_node)
 
                     current_node = current_node.parent
-                    # print("current node : ", current_node.value)
                     if current_node.left_child.checkedAgain is True and current_node.right_child.checkedAgain is True \
                             and current_node.parent is not None:
                         current_node = current_node.parent
                         return self.make_list_nodes(current_node)
+
                     elif current_node.left_child.checkedAgain is True and current_node.right_child.checkedAgain \
                             is True and current_node.parent is None:
                         return self.make_list_nodes(current_node)
+
                     else:
                         current_node = current_node.right_child
                         return self.make_list_nodes(current_node)
 
     def build_child(self, tree, list_nodes):
+        """
+        function to return the children trees and list of nodes.
+        :param tree: child tree
+        :param list_nodes: list of nodes for that child tree.
+        :return: tuple (tree, list of nodes)
+        """
         return tree, list_nodes
 
 
 class ToInfixParser:
+    """
+    Class to convert the prefix expression to infix notation.
+    """
     def __init__(self):
         self.stack = []
 
     @staticmethod
     def deconstruct_tree(list_nodes):
-        # print(list_nodes)
+        """
+
+        :param list_nodes: list of nodes belonging to tree
+        :return: the values of the tree in prefix notation.
+        """
         pref = list()
         for i in list_nodes:
             pref.append(str(i.value))
         return pref
 
-
-    def conv_inf(self, l):
-        for e in l[::-1]:
+    def conv_inf(self, prefix_expr):
+        """
+        Function to convert the prefix expression back to infix notation.
+        :param prefix_expr: prefix expression to be converted.
+        :return: infix expression.
+        """
+        for e in prefix_expr[::-1]:
             if e not in GenMember.operations:
                 self.stack.append(e)
-                
+
             else:
                 operand1 = self.stack.pop(-1)
                 operand2 = self.stack.pop(-1)
@@ -740,7 +785,17 @@ class ToInfixParser:
         return self.stack.pop()[1:-1]
 
 
-def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_rate = 0.9, mutation_rate = 0.1):
+def train_gp(data_set, max_depth=3, population_size=500, max_iteration=100, cross_over_rate=0.9, mutation_rate=0.1):
+    """
+    Function to train the genetic program using the training dataset, based on user defined parameters.
+    :param data_set: data set to be read into the program
+    :param max_depth: max depth of a tree
+    :param population_size: maximum popululation size
+    :param max_iteration: stopping criteria if no solution is found within a reasonable iteration limit
+    :param cross_over_rate: frequency of crossover expressed as a value between [0,1]
+    :param mutation_rate: frequency of mutation expressed as a value between [0,1]
+    :return: optimal expression found through training.
+    """
     import sys
     import time
     start = time.time()
@@ -749,7 +804,6 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
     tree = Tree()
     x_val = list()
     y_val = list()
-
 
     current_population = GenMember()
     population = current_population.get_valid_expressions(max_depth, population_size)
@@ -767,18 +821,18 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
 
             # print("population = ", population)
             # print("fitness: ", population_fitness)
-        for i in range(len(population_fitness)):
-            if population_fitness[i] <= 133:
+        for index in range(len(population_fitness)):
+            if population_fitness[index] <= 133:
                 # if get_fitness[i] ==0:
                 print("#########################################################################")
                 print(True)
 
                 print("Iteration: ", x)
-                print("fitness index:", population_fitness.index(population_fitness[i]))
-                print("fitness: ", population_fitness[i])
+                print("fitness index:", population_fitness.index(population_fitness[index]))
+                print("fitness: ", population_fitness[index])
                 print()
                 # print(population)
-                print(population[i])
+                print(population[index])
                 # evale = current_population.eval_expressions(population[i])
                 # print(evale)
                 loop_break = True
@@ -788,7 +842,7 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
                 elapsed_time = end - start
                 print("time elapsed: ", elapsed_time)
                 print("here")
-                return population[i]
+                return population[index]
 
         # # print(get_fitness)
 
@@ -799,7 +853,7 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
             # sys.stdout.write("iteration: {} \n".format(x))
 
             x_val.append(x)
-            abs_list = [abs(j) for j in population_fitness]
+            abs_list = [abs(f) for f in population_fitness]
             min_val = min(abs_list)
             # print("current best fitness: ", min_val)
             # sys.stdout.write("current best fitness:{} \n".format(min_val))
@@ -812,7 +866,7 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
         if x == max_iteration:
             print("max iteration met")
             # print("fitness: ", get_fitness)
-            abs_list = [abs(j) for j in population_fitness]
+            abs_list = [abs(fit) for fit in population_fitness]
             min_val = min(abs_list)
             print("best fitness: ", min_val)
             index = abs_list.index(min_val)
@@ -849,8 +903,8 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
         #     # print("parent trees")
         parent_tree1 = get_prefix_parents[0]
         parent_tree2 = get_prefix_parents[1]
-        parent_tree1_fitness = get_prefix_parents[0][1]
-        parent_tree2_fitness = get_prefix_parents[1][1]
+        # parent_tree1_fitness = get_prefix_parents[0][1]
+        # parent_tree2_fitness = get_prefix_parents[1][1]
 
         #     # print("here")
         #     # print(parent_tree1_fitness)
@@ -886,20 +940,23 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
         make_parent_tree_one_clone = copy.deepcopy(make_parent_tree_one)
         #     # show_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[0])
         #     # print("here")
-        parent_tree1_fitness_clone = parent_tree1_fitness
+        # parent_tree1_fitness_clone = parent_tree1_fitness
         #     # print(parent_tree1_fitness_clone)
         #     # print(show_parent_tree_one_clone)
 
         make_parent_tree_two_clone = copy.deepcopy(make_parent_tree_two)
+        """
         #     # show_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[0])
         parent_tree2_fitness_clone = parent_tree2_fitness
         #     # print(parent_tree2_fitness_clone)
         #     # print(show_parent_tree_two_clone)
-
+        """
+        """
         nodes_parent_tree_one_clone = tree.print_full_tree(make_parent_tree_one_clone[2])
-        #     # print("parent one nodes: ", nodes_parent_tree_one)
+        # print("parent one nodes: ", nodes_parent_tree_one)
         nodes_parent_tree_two_clone = tree.print_full_tree(make_parent_tree_two_clone[2])
-        #     # print("parent two nodes: ", nodes_parent_tree_two)
+        # print("parent two nodes: ", nodes_parent_tree_two)
+        """
 
         rnd = random()
         #     # print("rnd : ", rnd)
@@ -921,7 +978,7 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
             # _two.value,random_node_two.nodenum)
 
             new_trees = tree.swap_nodes(make_parent_tree_one_clone[0], make_parent_tree_two_clone[0],
-                                         random_node_one, random_node_two)
+                                        random_node_one, random_node_two)
         else:
             #         # print("not crossing over")
             new_trees = [make_parent_tree_one_clone[0], make_parent_tree_two_clone[0]]
@@ -1009,8 +1066,10 @@ def main(max_depth = 3, population_size = 500, max_iteration = 100, cross_over_r
 
 if __name__ == "__main__":
     import math
-    optimal_expression = main(max_depth = 3, population_size = 500, max_iteration = 1500, cross_over_rate = 0.9, mutation_rate = 0.9)
 
+    optimal_expression =train_gp(data_set="dataset2.txt", max_depth=3, population_size=500, max_iteration=1500,
+                              cross_over_rate=0.9,
+                              mutation_rate=0.9)
 
     print("expression: ", optimal_expression)
 
@@ -1033,27 +1092,29 @@ if __name__ == "__main__":
 
     # print("data: ")
     # print(data)
-    row =[[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425 ],[0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],
-            [0.149332758, 0.347589881, 0.139985797, 1.689751437, 1.734865801],[0.137193647, 0.416721256, 0.147865432, 2.116532577, 1.761369401],
-        [0.082350665, 0.480389313, 0.174387346, 2.342011704, 1.766493641]]
-    label = [0,0,0,0,0]
+    row = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425],
+           [0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],
+           [0.149332758, 0.347589881, 0.139985797, 1.689751437, 1.734865801],
+           [0.137193647, 0.416721256, 0.147865432, 2.116532577, 1.761369401],
+           [0.082350665, 0.480389313, 0.174387346, 2.342011704, 1.766493641]]
+    label = [0, 0, 0, 0, 0]
 
     prediction = list()
     for i in optimal_expression:
         tmp = list()
         for j in row:
             # print(j)
-            new_exp = i.replace("X1", str(j[0])).replace("X2", str(j[1])).replace("X3", str(j[2]))\
-            .replace("X4", str(j[3])).replace("X5", str(j[4]))
+            new_exp = i.replace("X1", str(j[0])).replace("X2", str(j[1])).replace("X3", str(j[2])) \
+                .replace("X4", str(j[3])).replace("X5", str(j[4]))
             eva = eval(new_exp)
             print()
-            print("eval: ",eva)
+            print("eval: ", eva)
             if eva >= 0:
                 print("evaluation : ", eva)
                 print("Company likely to go bankrupt")
                 x = eva
                 print("val of x is = ", x)
-                tmp.append(x)            
+                tmp.append(x)
                 # tmp.append(1)
             else:
                 print("evaluation here : ", eva)
@@ -1070,17 +1131,12 @@ if __name__ == "__main__":
 
     for i in prediction:
         for j in i:
-            sig = 1/(1+math.exp(-j))
+            sig = 1 / (1 + math.exp(-j))
             print("sig")
-            print(sig)   
-            print()             
-                # tmp.append(0)
-        # prediction.append(tmp)
+            print(sig)
+            print()
 
-    # print("predictions: ")
-    # print(prediction)
-
-
-
-
-            
+# TODO - IMPLEMENT LEVEL CAP
+# TODO - TESTING
+# TODO - USE SIGMOID FUNCTION TO MAKE CLASSIFICAITON AND PROBABILITY.
+# TODO - SIMPLE GUI INTERFACE 

@@ -56,9 +56,10 @@ There have been several techniques that have been used to predict CF, some of wh
 \textbf{Supervised Learning} - GP's and ANN's fall under the umbrella of Machine Learning (ML). ML is a form of Artificial Intelligence (AI) that allows a computer program to learn without the use of explicit programming. This means whilst the program is running, it will start to form patterns based on the data that is fed in, and adapt the program appropriately to try to produce the best results until a termination criteria is met.
 In supervised learning, the output after each iteration of each algorithm is compared against the already known desired output. This can then be used for comparison to check whether or not the programs have correctly classified a company financially distressed or not. For every iteration, the program will start to learn, so the accuracy of the classifications will start to increase over time. Eventually, when an unknown set of data is inputted into the programs, the program will be able to correctly produce an output to declare if the company in question will likely to fail or not along with a percentage of certainty.\\ 
 
-
-
 \subsection{Motivations For this Project}
+At present, we are able to extract copious amounts of historical financial data from a range of small, medium and large companies. Through looking at the data that is provided, we are able to see whether or not a company has failed or not failed as yet. Unfortunately, there is not an easy way to identify from looking at the raw data as to whether or not a company is financially distressed and the likelihood of the company going bankrupt in the foreseeable future. That being said, through selecting the most appropriate key performance indicators (KPI's) - financial variables that are known to affect a company's performance the most -  this data can be manipulated and combined in various ways to help find a way to predict how likely a company is to failure and whether or not they are financially distressed. The combination of these KPI's should be applicable to small medium and large companies. \\
+In the past, several supervised learning methods have been used to approach this problem. As seen in section 1.2, ANN's have been used to try to solve this problem. Whilst ANN's are known to have strong predictive accuracy to see if a company falls into the category of "likely to fail" or "not likely to fail", what they fail to provide is a mathematical equation that a company could use to enter their own data to see their likelihood of failure. Altman provided a solution that worked very well at the current state of the economy at that time, however as economies have changed over the years, Altman's equation may not necessarily be the most optimal equation to use anymore. \\
+A genetic program can be a way to generate and evolve mathematical expressions to produce an equation that can be used to firstly classify whether a company is financially distressed and likely to go bankrupt, secondly it can produce a probability to see the probability of failure within a one year period. Finally the genetic program will be able to produce an optimal equation that a client could use by inputting the relevant data to see their performance. 
 \newpage
 \section{Summary of literature review and specification}\label{sec:spec}
 \subsection{Literature Review}
@@ -188,18 +189,21 @@ As the new children that have been created have been converted back into their i
 
 Once the child fitness's have been found for the children, the population can be updated accordingly. To do this, the function \textit{update\textunderscore population} was called. This function takes the original population and the new child, and compares the new child against the worst member in the current population. If the child is better than the current worst member of the population, then the child will replace this member in the population. This process is repeated for the second child as well, to ensure that the worst members of the population are filtered out, and to enable the GP to start learning, but accepting better fitted individuals and rejected those that are worse. By replacing one individual at a time, this also help to make sure that the population size remained the same size as when it started. 
 
-
-\subsubsection{Running the Genetic Program - Training and Testing}
-
+\subsubsection{Running the Genetic Program - Training and Testing datasets}
+In genetic programming, to allow the network to learn and find patterns in the data to try to produce an optimal solution, the network has to be trained. This means 
+During the development of the program, after the main program was created, it was recommended that the dataset that I had should be split into two datasets such that I could train the network to a certain degree of accuracy, and then use another dataset that could be used to test the predictive accuracy of an unknown dataset. \\
+Rather than training the dataset on a large amount of data and testing it on another large dataset, I extracted 10 rows of data from the proper dataset, and used this to train the network. After the network was sufficiently trained, for example, if it reached a certain fitness level for the dataset given or if the program reached the maximum iteration criteria, then the current best solution would be returned as well as the predictive accuracy of the GP that was trained to get the best solution.  As the \textit{optimal solution} was found, I then took another row of data from the dataset (which had not been a part of the initial 10 rows being used for training), 
 \newpage
 \section{Testing}
+When developing this program, to able to understand what the program is doing and how the program is learning, I used a very small data set such that it was sufficient enough to test the code. This not only made debugging easier, but due to the stochastic nature of this project, being able to test whether or not the code is doing what it is actually meant to be doing was a challenge. 
 
+\begin{comment}
 \newpage
 \section{Description of the final product}
 
 \newpage
 \section{Evaluation of the final product}
-
+\end{comment}
 \newpage
 \section{Critical assessment of the project }
 
