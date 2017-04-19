@@ -192,23 +192,18 @@ Once the child fitness's have been found for the children, the population can be
 \subsubsection{Running the Genetic Program - Training and Testing datasets}
 In genetic programming, to allow the network to learn and find patterns in the data to try to produce an optimal solution, the network has to be trained. This means 
 During the development of the program, after the main program was created, it was recommended that the dataset that I had should be split into two datasets such that I could train the network to a certain degree of accuracy, and then use another dataset that could be used to test the predictive accuracy of an unknown dataset. \\
-Rather than training the dataset on a large amount of data and testing it on another large dataset, I extracted 10 rows of data from the proper dataset, and used this to train the network. After the network was sufficiently trained, for example, if it reached a certain fitness level for the dataset given or if the program reached the maximum iteration criteria, then the current best solution would be returned as well as the predictive accuracy of the GP that was trained to get the best solution.  As the \textit{optimal solution} was found, I then took another row of data from the dataset (which had not been a part of the initial 10 rows being used for training), 
+Rather than training the dataset on a large amount of data and testing it on another large dataset, I extracted 10 rows of data from the proper dataset, and used this to train the network. After the network was sufficiently trained, for example, if it reached a certain fitness level for the dataset given or if the program reached the maximum iteration criteria, then the current best solution would be returned as well as the predictive accuracy of the GP that was trained to get the best solution.  As the \textit{optimal solution} was found, I then took another row of data from the dataset (which had not been a part of the initial 10 rows being used for training) and inserted the testing test data into the optimal equation. The evaluated value was then passed through a sigmoid function, as this was used to represent the data between a range of 0 and 1, and was used to determine which class the company fell into . If the value produced by the sigmoidal function was below 0.499, then the company was classed as "not likely to fail", however if it was 0.5 and above, the company was classified as "likely to fail".
 \newpage
 \section{Testing}
-When developing this program, to able to understand what the program is doing and how the program is learning, I used a very small data set such that it was sufficient enough to test the code. This not only made debugging easier, but due to the stochastic nature of this project, being able to test whether or not the code is doing what it is actually meant to be doing was a challenge. 
+When developing this program, to able to understand what the program is doing and how the program is learning, I used a very small data set such that it was sufficient enough to print the code whilst it was running. This not only made debugging easier, but due to the stochastic nature of this project, being able to test whether or not the genetic programming was learning at each iteration was a challenge. By using a small dataset, and working with smaller values, it allowed me to check to see if from a random population at epoch 0, as the program ran, the fitness values were starting to decrease until either the termination criteria was met or the maximum iteration criteria was met. Using the library \textit{Matplotlib}, I was able to plot the data to see the best fitness values over time , with the hopes that over 'n' generations, the fitness values would reduce and could be seen through the use of a graph. 
 
-\begin{comment}
-\newpage
-\section{Description of the final product}
-
-\newpage
-\section{Evaluation of the final product}
-\end{comment}
 \newpage
 \section{Critical assessment of the project }
+\subsection{What was Successful}
 
 \newpage
 \section{Future Work}
+\subsection{Possible Improvements}
 
 \newpage
 \section{Conclusion}
