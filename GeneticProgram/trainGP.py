@@ -110,7 +110,6 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
             # print("population: ", population)
             print("equation: ", population[index])
             acc = 1 - (min_val / len(GenMember.data))
-            print("acc: ", acc)
             print("acc: ", round(acc, 2) * 100, "%")
             end = time.time()
             elapsed_time = end - start
@@ -118,12 +117,12 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
             print("time elapsed: ", elapsed_time)
             # print("ben was right")
 
-            plt.figure()
-            plt.plot(x_val, y_val, "b", label="fitness")
-            plt.xlabel("iteration")
-            plt.ylabel("fitness")
-            plt.legend(loc="best")
-            plt.show()
+            # plt.figure()
+            # plt.plot(x_val, y_val, "b", label="fitness")
+            # plt.xlabel("iteration")
+            # plt.ylabel("fitness")
+            # plt.legend(loc="best")
+            # plt.show()
 
             return population[index]
         if selection_type == 'tournament':
