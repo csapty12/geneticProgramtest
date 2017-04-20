@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import copy
 
 
-def train_gp(data_set, gen_depth=3, max_depth=3, population_size=500, max_iteration=2,
+def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size=500, max_iteration=2,
              selection_type="tournament", tournament_size=50, cross_over_rate=0.9, mutation_rate=0.1):
     """
     Function to train the genetic program using the training dataset, based on user defined parameters.
@@ -33,6 +33,16 @@ def train_gp(data_set, gen_depth=3, max_depth=3, population_size=500, max_iterat
 
     current_population = GenMember()
     population = current_population.get_valid_expressions(gen_depth, population_size)
+    sys.stdout.write("###########parameters########### \n")
+    sys.stdout.write("dataset: {} \n".format(data_set))
+    sys.stdout.write("Generation depth: {} \n".format(gen_depth))
+    sys.stdout.write("Population Size : {} \n".format(population_size))
+    sys.stdout.write("Maximum Iterations : {} \n".format(max_iteration))
+    sys.stdout.write("Selection Type : {} \n".format(selection_type))
+    sys.stdout.write("tournament size : {} \n".format(tournament_size))
+    sys.stdout.write("Crossover rate : {} \n".format(cross_over_rate))
+    sys.stdout.write("Mutation Rate : {} \n".format(mutation_rate))
+    sys.stdout.write("################################ \n")
 
     x = 1
 
@@ -82,7 +92,7 @@ def train_gp(data_set, gen_depth=3, max_depth=3, population_size=500, max_iterat
             abs_list = [abs(f) for f in population_fitness]
             min_val = min(abs_list)
             # print("current best fitness: ", min_val)
-            # sys.stdout.write("current best fitness:{} \n".format(min_val))
+            sys.stdout.write("{} \n".format(min_val))
             sys.stdout.flush()
             y_val.append(min_val)
             # print("time elapsed: ", time.time())
@@ -293,4 +303,3 @@ def train_gp(data_set, gen_depth=3, max_depth=3, population_size=500, max_iterat
         # print(" new population fitness:: ", population_fitness)
 
         x += 1
-

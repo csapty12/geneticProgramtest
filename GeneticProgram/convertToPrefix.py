@@ -1,4 +1,6 @@
 import re
+
+
 class ToPrefixParser(object):
     """
     Class that converts infix notation to prefix notation, to get ready to construct a binary tree.
@@ -155,4 +157,3 @@ class ToPrefixParser(object):
         for k in range(len(prefix_list)):
             pref_list.append((prefix_list[k], parent_expression[k][1]))
         return pref_list
-

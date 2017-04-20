@@ -1,4 +1,6 @@
 import numpy as np
+
+
 class Data(object):
     """
     Class to read data, and  manipulate the data such to be shuffled, as well as split th
@@ -28,4 +30,3 @@ class Data(object):
 
         data_cfd = cfd[:, 0:-1]
         return data_cfd, class_labels_cfd
-

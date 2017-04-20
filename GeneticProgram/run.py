@@ -22,7 +22,6 @@ def run_gp(test_data_set):
 
     exp = list()
     exp.append(optimal_expression)
-    # print("expression: ", exp)
     optimal_expression = exp
     # row = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425],
     #        [0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],
@@ -36,23 +35,16 @@ def run_gp(test_data_set):
     for i in optimal_expression:
         tmp = list()
         for j in row:
-            # print(j)
             new_exp = i.replace("X1", str(j[0])).replace("X2", str(j[1])).replace("X3", str(j[2])) \
                 .replace("X4", str(j[3])).replace("X5", str(j[4]))
             eva = eval(new_exp)
-            # print("eval: ", eva)
             if eva >= 0:
-                # print("Company likely to go bankrupt")
                 x = eva
                 tmp.append(x)
             else:
-                # print("Company not likely to go bankrupt")
                 y = eva
                 tmp.append(y)
         prediction.append(tmp)
-
-    # print("predictions")
-    # print(prediction)
 
     prob = list()
 
@@ -61,22 +53,21 @@ def run_gp(test_data_set):
             try:
                 sig = 1 / (1 + math.exp(-j))
             except OverflowError:
-                # sig = float('inf')
                 sig = 0
             if sig > 0.5:
                 prob.append(1)
             else:
                 prob.append(0)
     print("expression: ", optimal_expression)
-    print("classifications")
-    print(prob)
+    # print("classifications")
+    # print(prob)
 
     trufa = prob == label
     # for i in range(len(prob)):
     #     trufa.append(i == label[i])
 
-    print("true false array")
-    print(trufa)
+    # print("true false array")
+    # print(trufa)
 
     print("accuracy: ", sum(trufa) / len(trufa))
 
@@ -87,4 +78,3 @@ if __name__ == "__main__":
 # TODO - PARAMETERISE THE TRAIN_GP FUNCTION
 # TODO - IMPLEMENT LEVEL CAP
 # TODO - TESTING
-# TODO - SIMPLE GUI INTERFACE

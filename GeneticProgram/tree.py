@@ -7,6 +7,7 @@ class Tree(object):
     """
     Class to make a tree, find a subtree, and and perform genetic operations on the tree.
     """
+
     def __init__(self, root_node=None):
         """
         Constructor to initialise the root node of a tree.
@@ -267,4 +268,3 @@ class Tree(object):
         :return: tuple (tree, list of nodes)
         """
         return tree, list_nodes
-

@@ -41,6 +41,7 @@ popupMenu.grid(row=7, column=1)
 Button(mainframe, text='Quit', command=mainframe.quit).grid(row=8, column=0, sticky=W, pady=4)
 Button(mainframe, text='Train GP').grid(row=8, column=1, sticky=E)
 
+
 # on change dropdown value
 def change_dropdown(*args):
     print(tkvar.get())

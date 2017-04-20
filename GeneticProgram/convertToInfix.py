@@ -1,8 +1,11 @@
 from ExpressionGenerator import GenMember
+
+
 class ToInfixParser:
     """
     Class to convert the prefix expression to infix notation.
     """
+
     def __init__(self):
         self.stack = []
 
@@ -34,4 +37,3 @@ class ToInfixParser:
                 self.stack.append("({}{}{})".format(operand1, e, operand2))
 
         return self.stack.pop()[1:-1]
-

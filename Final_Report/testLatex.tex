@@ -190,7 +190,13 @@ As the new children that have been created have been converted back into their i
 Once the child fitness's have been found for the children, the population can be updated accordingly. To do this, the function \textit{update\textunderscore population} was called. This function takes the original population and the new child, and compares the new child against the worst member in the current population. If the child is better than the current worst member of the population, then the child will replace this member in the population. This process is repeated for the second child as well, to ensure that the worst members of the population are filtered out, and to enable the GP to start learning, but accepting better fitted individuals and rejected those that are worse. By replacing one individual at a time, this also help to make sure that the population size remained the same size as when it started. 
 \newpage
 \section{Testing the GP}
-Through out development of the GP, I used various methods of testing the GP, to see how different techniques and different permutations of these techniques affected the training accuracy of the genetic program and the testing predictive accuracy of the testing data. 
+Through out development of the GP, I used various methods of testing the GP, to see how different techniques and different permutations of these techniques affected the training accuracy of the genetic program and the testing predictive accuracy of the testing data. Before being able to implement the testing phase. To do this, a design plan was made, split into two sections. The first part belonged to testing the functionality of the code to ensure that each function worked. After the program had been developed, and the functionality of each of the functions had been tested, the second planning stage was undertaken. Once I accepted that the code works and could would agree that the code was in fact learning, I could start to create tests to tune the paramaters, and change them to see the outputs. Through this section, both of these stages will be discussed. 
+
+\subsection{Testing Code Functionality}
+Whilst developing each class and the functions associated with their respective classes, I generated a very small set of static data, an \textit{optimal} function, and the outputs of the data if the data was fed into this function. \\
+The first class that was developed was the GenMember class to generate valid mathematical expressions, select parents, and update the population. After 
+
+
 
 \subsection{Running the Genetic Program - Training and Testing datasets}
 
