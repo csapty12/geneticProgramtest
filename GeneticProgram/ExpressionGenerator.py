@@ -10,6 +10,7 @@ class GenMember(object):
     new population.
 
     """
+
     # Read the data from the text file
     d = Data('dataset2.txt')
     read_data = d.read_data(shuffle_d=False)
@@ -171,6 +172,22 @@ class GenMember(object):
         parents.append(parent_two)
         return parents
 
+    def select_best_parents(self, population, fitness):
+        zipped_population = list(zip(population, fitness))
+        parent_one = min(zipped_population, key=lambda t: t[1])
+        p1_index = zipped_population.index(parent_one)
+
+        zipped_population.pop(p1_index)
+        parent_two = min(zipped_population, key=lambda t: t[1])
+        p2_index = zipped_population.index(parent_two)
+        zipped_population.pop(p2_index)
+
+        parents = list()
+        parents.append(parent_one)
+        parents.append(parent_two)
+
+        return parents
+
     def update_population(self, population, fitness, c1, child_fit1, c2, child_fit2):
         """
         Function to update the population, by comparing the two worst individuals in the current population,
@@ -222,4 +239,3 @@ class GenMember(object):
         new_population_fitness = [i[1] for i in zipped_population]
 
         return new_population, new_population_fitness
-

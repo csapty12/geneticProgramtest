@@ -7,15 +7,18 @@ import matplotlib.pyplot as plt
 import copy
 
 
-def train_gp(data_set, max_depth=3, population_size=500, max_iteration=2, cross_over_rate=0.9, mutation_rate=0.1,
-             selection_method="tournament", tournament_size =50):
+def train_gp(data_set, gen_depth=3, max_depth=3, population_size=500, max_iteration=2,
+             selection_type="tournament", tournament_size=50, cross_over_rate=0.9, mutation_rate=0.1):
     """
     Function to train the genetic program using the training dataset, based on user defined parameters.
     :param data_set: data set to be read into the program
+    :param gen_depth: depth of the original population
     :param max_depth: max depth of a tree
     :param population_size: maximum popululation size
     :param max_iteration: stopping criteria if no solution is found within a reasonable iteration limit
     :param cross_over_rate: frequency of crossover expressed as a value between [0,1]
+    :param selection_type: type of selection -> choose between tournament and select best 2 each time
+    :param tournament_size: number of individuals to be selected for tournament in population
     :param mutation_rate: frequency of mutation expressed as a value between [0,1]
     :return: optimal expression found through training.
     """
@@ -29,7 +32,7 @@ def train_gp(data_set, max_depth=3, population_size=500, max_iteration=2, cross_
     y_val = list()
 
     current_population = GenMember()
-    population = current_population.get_valid_expressions(max_depth, population_size)
+    population = current_population.get_valid_expressions(gen_depth, population_size)
 
     x = 1
 
@@ -113,8 +116,13 @@ def train_gp(data_set, max_depth=3, population_size=500, max_iteration=2, cross_
             plt.show()
 
             return population[index]
+        if selection_type == 'tournament':
+            select_parents = current_population.tournament_selection(population, population_fitness, tournament_size)
+        elif selection_type == 'select_best':
+            select_parents = current_population.select_best_parents(population, population_fitness)
 
-        select_parents = current_population.tournament_selection(population, population_fitness, 50)
+        # print("paents selected")
+        # print(select_parents)
         # print("parents selected", select_parents)
         split_parents = to_pref.split_parents(select_parents)
         fix_decimals = to_pref.fix_dec(split_parents)
