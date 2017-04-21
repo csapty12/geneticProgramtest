@@ -86,34 +86,39 @@ class Tree(object):
             return current_node
 
         else:
-            # if the current node left child exists:
-            if current_node.left_child is not None and current_node.left_child.checked is False:
-                # mark the current node as checked
-                current_node.checked = True
-                # move into the left child node.
-                current_node = current_node.left_child
-                return self.find_subtree(current_node, list_nodes, rnd_val)
-
-            else:
-                # if the curent node left child doesnt exist i.e is a leaf node
-                current_node.checked = True
-                # move to the parent
-                if current_node.right_child is not None and current_node.right_child.checked is False:
+            try:
+                # if the current node left child exists:
+                if current_node.left_child is not None and current_node.left_child.checked is False:
+                    # mark the current node as checked
                     current_node.checked = True
-                    current_node = current_node.right_child
+                    # move into the left child node.
+                    current_node = current_node.left_child
                     return self.find_subtree(current_node, list_nodes, rnd_val)
 
                 else:
-                    current_node = current_node.parent
-                    # if the current node left and right child both have been cheked, move to the curren node parent
-                    if current_node.left_child.checked is True and current_node.right_child.checked is True:
-                        current_node = current_node.parent
+                    # if the curent node left child doesnt exist i.e is a leaf node
+                    current_node.checked = True
+                    # move to the parent
+                    if current_node.right_child is not None and current_node.right_child.checked is False:
+                        current_node.checked = True
+                        current_node = current_node.right_child
                         return self.find_subtree(current_node, list_nodes, rnd_val)
 
                     else:
-                        # move pointer to the right child
-                        current_node = current_node.right_child
-                        return self.find_subtree(current_node, list_nodes, rnd_val)
+                        current_node = current_node.parent
+                        # if the current node left and right child both have been cheked, move to the curren node parent
+                        if current_node.left_child.checked is True and current_node.right_child.checked is True:
+                            current_node = current_node.parent
+                            return self.find_subtree(current_node, list_nodes, rnd_val)
+
+                        else:
+                            # move pointer to the right child
+                            current_node = current_node.right_child
+                            return self.find_subtree(current_node, list_nodes, rnd_val)
+            except RecursionError:
+                print("maximum recursion depth occurred!!")
+                print("please rerun the program. ")
+                quit()
 
     def select_random_val(self, list_nodes):
         """
@@ -237,28 +242,33 @@ class Tree(object):
                 return self.make_list_nodes(current_node)
 
             else:
-                current_node.checkedAgain = True
-                if current_node.right_child is not None and current_node.right_child.checkedAgain is False:
-                    current_node = current_node.right_child
-                    return self.make_list_nodes(current_node)
-
-                else:
-                    if current_node not in l1:
-                        l1.append(current_node)
-
-                    current_node = current_node.parent
-                    if current_node.left_child.checkedAgain is True and current_node.right_child.checkedAgain is True \
-                            and current_node.parent is not None:
-                        current_node = current_node.parent
-                        return self.make_list_nodes(current_node)
-
-                    elif current_node.left_child.checkedAgain is True and current_node.right_child.checkedAgain \
-                            is True and current_node.parent is None:
+                try:
+                    current_node.checkedAgain = True
+                    if current_node.right_child is not None and current_node.right_child.checkedAgain is False:
+                        current_node = current_node.right_child
                         return self.make_list_nodes(current_node)
 
                     else:
-                        current_node = current_node.right_child
-                        return self.make_list_nodes(current_node)
+                        if current_node not in l1:
+                            l1.append(current_node)
+
+                        current_node = current_node.parent
+                        if current_node.left_child.checkedAgain is True and current_node.right_child.checkedAgain is True \
+                                and current_node.parent is not None:
+                            current_node = current_node.parent
+                            return self.make_list_nodes(current_node)
+
+                        elif current_node.left_child.checkedAgain is True and current_node.right_child.checkedAgain \
+                                is True and current_node.parent is None:
+                            return self.make_list_nodes(current_node)
+
+                        else:
+                            current_node = current_node.right_child
+                            return self.make_list_nodes(current_node)
+                except RecursionError:
+                    print("maximum depth exceeded in make_list_nodes")
+                    print("please use a smaller depth to prevent error")
+                    quit()
 
     def build_child(self, tree, list_nodes):
         """

@@ -21,7 +21,7 @@ class ToInfixParser:
             pref.append(str(i.value))
         return pref
 
-    def conv_inf(self, prefix_expr):
+    def get_infix_notation(self, prefix_expr):
         """
         Function to convert the prefix expression back to infix notation.
         :param prefix_expr: prefix expression to be converted.

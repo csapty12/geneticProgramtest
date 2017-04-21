@@ -12,8 +12,8 @@ def test_gp_full_data(test_dataset):
 def run_gp(test_data_set):
     import math
 
-    optimal_expression = train_gp(data_set="dataset2.txt", gen_depth=4, max_depth=3,
-                                  population_size=500, max_iteration=1500, selection_type="tournament",
+    optimal_expression = train_gp(data_set="dataset2.txt", gen_depth=3, max_depth=3,
+                                  population_size=4, max_iteration=2, selection_type="select_best",
                                   tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99)
 
     x = test_gp_full_data(test_data_set)
@@ -75,6 +75,4 @@ def run_gp(test_data_set):
 if __name__ == "__main__":
     run_gp('dataset2.txt')
 
-# TODO - PARAMETERISE THE TRAIN_GP FUNCTION
-# TODO - IMPLEMENT LEVEL CAP
-# TODO - TESTING
+# TODO - IMPLEMENT LEVEL CAP - OR AT LEAST HANDLE IT SOMEHOW

@@ -31,8 +31,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
     x_val = list()
     y_val = list()
 
-    current_population = GenMember()
-    population = current_population.get_valid_expressions(gen_depth, population_size)
+
     sys.stdout.write("###########parameters########### \n")
     sys.stdout.write("dataset: {} \n".format(data_set))
     sys.stdout.write("Generation depth: {} \n".format(gen_depth))
@@ -44,19 +43,18 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
     sys.stdout.write("Mutation Rate : {} \n".format(mutation_rate))
     sys.stdout.write("################################ \n")
 
+    current_population = GenMember()
+    population = current_population.get_valid_expressions(gen_depth, population_size)
+
     x = 1
 
     while x <= max_iteration:
         #     # print()
-        # #     print("population!: ", population)
+        print("population!: ", population)
         #     print()
         if x == 1:
             population_fitness = current_population.get_fitness(population)
-            # print("fitness: ",population_fitness)
-            # else:
 
-            # print("population = ", population)
-            # print("fitness: ", population_fitness)
         for index in range(len(population_fitness)):
             if population_fitness[index] <= 133:
                 # if get_fitness[i] ==0:
@@ -79,8 +77,6 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
                 print("time elapsed: ", elapsed_time)
                 print("here")
                 return population[index]
-
-        # # print(get_fitness)
 
         if x % 10 == 0:
             # print("parents: ", select_parents )
@@ -130,14 +126,13 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
         elif selection_type == 'select_best':
             select_parents = current_population.select_best_parents(population, population_fitness)
 
-        # print("paents selected")
-        # print(select_parents)
         # print("parents selected", select_parents)
         split_parents = to_pref.split_parents(select_parents)
-        fix_decimals = to_pref.fix_dec(split_parents)
-        get_prefix_parents = to_pref.get_prefix_notation(fix_decimals)
-        # print("prefix notation: ")
-        # print("parent prefix: ", get_prefix_parents)
+        # # print("split parents:")
+        # # print(split_parents)
+        get_prefix_parents = to_pref.get_prefix_notation(split_parents)
+        print("prefix notation: ")
+        print("parent prefix: ", get_prefix_parents)
         #     #
         #     # print()
         #     # print("parent trees")
@@ -268,7 +263,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
         deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
         # print(deconstruct_child_one)
 
-        c1 = p.conv_inf(deconstruct_child_one)
+        c1 = p.get_infix_notation(deconstruct_child_one)
         c1 = c1.replace(" ", "")
 
         # print("child one: ", c1)
@@ -276,13 +271,13 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
 
         # population.append(c1)
 
-        # print("deconstructing child 2")
+        print("deconstructing child 2")
         deconstruct_child_two = ToInfixParser.deconstruct_tree(new_child_two[1])
-        # print(deconstruct_child_two)
+        print(deconstruct_child_two)
 
-        c2 = p.conv_inf(deconstruct_child_two)
+        c2 = p.get_infix_notation(deconstruct_child_two)
         c2 = c2.replace(" ", "")
-        # print("child two:", c2)
+        print("child two:", c2)
         # print("jere")
         # get the fitness of the
         new_fit1 = current_population.get_fitness(c1, child=True)
@@ -299,6 +294,6 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
         population = update_population1[0]
         # print(" new population: ", population)
         population_fitness = update_population1[1]
-        # print(" new population fitness:: ", population_fitness)
+        print(" new population fitness:: ", population_fitness)
 
         x += 1

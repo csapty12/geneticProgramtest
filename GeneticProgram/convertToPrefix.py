@@ -22,34 +22,12 @@ class ToPrefixParser(object):
         :param parents: the two parents selected from selection process
         :return: parents, split up into individual gene characteristics -> ["x1+1"] -> ["X1","+","1","end"]
         """
-        split_list = [re.findall('\w+|\W', s[0]) for s in parents]
+        split_list = [re.findall('\w+\d*\.\d+|\w+|\W', s[0]) for s in parents]
 
         [i.append("stop") for i in split_list]
 
         split_parents = [(split_list[i], parents[i][1]) for i in range(len(parents))]
 
-        return split_parents
-
-    def fix_dec(self, split_parents):
-        """
-        function to repair the split parents if expression contains floating point numbers.
-        e.g ["1",".","234","+","X4"] ->["1.234","+","X4"]
-        :param split_parents: the parents that have now been split up
-        :return: the split parents with all correct values.
-        """
-        for p in split_parents:
-            for item in p[0]:
-                if item == ".":
-                    dec = p[0].index(item)
-
-                    val1 = p[0][dec - 1]
-                    val2 = p[0][dec + 1]
-                    x = val1 + item + val2
-
-                    p[0].insert(dec, x)
-                    del p[0][dec - 1]
-                    del p[0][dec]
-                    del p[0][dec]
         return split_parents
 
     def get_operation(self, expression, expected):
