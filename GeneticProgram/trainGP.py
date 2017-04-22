@@ -50,7 +50,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
 
     while x <= max_iteration:
         #     # print()
-        print("population!: ", population)
+        # print("population!: ", population)
         #     print()
         if x == 1:
             population_fitness = current_population.get_fitness(population)
@@ -113,12 +113,12 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
             print("time elapsed: ", elapsed_time)
             # print("ben was right")
 
-            # plt.figure()
-            # plt.plot(x_val, y_val, "b", label="fitness")
-            # plt.xlabel("iteration")
-            # plt.ylabel("fitness")
-            # plt.legend(loc="best")
-            # plt.show()
+            plt.figure()
+            plt.plot(x_val, y_val, "b", label="fitness")
+            plt.xlabel("iteration")
+            plt.ylabel("fitness")
+            plt.legend(loc="best")
+            plt.show()
 
             return population[index]
         if selection_type == 'tournament':
@@ -131,8 +131,8 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
         # # print("split parents:")
         # # print(split_parents)
         get_prefix_parents = to_pref.get_prefix_notation(split_parents)
-        print("prefix notation: ")
-        print("parent prefix: ", get_prefix_parents)
+        # print("prefix notation: ")
+        # print("parent prefix: ", get_prefix_parents)
         #     #
         #     # print()
         #     # print("parent trees")
@@ -271,13 +271,13 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
 
         # population.append(c1)
 
-        print("deconstructing child 2")
+        # print("deconstructing child 2")
         deconstruct_child_two = ToInfixParser.deconstruct_tree(new_child_two[1])
-        print(deconstruct_child_two)
+        # print(deconstruct_child_two)
 
         c2 = p.get_infix_notation(deconstruct_child_two)
         c2 = c2.replace(" ", "")
-        print("child two:", c2)
+        # print("child two:", c2)
         # print("jere")
         # get the fitness of the
         new_fit1 = current_population.get_fitness(c1, child=True)
@@ -294,6 +294,6 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
         population = update_population1[0]
         # print(" new population: ", population)
         population_fitness = update_population1[1]
-        print(" new population fitness:: ", population_fitness)
+        # print(" new population fitness:: ", population_fitness)
 
         x += 1
