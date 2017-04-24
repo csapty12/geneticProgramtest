@@ -89,7 +89,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
             abs_list = [abs(f) for f in population_fitness]
             min_val = min(abs_list)
             # print("current best fitness: ", min_val)
-            sys.stdout.write("{} \n".format(min_val))
+            # sys.stdout.write("{} \n".format(min_val))
             sys.stdout.flush()
             y_val.append(min_val)
             # print("time elapsed: ", time.time())
