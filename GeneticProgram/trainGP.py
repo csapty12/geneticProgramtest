@@ -77,7 +77,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
                 elapsed_time = end - start
                 print("time elapsed: ", elapsed_time)
                 print("here")
-                return population[index]
+                return population[index], x_val, y_val
 
         if x % 10 == 0:
             # print("parents: ", select_parents )
