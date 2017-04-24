@@ -112,16 +112,14 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
             elapsed_time = end - start
 
             print("time elapsed: ", elapsed_time)
-            # print("ben was right")
+            # plt.figure()
+            # plt.plot(x_val, y_val, "b", label="fitness")
+            # plt.xlabel("iteration")
+            # plt.ylabel("fitness")
+            # plt.legend(loc="best")
+            # plt.show()
 
-            plt.figure()
-            plt.plot(x_val, y_val, "b", label="fitness")
-            plt.xlabel("iteration")
-            plt.ylabel("fitness")
-            plt.legend(loc="best")
-            plt.show()
-
-            return population[index]
+            return population[index], x_val, y_val
         if selection_type == 'tournament':
             select_parents = current_population.tournament_selection(population, population_fitness, tournament_size)
         elif selection_type == 'select_best':

@@ -13,7 +13,7 @@ def run_gp(test_data_set, thresh = 0.5):
     import math
 
     optimal_expression = train_gp(data_set="dataset2.txt", gen_depth=3, max_depth=3,
-                                  population_size=500, max_iteration=2, selection_type="tournament",
+                                  population_size=500, max_iteration=1000, selection_type="tournament",
                                   tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99, thresh = thresh )
 
     x = test_gp_full_data(test_data_set)
@@ -21,7 +21,7 @@ def run_gp(test_data_set, thresh = 0.5):
     label = x[1]
 
     exp = list()
-    exp.append(optimal_expression)
+    exp.append(optimal_expression[0])
     optimal_expression = exp
     # row = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425],
     #        [0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],

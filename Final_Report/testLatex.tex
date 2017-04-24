@@ -311,8 +311,8 @@ To make the the ANN and GP more comparable, I also attempted to use the train te
 
 Although K-Fold Cross Validation can be used for the GP by being able to produce the average predictive accuracy of the model, the aim of the project was to find an optimal function that could be used to predict CB. However it is not possible to average multiple expressions which would produce a solution that is equivalent to the predictive classification accuracy produced by K-Fold. Therefore I decided not to use this method as a form of training and testing the datasets. 
 
-\subsection{Genetic Program Parameter Tuning}
-Now that the code was functioning and for simple problems, an optimal function was being found, I could use the actual dataset and alter the parameters to see if the predictive accuracy would increase on more complex problems. To make this process easier, the train\textunderscore gp function contains all the parameters that can be altered, which could affect the predictive accuracy of the model. \\
+\subsection{Genetic Program Experiments}
+Now that the code was functioning and for simple problems, an optimal function was being found, I could use the actual dataset and alter the parameters to see if the predictive accuracy would increase on more complex problems. To make this process easier, the train\textunderscore gp function contains all the parameters that could be optimised, which could affect the predictive accuracy of the model. \\
 
 The first parameter that was changed when testing on the hold out data set was the threshold value to classify a company as 1 or 0. The values of this changed between 0.1 - 0.9, to see the different classification accuracies when being used on the hold out set. Overall, it was noted that the best predictive accuracies occurred when the threshold value was 0.5. A possible reason for this is that 0.5 eliminated any biases when trying to classify the company as a 0 or a 1.
 
