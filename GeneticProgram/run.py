@@ -9,12 +9,12 @@ def test_gp_full_data(test_dataset):
     return x[0], x[1]
 
 
-def run_gp(test_data_set):
+def run_gp(test_data_set, thresh = 0.5):
     import math
 
     optimal_expression = train_gp(data_set="dataset2.txt", gen_depth=3, max_depth=3,
                                   population_size=500, max_iteration=2, selection_type="tournament",
-                                  tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99)
+                                  tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99, thresh = thresh )
 
     x = test_gp_full_data(test_data_set)
     row = x[0]
@@ -54,7 +54,7 @@ def run_gp(test_data_set):
                 sig = 1 / (1 + math.exp(-j))
             except OverflowError:
                 sig = 0
-            if sig > 0.5:
+            if sig > thresh:
                 prob.append(1)
             else:
                 prob.append(0)

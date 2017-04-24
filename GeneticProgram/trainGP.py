@@ -8,7 +8,7 @@ import copy
 
 
 def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size=500, max_iteration=2,
-             selection_type="tournament", tournament_size=50, cross_over_rate=0.9, mutation_rate=0.1):
+             selection_type="tournament", tournament_size=50, cross_over_rate=0.9, mutation_rate=0.1, thresh =0.5):
     """
     Function to train the genetic program using the training dataset, based on user defined parameters.
     :param data_set: data set to be read into the program
@@ -41,6 +41,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
     sys.stdout.write("tournament size : {} \n".format(tournament_size))
     sys.stdout.write("Crossover rate : {} \n".format(cross_over_rate))
     sys.stdout.write("Mutation Rate : {} \n".format(mutation_rate))
+    sys.stdout.write("Testing Threshold : {} \n".format(thresh))
     sys.stdout.write("################################ \n")
 
     current_population = GenMember()
