@@ -20,7 +20,7 @@ class ToPrefixParser(object):
         """
         function to split the parents to enable parents to be converted into prefix notation later.
         :param parents: the two parents selected from selection process
-        :return: parents, split up into individual gene characteristics -> ["x1+1"] -> ["X1","+","1","end"]
+        :return: parents, split up into individual gene characteristics -> ["X1+1"] -> ["X1","+","1","end"]
         """
         split_list = [re.findall('\w+\d*\.\d+|\w+|\W', s[0]) for s in parents]
 
@@ -135,3 +135,11 @@ class ToPrefixParser(object):
         for k in range(len(prefix_list)):
             pref_list.append((prefix_list[k], parent_expression[k][1]))
         return pref_list
+
+if __name__=="__main__":
+    t = ToPrefixParser()
+    x = t.split_parents([('X1+1.3-X3+X2/X4*X5',170),( 'X2/X5+6.433-X1*X3*X4',243)])
+    print(x)
+    y = t.get_prefix_notation(x)
+
+    print(y)

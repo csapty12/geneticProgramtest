@@ -128,8 +128,8 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
 
         # print("parents selected", select_parents)
         split_parents = to_pref.split_parents(select_parents)
-        # # print("split parents:")
-        # # print(split_parents)
+        # print("split parents:")
+        # print(split_parents)
         get_prefix_parents = to_pref.get_prefix_notation(split_parents)
         # print("prefix notation: ")
         # print("parent prefix: ", get_prefix_parents)

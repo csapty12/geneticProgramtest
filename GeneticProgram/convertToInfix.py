@@ -34,6 +34,19 @@ class ToInfixParser:
             else:
                 operand1 = self.stack.pop(-1)
                 operand2 = self.stack.pop(-1)
-                self.stack.append("({}{}{})".format(operand1, e, operand2))
+                op = e
+                # try:
+                #     sub_exp = operand1+op+operand2
+                #     ev = eval(sub_exp)
+                #
+                #     self.stack.append("({})".format(ev))
+                # except:
+               
+                self.stack.append("({}{}{})".format(operand1, op, operand2))
 
         return self.stack.pop()[1:-1]
+
+# if __name__ == "__main__":
+#     t = ToInfixParser()
+#     x = t.get_infix_notation(['+','-','3','4','*','X5','X2'])
+#     print(x)
