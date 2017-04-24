@@ -1,0 +1,23 @@
+###########parameters########### 
+dataset: dataset2.txt 
+Generation depth: 3 
+Population Size : 10 
+Maximum Iterations : 1000 
+Selection Type : tournament 
+tournament size : 50 
+Crossover rate : 0.5 
+Mutation Rate : 0.99 
+Testing Threshold : 0.9 
+################################ 
+Traceback (most recent call last):
+  File "run.py", line 77, in <module>
+    run_gp('dataset2.txt')
+  File "run.py", line 18, in run_gp
+    tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99, thresh = thresh )
+  File "/home/links/cs555/geneticProgramtest/GeneticProgram/trainGP.py", line 126, in train_gp
+    select_parents = current_population.tournament_selection(population, population_fitness, tournament_size)
+  File "/home/links/cs555/geneticProgramtest/GeneticProgram/ExpressionGenerator.py", line 151, in tournament_selection
+    candidates = sample(zipped_population, selection_size)
+  File "/usr/local/anaconda3/lib/python3.5/random.py", line 315, in sample
+    raise ValueError("Sample larger than population")
+ValueError: Sample larger than population
