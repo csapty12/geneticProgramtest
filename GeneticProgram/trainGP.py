@@ -30,7 +30,12 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
     tree = Tree()
     x_val = list()
     y_val = list()
-
+    print("\n\n\n\n\n\n")
+    sys.stderr.write("\n")
+    sys.stderr.write("\n")
+    sys.stderr.write("\n")
+    sys.stderr.write("\n")
+    sys.stderr.write("\n")
 
     sys.stdout.write("###########parameters########### \n")
     sys.stdout.write("dataset: {} \n".format(data_set))
