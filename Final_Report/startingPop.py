@@ -45,11 +45,11 @@ s1000 = [0.75134168157423975, 0.71019677996422181, 0.7441860465116279, 0.7262969
 		0.7155635062611807, 0.71735241502683367, 0.71019677996422181, 0.73166368515205726, 0.71198568872987478]
 
 
-
-plt.plot(list(range(len(s10))),s10,'b',label = "Population: 10")
-plt.plot(list(range(len(s100))),s100,'g',label = "Population: 100")
-plt.plot(list(range(len(s500))),s500,'y',label = "Population: 500")
-plt.plot(list(range(len(s1000))),s1000,'k',label = "Population: 1000")
+plt.boxplot([s10,s100,s500,s1000])
+# plt.plot(list(range(len(s10))),s10,'b',label = "Population: 10")
+# plt.plot(list(range(len(s100))),s100,'g',label = "Population: 100")
+# plt.plot(list(range(len(s500))),s500,'y',label = "Population: 500")
+# plt.plot(list(range(len(s1000))),s1000,'k',label = "Population: 1000")
 
 plt.legend(loc = "best")
 plt.show()

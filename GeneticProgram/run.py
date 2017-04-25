@@ -12,10 +12,10 @@ def test_gp_full_data(test_dataset):
 def run_gp(test_data_set, thresh = 0.5):
     import math
     accuracies = list()
-    for i in range(1):
+    for i in range(10):
         optimal_expression = train_gp(data_set="dataset2.txt", gen_depth=3, max_depth=3,
-                                      population_size=500, max_iteration=1000, selection_type="tournament",
-                                      tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99, thresh = thresh )
+                                      population_size=10, max_iteration=1000, selection_type="tournament",
+                                      tournament_size=5, cross_over_rate=0.5, mutation_rate=0.99, thresh = thresh )
 
         x = test_gp_full_data(test_data_set)
         row = x[0]
@@ -24,14 +24,6 @@ def run_gp(test_data_set, thresh = 0.5):
         exp = list()
         exp.append(optimal_expression[0])
         optimal_expression = exp
-        # row = [[0.185841328, 0.229878245, 0.150353322, 2.267962444, 1.72085425],
-        #        [0.16285377, 0.293619897, 0.148429586, 2.112106101, 1.726711829],
-        #        [0.149332758, 0.347589881, 0.139985797, 1.689751437, 1.734865801],
-        #        [0.137193647, 0.416721256, 0.147865432, 2.116532577, 1.761369401],
-        #        [0.082350665, 0.480389313, 0.174387346, 2.342011704, 1.766493641],
-        #        [0.159720391, -0.781208802, -0.087774755, 0.333050959,1.899437307]]
-        # label = [0, 0, 0, 0, 0, 1]
-        #
         prediction = list()
         for i in optimal_expression:
             tmp = list()
@@ -72,6 +64,7 @@ def run_gp(test_data_set, thresh = 0.5):
         accs = sum(trufa) / len(trufa)
         print("accuracy: ", accs)
         accuracies.append(accs)
+        print("\n\n\n\n\n\n")
 
     print("accuracies over n iteations")
     print(accuracies)

@@ -229,9 +229,9 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
         child_two_list_node = list(tree.make_list_nodes(child_two))
         child_two_list_node = tree.get_child_two(child_one_list_node, child_two_list_node)
 
-        #     # print("child one nodes: ", child_one_list_node)
-        #     # print()
-        #     # print("child two nodes: ", child_two_list_node)
+        print("child one nodes: ", child_one_list_node)
+        print()
+        print("child two nodes: ", child_two_list_node)
 
         #     # print("mutating nodes: ")
         rnd = random()
@@ -259,9 +259,9 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
 
             #     # print("deconstructing trees")
         p = ToInfixParser()
-        #     # print("deconstructing child 1")
+        print("deconstructing child 1")
         deconstruct_child_one = ToInfixParser.deconstruct_tree(new_child_one[1])
-        # print(deconstruct_child_one)
+        print(deconstruct_child_one)
 
         c1 = p.get_infix_notation(deconstruct_child_one)
         c1 = c1.replace(" ", "")

@@ -24,14 +24,15 @@ sel = [0.73166368515205726, 0.73524150268336319, 0.71377459749552774, 0.72987477
  		0.74955277280858679, 0.73345259391771023, 0.70483005366726292, 0.74776386404293382, 0.72207513416815742]
 
 
-
+plt.boxplot([tour,sel])
+# plt.boxplot(sel)
 
 
 # vals2 = [0.735241502683,0.728085867621, 0.738819320215, 0.731663685152, 0.738819320215,
 #  0.745974955277, 0.710196779964, 0.744186046512, 0.729874776386,  0.715563506261]
 
-plt.plot(list(range(len(tour))), tour, 'g', label ="Tournament Selection")
-plt.plot(list(range(len(sel))), sel, 'r', label ="Select Best Two")
-plt.legend(loc = "best")
+# plt.plot(list(range(len(tour))), tour, 'g', label ="Tournament Selection")
+# plt.plot(list(range(len(sel))), sel, 'r', label ="Select Best Two")
+# plt.legend(loc = "best")
 
 plt.show()
