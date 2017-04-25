@@ -8,7 +8,12 @@ class ToPrefixParser(object):
 
     # every instance of a tree is a node.
     def __init__(self, val=None, left=None, right=None):
-
+        """
+        Constructor to build the prefix expression
+        :param val: the value to be inserted
+        :param left: left child reference
+        :param right:  right child reference
+        """
         self.val = val  # holds the value
         self.left = left  # holds the left child value
         self.right = right  # holds the right child value
@@ -135,11 +140,3 @@ class ToPrefixParser(object):
         for k in range(len(prefix_list)):
             pref_list.append((prefix_list[k], parent_expression[k][1]))
         return pref_list
-
-if __name__=="__main__":
-    t = ToPrefixParser()
-    x = t.split_parents([('X1+1.3-X3+X2/X4*X5',170),( 'X2/X5+6.433-X1*X3*X4',243)])
-    print(x)
-    y = t.get_prefix_notation(x)
-
-    print(y)

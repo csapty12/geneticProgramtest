@@ -16,7 +16,7 @@
     <SUITE FILE_PATH="PyCharm2016.2/coverage/GeneticProgram$tkinteer2.coverage" NAME="tkinteer2 Coverage Results" MODIFIED="1492631192286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="PyCharm2016.2/coverage/GeneticProgram$tkinterTutorial.coverage" NAME="tkinterTutorial Coverage Results" MODIFIED="1492629198749" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GeneticProgram$Unittests_in_UnitTest.coverage" NAME="Unittests in UnitTest Coverage Results" MODIFIED="1492789159660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/GeneticProgram$GeneticProgram.coverage" NAME="GeneticProgram Coverage Results" MODIFIED="1493043973014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GeneticProgram$GeneticProgram.coverage" NAME="GeneticProgram Coverage Results" MODIFIED="1493078142675" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GeneticProgram$tkinteer2.coverage" NAME="tkinteer2 Coverage Results" MODIFIED="1492696048671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GeneticProgram$Unittests_in_UnitTests.coverage" NAME="Unittests in UnitTests Coverage Results" MODIFIED="1492786758564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="PyCharm2016.2/coverage/GeneticProgram$GeneticProgram.coverage" NAME="GeneticProgram Coverage Results" MODIFIED="1492640315828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -33,9 +33,19 @@
       <file leaf-file-name="convertToPrefix.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/convertToPrefix.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2145">
-              <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="375">
+              <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
+              <folding>
+                <element signature="e#46#157#1" expanded="false" />
+                <element signature="e#266#619#0" expanded="false" />
+                <element signature="e#747#1286#0" expanded="false" />
+                <element signature="e#1347#1779#0" expanded="false" />
+                <element signature="e#1826#2684#0" expanded="false" />
+                <element signature="e#2733#3451#0" expanded="false" />
+                <element signature="e#3503#4222#0" expanded="false" />
+                <element signature="e#4271#4827#0" expanded="false" />
+                <element signature="e#4891#5572#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -43,9 +53,18 @@
       <file leaf-file-name="trainGP.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainGP.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="79" column="54" selection-start-line="79" selection-start-column="54" selection-end-line="79" selection-end-column="54" />
-              <folding />
+            <state relative-caret-position="3555">
+              <caret line="296" column="14" selection-start-line="253" selection-start-column="8" selection-end-line="296" selection-end-column="14" />
+              <folding>
+                <element signature="e#4790#4804#0" expanded="false" />
+                <element signature="e#5482#5507#0" expanded="false" />
+                <element signature="e#5619#5647#0" expanded="false" />
+                <element signature="e#5879#5928#0" expanded="false" />
+                <element signature="e#6380#6411#0" expanded="false" />
+                <element signature="e#7520#7608#0" expanded="false" />
+                <element signature="e#7881#8151#1" expanded="false" />
+                <element signature="e#8160#8477#1" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -53,18 +72,98 @@
       <file leaf-file-name="convertToInfix.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/convertToInfix.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
+            <state relative-caret-position="225">
+              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+              <folding>
+                <element signature="e#257#501#0" expanded="false" />
+                <element signature="e#558#1350#0" expanded="false" />
+                <marker date="1493079522000" expanded="true" signature="64:1350" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="33" column="36" selection-start-line="33" selection-start-column="36" selection-end-line="33" selection-end-column="36" />
+              <folding>
+                <element signature="e#45#146#1" expanded="false" />
+                <element signature="e#191#217#0" expanded="false" />
+                <marker date="1493079814000" expanded="true" signature="40:1079" ph="..." />
+                <marker date="1493079814000" expanded="true" signature="260:1079" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tree.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tree.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#8710#8885#0" expanded="false" />
+                <element signature="e#8946#9197#0" expanded="false" />
+                <element signature="e#9255#11604#0" expanded="false" />
+                <element signature="e#11659#11910#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExpressionGenerator.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ExpressionGenerator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="174" column="0" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
+              <folding>
+                <element signature="e#114#384#1" expanded="false" />
+                <element signature="e#708#1777#0" expanded="false" />
+                <element signature="e#1815#1993#0" expanded="false" />
+                <element signature="e#2068#2930#0" expanded="false" />
+                <element signature="e#2993#5714#0" expanded="false" />
+                <element signature="e#5797#7474#0" expanded="false" />
+                <element signature="e#7540#8328#0" expanded="false" />
+                <element signature="e#8424#10659#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="node.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+              <folding>
+                <element signature="e#25#191#1" expanded="false" />
+                <element signature="e#240#578#0" expanded="false" />
+                <element signature="e#620#1045#0" expanded="false" />
+                <element signature="e#1091#1514#0" expanded="false" />
+                <element signature="e#1567#2086#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="run.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/run.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/run.py">
+      <file leaf-file-name="tkinteer2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tkinteer2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="739">
-              <caret line="76" column="20" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
+            <state relative-caret-position="123">
+              <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -89,16 +188,16 @@
         <option value="$PROJECT_DIR$/GeneticProgram.py" />
         <option value="$PROJECT_DIR$/tkinterTutorial.py" />
         <option value="$PROJECT_DIR$/tkinteer2.py" />
-        <option value="$PROJECT_DIR$/data.py" />
         <option value="$PROJECT_DIR$/UnitTests.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
-        <option value="$PROJECT_DIR$/tree.py" />
-        <option value="$PROJECT_DIR$/ExpressionGenerator.py" />
         <option value="$PROJECT_DIR$/UnitTest.py" />
+        <option value="$PROJECT_DIR$/trainGP.py" />
+        <option value="$PROJECT_DIR$/run.py" />
+        <option value="$PROJECT_DIR$/tree.py" />
         <option value="$PROJECT_DIR$/convertToInfix.py" />
         <option value="$PROJECT_DIR$/convertToPrefix.py" />
-        <option value="$PROJECT_DIR$/run.py" />
-        <option value="$PROJECT_DIR$/trainGP.py" />
+        <option value="$PROJECT_DIR$/data.py" />
+        <option value="$PROJECT_DIR$/ExpressionGenerator.py" />
       </list>
     </option>
   </component>
@@ -109,9 +208,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="22" />
+    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="874" />
+    <option name="height" value="873" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -528,7 +627,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1440" height="874" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18240343" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -537,18 +636,18 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4309463" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39948782" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43149808" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39948782" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -564,7 +663,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="11" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -818,20 +917,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tkinterTutorial.py" />
-    <entry file="file://$PROJECT_DIR$/tkinteer2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -840,27 +925,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UnitTests.py" />
-    <entry file="file://$PROJECT_DIR$/node.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="618">
-          <caret line="270" column="26" selection-start-line="270" selection-start-column="26" selection-end-line="270" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ExpressionGenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="175" column="58" selection-start-line="175" selection-start-column="58" selection-end-line="175" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/UnitTest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
@@ -868,35 +932,124 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/convertToPrefix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
+          <folding>
+            <element signature="e#46#157#1" expanded="false" />
+            <element signature="e#266#619#0" expanded="false" />
+            <element signature="e#747#1286#0" expanded="false" />
+            <element signature="e#1347#1779#0" expanded="false" />
+            <element signature="e#1826#2684#0" expanded="false" />
+            <element signature="e#2733#3451#0" expanded="false" />
+            <element signature="e#3503#4222#0" expanded="false" />
+            <element signature="e#4271#4827#0" expanded="false" />
+            <element signature="e#4891#5572#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/convertToInfix.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
+        <state relative-caret-position="225">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding>
+            <element signature="e#257#501#0" expanded="false" />
+            <element signature="e#558#1350#0" expanded="false" />
+            <marker date="1493079522000" expanded="true" signature="64:1350" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="33" column="36" selection-start-line="33" selection-start-column="36" selection-end-line="33" selection-end-column="36" />
+          <folding>
+            <element signature="e#45#146#1" expanded="false" />
+            <element signature="e#191#217#0" expanded="false" />
+            <marker date="1493079814000" expanded="true" signature="40:1079" ph="..." />
+            <marker date="1493079814000" expanded="true" signature="260:1079" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ExpressionGenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="174" column="0" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
+          <folding>
+            <element signature="e#114#384#1" expanded="false" />
+            <element signature="e#708#1777#0" expanded="false" />
+            <element signature="e#1815#1993#0" expanded="false" />
+            <element signature="e#2068#2930#0" expanded="false" />
+            <element signature="e#2993#5714#0" expanded="false" />
+            <element signature="e#5797#7474#0" expanded="false" />
+            <element signature="e#7540#8328#0" expanded="false" />
+            <element signature="e#8424#10659#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding>
+            <element signature="e#25#191#1" expanded="false" />
+            <element signature="e#240#578#0" expanded="false" />
+            <element signature="e#620#1045#0" expanded="false" />
+            <element signature="e#1091#1514#0" expanded="false" />
+            <element signature="e#1567#2086#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/convertToPrefix.py">
+    <entry file="file://$PROJECT_DIR$/tkinteer2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2145">
-          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+        <state relative-caret-position="123">
+          <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trainGP.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="79" column="54" selection-start-line="79" selection-start-column="54" selection-end-line="79" selection-end-column="54" />
-          <folding />
+        <state relative-caret-position="3555">
+          <caret line="296" column="14" selection-start-line="253" selection-start-column="8" selection-end-line="296" selection-end-column="14" />
+          <folding>
+            <element signature="e#4790#4804#0" expanded="false" />
+            <element signature="e#5482#5507#0" expanded="false" />
+            <element signature="e#5619#5647#0" expanded="false" />
+            <element signature="e#5879#5928#0" expanded="false" />
+            <element signature="e#6380#6411#0" expanded="false" />
+            <element signature="e#7520#7608#0" expanded="false" />
+            <element signature="e#7881#8151#1" expanded="false" />
+            <element signature="e#8160#8477#1" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run.py">
+    <entry file="file://$PROJECT_DIR$/tree.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="739">
-          <caret line="76" column="20" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
-          <folding />
+        <state relative-caret-position="300">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#8710#8885#0" expanded="false" />
+            <element signature="e#8946#9197#0" expanded="false" />
+            <element signature="e#9255#11604#0" expanded="false" />
+            <element signature="e#11659#11910#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

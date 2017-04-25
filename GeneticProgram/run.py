@@ -12,7 +12,7 @@ def test_gp_full_data(test_dataset):
 def run_gp(test_data_set, thresh = 0.5):
     import math
     accuracies = list()
-    for i in range(10):
+    for i in range(1):
         optimal_expression = train_gp(data_set="dataset2.txt", gen_depth=3, max_depth=3,
                                       population_size=500, max_iteration=1000, selection_type="tournament",
                                       tournament_size=50, cross_over_rate=0.5, mutation_rate=0.99, thresh = thresh )

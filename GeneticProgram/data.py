@@ -30,3 +30,5 @@ class Data(object):
 
         data_cfd = cfd[:, 0:-1]
         return data_cfd, class_labels_cfd
+
+    # need to make train test split.

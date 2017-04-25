@@ -1,6 +1,7 @@
 from node import Node
 from ExpressionGenerator import GenMember
 from random import choice
+import numpy as np
 
 
 class Tree(object):
@@ -174,7 +175,7 @@ class Tree(object):
 
         return tree_one, tree_two
 
-    def mutate_node(self, tree, list_nodes, node):
+    def mutate_node(self, tree, list_nodes, node, random_mutation=True):
         """
         Function to mutate the randomly selected node based on its current value and arity
         :param tree: tree to be mutated
@@ -192,9 +193,13 @@ class Tree(object):
         else:
             # check if terminal value and not a variable
             if node.value not in ["X1", "X2", "X3", "X4", "X5"]:
-                # alter the value by a small amount
                 val = float(node.value)
-                val -= 0.1
+                if random_mutation is True:
+                    rn = val * np.random.uniform(-5.0, 5.0)
+                # alter the value by a small amount
+                else:
+                    rn = val * np.random.randn()
+                val += rn
                 node.value = str(val)
 
             else:

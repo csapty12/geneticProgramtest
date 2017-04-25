@@ -235,6 +235,7 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
 
         #     # print("mutating nodes: ")
         rnd = random()
+
         if rnd <= mutation_rate:
             #         # print("mutating nodes: ")
             node_to_mutate_one = tree.select_random_val(child_one_list_node)
@@ -245,10 +246,10 @@ def train_gp(data_set ='dataset2.txt', gen_depth=3, max_depth=3, population_size
             #         # print()
 
             new_child_one = tree.mutate_node(child_one, child_one_list_node, node_to_mutate_one[2])
-            #         # print(new_child_one[0])
+            # print(new_child_one[0])
             #         #
             new_child_two = tree.mutate_node(child_two, child_two_list_node, node_to_mutate_two[2])
-            #         # print(new_child_two[0])
+            # print(new_child_two[0])
 
         else:
             #         #

@@ -45,8 +45,3 @@ class ToInfixParser:
                 self.stack.append("({}{}{})".format(operand1, op, operand2))
 
         return self.stack.pop()[1:-1]
-
-# if __name__ == "__main__":
-#     t = ToInfixParser()
-#     x = t.get_infix_notation(['+','-','3','4','*','X5','X2'])
-#     print(x)

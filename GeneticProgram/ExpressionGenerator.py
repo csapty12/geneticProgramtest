@@ -173,6 +173,13 @@ class GenMember(object):
         return parents
 
     def select_best_parents(self, population, fitness):
+        """
+        Function to select the best two parents in each the current population to be put forward for
+        crossover adn mutation.
+        :param population: the current population
+        :param fitness: fitness of the current population
+        :return: the two parents.
+        """
         zipped_population = list(zip(population, fitness))
         parent_one = min(zipped_population, key=lambda t: t[1])
         p1_index = zipped_population.index(parent_one)
